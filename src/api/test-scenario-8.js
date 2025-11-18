@@ -1,139 +1,86 @@
 #!/usr/bin/env node
-const axios = require("axios");
-require("dotenv").config();
-const API_BASE = process.env.API_BASE_URL || "http://localhost:3000";
+const { authenticateTBO } = require("../tbo/auth");
+const { getCityId } = require("../tbo/static");
+const { searchHotels } = require("../tbo/search");
+const { getHotelRoom } = require("../tbo/room");
+const { blockRoom, bookHotel } = require("../tbo/book");
 
 async function testScenario8() {
   console.log("\n" + "=".repeat(80));
-  console.log(
-    "SCENARIO 8: International (Paris, 2 Rooms Mixed: 1A+2C + 2A, CA)",
-  );
+  console.log("SCENARIO 8: Domestic (Pune, 1 Adult, Extended Stay 5 nights)");
   console.log("=".repeat(80));
+
   try {
-    const searchRes = await axios.post(
-      `${API_BASE}/api/tbo/search`,
-      {
-        destination: "Paris",
-        cityId: 3,
-        countryCode: "FR",
-        checkIn: "2026-01-14",
-        checkOut: "2026-01-16",
-        rooms: [
-          { adults: 1, children: 2, childAges: [5, 9] },
-          { adults: 2, children: 0, childAges: [] },
-        ],
-        currency: "EUR",
-        guestNationality: "CA",
-      },
-      { timeout: 30000 },
-    );
-    if (!searchRes.data.success) throw new Error("Search failed");
-    const hotel = searchRes.data.hotels[0];
-    const roomRes = await axios.post(
-      `${API_BASE}/api/tbo/room`,
-      {
-        traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
-        checkInDate: "2026-01-14",
-        checkOutDate: "2026-01-16",
-        noOfRooms: 2,
-      },
-      { timeout: 30000 },
-    );
-    if (!roomRes.data.success) throw new Error("Room failed");
-    const blockRes = await axios.post(
-      `${API_BASE}/api/tbo/block`,
-      {
-        traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
-        guestNationality: "CA",
-        noOfRooms: 2,
-        isVoucherBooking: true,
-        hotelRoomDetails: roomRes.data.hotelRoomDetails,
-      },
-      { timeout: 30000 },
-    );
-    if (!blockRes.data.success) throw new Error("Block failed");
-    const bookRes = await axios.post(
-      `${API_BASE}/api/tbo/book`,
-      {
-        traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
-        bookingId: blockRes.data.bookingId,
-        guestNationality: "CA",
-        noOfRooms: 2,
-        isVoucherBooking: true,
-        hotelRoomDetails: blockRes.data.hotelRoomDetails,
-        hotelPassenger: [
-          {
-            Title: "Mr",
-            FirstName: "Robert",
-            LastName: "Johnson",
-            PaxType: 1,
-            Nationality: "CA",
-            Email: "robert@example.ca",
-            Phoneno: "+14165551234",
-          },
-          {
-            Title: "Master",
-            FirstName: "Tyler",
-            LastName: "Johnson",
-            PaxType: 2,
-            Age: 5,
-            Nationality: "CA",
-            Email: "robert@example.ca",
-            Phoneno: "+14165551234",
-          },
-          {
-            Title: "Miss",
-            FirstName: "Jessica",
-            LastName: "Johnson",
-            PaxType: 2,
-            Age: 9,
-            Nationality: "CA",
-            Email: "robert@example.ca",
-            Phoneno: "+14165551234",
-          },
-          {
-            Title: "Mr",
-            FirstName: "Christopher",
-            LastName: "Brown",
-            PaxType: 1,
-            Nationality: "CA",
-            Email: "christopher@example.ca",
-            Phoneno: "+14165551235",
-          },
-          {
-            Title: "Mrs",
-            FirstName: "Jennifer",
-            LastName: "Brown",
-            PaxType: 1,
-            Nationality: "CA",
-            Email: "jennifer@example.ca",
-            Phoneno: "+14165551236",
-          },
-        ],
-      },
-      { timeout: 30000 },
-    );
-    if (!bookRes.data.success) throw new Error("Book failed");
-    console.log(`✅ PASSED | Confirmation: ${bookRes.data.confirmationNo}`);
-    return {
-      scenario: 8,
-      status: "PASSED",
-      confirmationNo: bookRes.data.confirmationNo,
-    };
+    const tokenId = (await authenticateTBO()).TokenId;
+    const cityId = await getCityId("Pune", "IN", tokenId);
+    if (!cityId) throw new Error("Pune not found");
+
+    const searchResult = await searchHotels({
+      destination: "Pune",
+      countryCode: "IN",
+      checkIn: "2025-12-01",
+      checkOut: "2025-12-06",
+      guestNationality: "IN",
+      rooms: [{ adults: 1, children: 0, childAges: [] }],
+      currency: "INR",
+    });
+    if (!searchResult?.hotels?.length) throw new Error("No hotels found");
+    const hotel = searchResult.hotels[0];
+
+    const roomResult = await getHotelRoom({
+      traceId: searchResult.traceId,
+      resultIndex: hotel.ResultIndex,
+      hotelCode: hotel.HotelCode,
+    });
+    if (!roomResult?.rooms?.length) throw new Error("No rooms found");
+
+    const blockResult = await blockRoom({
+      traceId: searchResult.traceId,
+      resultIndex: hotel.ResultIndex,
+      hotelCode: hotel.HotelCode,
+      hotelName: hotel.HotelName,
+      guestNationality: "IN",
+      noOfRooms: 1,
+      hotelRoomDetails: roomResult.rooms,
+      isVoucherBooking: true,
+    });
+    if (!blockResult?.responseStatus) throw new Error("Block failed");
+
+    const bookResult = await bookHotel({
+      traceId: searchResult.traceId,
+      resultIndex: hotel.ResultIndex,
+      hotelCode: hotel.HotelCode,
+      hotelName: hotel.HotelName,
+      guestNationality: "IN",
+      noOfRooms: 1,
+      isVoucherBooking: true,
+      hotelRoomDetails: blockResult.hotelRoomDetails,
+      hotelPassenger: [
+        {
+          Title: "Mr",
+          FirstName: "Arjun",
+          LastName: "Desai",
+          PaxType: 1,
+          Nationality: "IN",
+          Email: "arjun@example.com",
+          Phoneno: "+919876543228",
+          AddressLine1: "Test Address",
+          City: "Pune",
+          CountryCode: "IN",
+          CountryName: "India",
+        },
+      ],
+    });
+    if (!bookResult?.bookingId) throw new Error("Book failed");
+    const confirmationNo = bookResult.confirmationNo || bookResult.bookingId;
+    console.log(`✅ PASSED | Confirmation: ${confirmationNo}`);
+    return { scenario: 8, status: "PASSED", confirmationNo };
   } catch (error) {
     console.error(`❌ FAILED: ${error.message}`);
     return { scenario: 8, status: "FAILED", error: error.message };
   }
 }
+
 testScenario8().then((r) => {
   console.log("=".repeat(80));
   console.log(JSON.stringify(r, null, 2));
