@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-const { authenticateTBO } = require("../tbo/auth");
-const { getCityId } = require("../tbo/static");
-const { searchHotels } = require("../tbo/search");
-const { getHotelRoom } = require("../tbo/room");
-const { blockRoom, bookHotel } = require("../tbo/book");
+const { authenticateTBO } = require("../../api/tbo/auth");
+const { getCityId } = require("../../api/tbo/static");
+const { searchHotels } = require("../../api/tbo/search");
+const { getHotelRoom } = require("../../api/tbo/room");
+const { blockRoom, bookHotel } = require("../../api/tbo/book");
 
 async function testScenario1() {
   console.log("\n" + "=".repeat(80));
