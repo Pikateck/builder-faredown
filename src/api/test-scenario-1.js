@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const axios = require('axios');
-require('dotenv').config({ path: './src/api/.env' });
+require('dotenv').config();
 
 const API_BASE = process.env.API_BASE_URL || 'http://localhost:3000/api';
 
