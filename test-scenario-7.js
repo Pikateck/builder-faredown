@@ -7,22 +7,22 @@ const API_BASE = process.env.API_BASE_URL || 'http://localhost:3000/api';
 async function testScenario7() {
   console.log('\n' + '='.repeat(80));
   console.log('SCENARIO 7: International Booking (2 Rooms, 1 Adult each)');
-  console.log('Destination: Dubai | Dates: 2026-01-11 to 2026-01-13 | Nationality: AU');
+  console.log('Destination: Paris | Dates: 2026-01-11 to 2026-01-13 | Nationality: AU');
   console.log('='.repeat(80));
 
   try {
     console.log('\n[Step 1/4] Searching for hotels...');
     const searchRes = await axios.post(`${API_BASE}/tbo/search`, {
-      destination: 'Dubai',
-      cityId: 12345,
-      countryCode: 'AE',
+      destination: 'Paris',
+      cityId: 3,
+      countryCode: 'FR',
       checkIn: '2026-01-11',
       checkOut: '2026-01-13',
       rooms: [
         { adults: 1, children: 0, childAges: [] },
         { adults: 1, children: 0, childAges: [] }
       ],
-      currency: 'USD',
+      currency: 'EUR',
       guestNationality: 'AU'
     }, { timeout: 30000 });
 
