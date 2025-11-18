@@ -81,11 +81,11 @@ async function testScenario1() {
         resultIndex: hotel.ResultIndex,
         hotelCode: hotel.HotelCode,
         hotelName: hotel.HotelName,
-        bookingId: blockRes.data.blockingId || blockRes.data.bookingId,
+        bookingId: blockRes.data.bookingId,
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: blockRes.data.hotelRoomDetails || [roomRes.data.rooms[0]],
+        hotelRoomDetails: blockRes.data.hotelRoomDetails,
         hotelPassenger: [
           {
             Title: "Mr",
