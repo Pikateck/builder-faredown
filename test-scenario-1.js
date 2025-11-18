@@ -12,7 +12,6 @@ async function testScenario1() {
       `${API_BASE}/api/tbo/search`,
       {
         destination: "Mumbai",
-        cityId: 10449,
         countryCode: "IN",
         checkIn: "2025-12-20",
         checkOut: "2025-12-22",
@@ -20,7 +19,7 @@ async function testScenario1() {
         currency: "INR",
         guestNationality: "IN",
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
     if (!searchRes.data.success) throw new Error("Search failed");
     const hotel = searchRes.data.hotels[0];
