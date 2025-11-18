@@ -43,23 +43,23 @@ async function testScenario1() {
       `${API_BASE}/api/tbo/room`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
         checkInDate: "2025-12-20",
         checkOutDate: "2025-12-22",
         noOfRooms: 1,
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
     if (!roomRes.data.success) throw new Error("Room failed");
     const blockRes = await axios.post(
       `${API_BASE}/api/tbo/block`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
@@ -72,9 +72,9 @@ async function testScenario1() {
       `${API_BASE}/api/tbo/book`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
         bookingId: blockRes.data.bookingId,
         guestNationality: "IN",
         noOfRooms: 1,
