@@ -88,7 +88,15 @@ async function testScenario1() {
     };
   } catch (error) {
     console.error(`❌ FAILED: ${error.message}`);
-    return { scenario: 1, status: "FAILED", error: error.message };
+    if (error.response?.data) {
+      console.error("Response data:", JSON.stringify(error.response.data, null, 2));
+    }
+    return {
+      scenario: 1,
+      status: "FAILED",
+      error: error.message,
+      details: error.response?.data
+    };
   }
 }
 testScenario1().then((r) => {
