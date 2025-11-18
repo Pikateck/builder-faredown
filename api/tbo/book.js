@@ -135,7 +135,7 @@ async function blockRoom(params = {}) {
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
 
-  // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
+  // ��� PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
   // Extract from primary room or fall back to alternatives
   const primaryRoom = mappedRooms[0];
   const blockRequestCategoryId =
@@ -306,7 +306,7 @@ async function bookHotel(params = {}) {
     resultIndex,
     hotelCode,
     hotelName,
-    categoryId, // ✅ CRITICAL: CategoryId from BlockRoom response (mandatory for Book)
+    categoryId, // ⚠️ CategoryId from BlockRoom (optional for non-de-dupe, required for de-dupe)
     guestNationality = "IN",
     noOfRooms = 1,
     hotelRoomDetails,
@@ -322,6 +322,14 @@ async function bookHotel(params = {}) {
     !hotelPassenger
   ) {
     throw new Error("Missing required parameters");
+  }
+
+  // Warn if this appears to be a de-dupe case but CategoryId is missing
+  if (!categoryId && hotelRoomDetails[0]?.CategoryId) {
+    console.warn(
+      "⚠️ Book called with room that has CategoryId, but categoryId param is missing. " +
+        "Using room-level CategoryId from hotelRoomDetails.",
+    );
   }
 
   // ✅ CRITICAL: Per TBO documentation, use the exact structure from BlockRoom response
