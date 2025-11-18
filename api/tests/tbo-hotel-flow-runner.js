@@ -426,10 +426,9 @@ async function runTboHotelFlow(config = {}) {
       );
       passengerStartIndex += roomConfig.adults + roomConfig.children;
 
-      hotelRoomDetails.push({
+      const roomDetail = {
         RoomIndex: hotelRoomDetails.length,
         RoomId: selectedRoom.RoomId,
-        CategoryId: categoryId,
         RoomName: selectedRoom.RoomName,
         Price: selectedRoom.Price,
         RoomPrice: selectedRoom.RoomPrice,
@@ -439,7 +438,14 @@ async function runTboHotelFlow(config = {}) {
         RoomTypeCode: roomTypeCode,
         RoomTypeName: roomTypeName,
         RatePlanCode: ratePlanCode,
-      });
+      };
+
+      // Only include CategoryId if we actually have it (de-dupe flow)
+      if (categoryId) {
+        roomDetail.CategoryId = categoryId;
+      }
+
+      hotelRoomDetails.push(roomDetail);
     }
 
     // Debug log before calling BlockRoom
@@ -481,7 +487,7 @@ async function runTboHotelFlow(config = {}) {
     }
 
     // STEP 5: BOOK HOTEL
-    console.log("\n📍 STEP 5: BOOK HOTEL (BookRoom)");
+    console.log("\n���� STEP 5: BOOK HOTEL (BookRoom)");
 
     const bookReq = {
       traceId: searchRes?.traceId || searchRes?.TraceId,
