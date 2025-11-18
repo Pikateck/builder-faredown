@@ -114,9 +114,8 @@ function findCheapestHotel(searchResponse) {
   }
 
   let cheapest = null;
-  let resultIndex = -1;
 
-  hotels.forEach((hotel, index) => {
+  hotels.forEach((hotel, arrayIndex) => {
     // Extract price - try multiple possible structures
     const price =
       hotel.Price?.OfferedPrice ||
@@ -131,13 +130,15 @@ function findCheapestHotel(searchResponse) {
       typeof price === "number" ? price : parseFloat(price) || Infinity;
 
     if (!cheapest || numPrice < cheapest.minPrice) {
+      // CRITICAL: Use ResultIndex from hotel object, NOT array index
+      const resultIndex = hotel.ResultIndex ?? hotel.resultIndex ?? arrayIndex;
+
       cheapest = {
         hotel,
         minPrice: numPrice,
-        resultIndex: index,
+        resultIndex, // This is the actual ResultIndex from TBO API, not array position
         hotelCode: hotel.HotelCode || hotel.hotelCode,
       };
-      resultIndex = index;
     }
   });
 
@@ -145,11 +146,17 @@ function findCheapestHotel(searchResponse) {
     throw new Error("No valid hotels found in search results");
   }
 
+  // Extract TraceId with multiple fallbacks
+  const traceId =
+    searchResponse?.traceId ||
+    searchResponse?.TraceId ||
+    searchResponse?.HotelSearchResult?.TraceId;
+
   return {
     hotel: cheapest.hotel,
     resultIndex: cheapest.resultIndex,
     hotelCode: cheapest.hotelCode,
-    traceId: searchResponse?.traceId,
+    traceId,
   };
 }
 
