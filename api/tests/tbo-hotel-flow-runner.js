@@ -354,17 +354,26 @@ async function runTboHotelFlow(config = {}) {
       selectedRoom.roomTypeName ||
       selectedRoom.room_type_name;
 
-    // Extract CategoryId from room first, then fall back to hotel's SupplierHotelCodes
-    let categoryId =
-      selectedRoom.CategoryId ||
-      selectedRoom.categoryId ||
-      selectedRoom.category_id;
+    // Canonical CategoryId extraction (de-dupe aware)
+    // Try room first, then hotel-level fields, then SupplierHotelCodes
+    const categoryId =
+      selectedRoom.CategoryId ??
+      selectedRoom.categoryId ??
+      hotel?.CategoryId ??
+      hotel?.categoryId ??
+      (Array.isArray(hotel?.SupplierHotelCodes) &&
+      hotel.SupplierHotelCodes.length > 0
+        ? hotel.SupplierHotelCodes[0].CategoryId ||
+          hotel.SupplierHotelCodes[0].categoryId
+        : undefined);
 
-    if (!categoryId && hotel?.SupplierHotelCodes?.length) {
-      categoryId =
-        hotel.SupplierHotelCodes[0].CategoryId ||
-        hotel.SupplierHotelCodes[0].categoryId;
-    }
+    // Detect if this is a de-dupe result (has CategoryId at any level)
+    const isDeDupe =
+      !!categoryId ||
+      !!hotel?.CategoryId ||
+      !!hotel?.categoryId ||
+      (Array.isArray(hotel?.SupplierHotelCodes) &&
+        hotel.SupplierHotelCodes.length > 0);
 
     const roomIndex =
       selectedRoom.RoomIndex ??
@@ -377,20 +386,32 @@ async function runTboHotelFlow(config = {}) {
 
     // STEP 4b: Validate room details against normalized fields
     console.log("\nStep 2b: Validating room details...");
-    const errors = [];
-    if (!roomTypeCode) errors.push("RoomTypeCode is required");
-    if (!roomTypeName) errors.push("RoomTypeName is required");
-    // CategoryId is optional – only log a warning if not found
-    if (!categoryId) {
+    const validationErrors = [];
+
+    // Mandatory field checks (always required)
+    if (!roomTypeCode) validationErrors.push("RoomTypeCode is required");
+    if (!roomTypeName) validationErrors.push("RoomTypeName is required");
+    if (roomIndex === undefined && roomIndex !== 0)
+      validationErrors.push("RoomIndex is required");
+    if (!ratePlanCode) validationErrors.push("RatePlanCode is required");
+
+    // CategoryId handling: warn only if de-dupe but missing
+    if (isDeDupe && !categoryId) {
       console.warn(
-        "⚠️  CategoryId missing – continuing without it (only required for de-dupe cases)",
+        "⚠️  De-dupe hotel detected but CategoryId is missing. " +
+          "Continuing, but this may cause TBO to reject BlockRoom/BookRoom.",
+        {
+          hotelCode: hotel?.HotelCode || hotel?.hotelCode,
+          resultIndex,
+        },
       );
     }
-    if (roomIndex === undefined && roomIndex !== 0)
-      errors.push("RoomIndex is required");
 
-    if (errors.length > 0) {
-      throw new Error(`Room validation failed: ${errors.join(", ")}`);
+    // Throw only if mandatory fields are missing
+    if (validationErrors.length > 0) {
+      throw new Error(
+        `Room validation failed: ${JSON.stringify(validationErrors)}`,
+      );
     }
 
     // Prepare hotelRoomDetails array for all rooms in this scenario
