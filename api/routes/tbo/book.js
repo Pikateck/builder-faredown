@@ -142,7 +142,8 @@ router.post("/", async (req, res) => {
       if (result.hotelBookingDetails) {
         const details = result.hotelBookingDetails;
         if (details.price) {
-          bookPrice = details.price.offeredPrice || details.price.publishedPrice;
+          bookPrice =
+            details.price.offeredPrice || details.price.publishedPrice;
           bookCurrency = details.price.currencyCode;
         }
         if (details.voucherId) {
@@ -166,7 +167,7 @@ router.post("/", async (req, res) => {
         hotel_name: hotelName,
         book_price: bookPrice,
         book_currency: bookCurrency,
-        book_status: result.responseStatus === 1 ? 'confirmed' : 'failed',
+        book_status: result.responseStatus === 1 ? "confirmed" : "failed",
         price_changed_in_book: result.isPriceChanged || false,
         voucher_id: voucherId,
         confirmation_id: confirmationId,

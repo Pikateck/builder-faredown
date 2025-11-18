@@ -18,7 +18,11 @@ const { searchHotels, formatDateForTBO } = require("./search");
 const { getHotelRoom } = require("./room");
 const { blockRoom, bookHotel } = require("./book");
 const { generateVoucher, getBookingDetails } = require("./voucher");
-const { sendChangeRequest, getChangeRequestStatus, cancelHotelBooking } = require("./cancel");
+const {
+  sendChangeRequest,
+  getChangeRequestStatus,
+  cancelHotelBooking,
+} = require("./cancel");
 const { getAgencyBalance } = require("./balance");
 const { getDestinationSearchStaticData, getCityId } = require("./static");
 
@@ -86,12 +90,16 @@ function logApiCall(endpoint, request, response, status, meta = {}) {
     request: {
       // Don't log sensitive data
       ...request,
-      TokenId: request.TokenId ? request.TokenId.substring(0, 30) + "..." : undefined,
+      TokenId: request.TokenId
+        ? request.TokenId.substring(0, 30) + "..."
+        : undefined,
       Password: undefined,
     },
     response: {
       ...response,
-      TokenId: response.TokenId ? response.TokenId.substring(0, 30) + "..." : undefined,
+      TokenId: response.TokenId
+        ? response.TokenId.substring(0, 30) + "..."
+        : undefined,
     },
     meta,
   };
@@ -114,8 +122,12 @@ function logApiCall(endpoint, request, response, status, meta = {}) {
  * @returns {object} { errorCode: number, message: string, retryable: boolean, recommendation: string }
  */
 function parseTBOError(errorResponse) {
-  const errorCode = errorResponse?.Error?.ErrorCode || errorResponse?.ErrorCode || 0;
-  const errorMessage = errorResponse?.Error?.ErrorMessage || errorResponse?.ErrorMessage || "Unknown error";
+  const errorCode =
+    errorResponse?.Error?.ErrorCode || errorResponse?.ErrorCode || 0;
+  const errorMessage =
+    errorResponse?.Error?.ErrorMessage ||
+    errorResponse?.ErrorMessage ||
+    "Unknown error";
 
   const knownError = TBO_ERROR_CODES[errorCode];
 
@@ -145,7 +157,9 @@ async function retryWithBackoff(asyncFn, maxRetries = 3, delayMs = 1000) {
       lastError = error;
       if (attempt < maxRetries) {
         const delayTime = delayMs * attempt; // Exponential backoff
-        console.warn(`Retry attempt ${attempt}/${maxRetries} in ${delayTime}ms...`);
+        console.warn(
+          `Retry attempt ${attempt}/${maxRetries} in ${delayTime}ms...`,
+        );
         await new Promise((resolve) => setTimeout(resolve, delayTime));
       }
     }
@@ -468,7 +482,12 @@ async function getChangeStatus(params = {}) {
       refundAmount: result.refundAmount,
     };
   } catch (error) {
-    logApiCall("GetChangeRequestStatus", params, { error: error.message }, "error");
+    logApiCall(
+      "GetChangeRequestStatus",
+      params,
+      { error: error.message },
+      "error",
+    );
     throw error;
   }
 }
@@ -548,7 +567,9 @@ async function getStaticData() {
 
     if (result.responseStatus !== 1) {
       const error = parseTBOError(result);
-      logApiCall("GetDestinationSearchStaticData", {}, result, "error", { error });
+      logApiCall("GetDestinationSearchStaticData", {}, result, "error", {
+        error,
+      });
       throw new Error(`Get static data failed: ${error.message}`);
     }
 
@@ -560,7 +581,12 @@ async function getStaticData() {
       totalCountries: result.countries?.length || 0,
     };
   } catch (error) {
-    logApiCall("GetDestinationSearchStaticData", {}, { error: error.message }, "error");
+    logApiCall(
+      "GetDestinationSearchStaticData",
+      {},
+      { error: error.message },
+      "error",
+    );
     throw error;
   }
 }
@@ -586,7 +612,12 @@ async function resolveCityId(cityName, countryCode, tokenId = null) {
       throw new Error(`City not found: ${cityName} in ${countryCode}`);
     }
 
-    logApiCall("ResolveCityId", { cityName, countryCode }, { cityId }, "success");
+    logApiCall(
+      "ResolveCityId",
+      { cityName, countryCode },
+      { cityId },
+      "success",
+    );
 
     return {
       success: true,

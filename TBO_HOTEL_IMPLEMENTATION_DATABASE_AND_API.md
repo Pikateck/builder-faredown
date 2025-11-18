@@ -9,9 +9,11 @@
 ### **1. Database Models Created**
 
 #### **a) TBOHotelBooking Model** (`api/models/TBOHotelBooking.js`)
+
 Handles all database operations for TBO hotel bookings.
 
 **Methods:**
+
 - `create(bookingData)` - Create new booking record
 - `updateBlock(id, blockData)` - Update with block room response
 - `updateBook(id, bookData)` - Update with booking confirmation
@@ -21,6 +23,7 @@ Handles all database operations for TBO hotel bookings.
 - `getAnalytics(dateFrom, dateTo)` - Get booking analytics
 
 **Usage Example:**
+
 ```javascript
 const TBOHotelBooking = require("./models/TBOHotelBooking");
 
@@ -39,9 +42,11 @@ const result = await TBOHotelBooking.create({
 ---
 
 #### **b) TBOHotelRateHistory Model** (`api/models/TBOHotelRateHistory.js`)
+
 Tracks price changes across booking stages (search → block → book).
 
 **Methods:**
+
 - `recordPriceChange(priceData)` - Record a price change event
 - `getByBookingId(id)` - Get price history for a booking
 - `getByTraceId(trace_id)` - Get price history by trace ID
@@ -50,6 +55,7 @@ Tracks price changes across booking stages (search → block → book).
 - `getHotelsWithFrequentChanges(dateFrom, dateTo, threshold)` - Identify problematic hotels
 
 **Usage Example:**
+
 ```javascript
 const TBOHotelRateHistory = require("./models/TBOHotelRateHistory");
 
@@ -70,13 +76,16 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ### **2. API Routes Enhanced**
 
 #### **a) Search Route** (`api/routes/tbo/search.js`)
+
 **Endpoint:** `POST /api/tbo/search`
 
 **Enhancements:**
+
 - Now imports TBOHotelRateHistory for future rate tracking
 - Prepares initial search data for booking workflow
 
 **Request:**
+
 ```json
 {
   "destination": "Dubai",
@@ -90,6 +99,7 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -113,15 +123,18 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ---
 
 #### **b) Block Route** (`api/routes/tbo/block.js`)
+
 **Endpoint:** `POST /api/tbo/block`
 
 **Enhancements:**
+
 - ✅ Saves booking record to `tbo_hotel_bookings` table
 - ✅ Captures block price and status
 - ✅ Marks if price changed during block stage
 - ✅ Returns `bookingId` for use in book request
 
 **Request:**
+
 ```json
 {
   "traceId": "TR-20250515-001",
@@ -141,6 +154,7 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -152,6 +166,7 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ```
 
 **Database Changes:**
+
 - Creates row in `tbo_hotel_bookings` table with:
   - `trace_id`, `hotel_code`, `hotel_name`
   - `block_price`, `block_status`
@@ -161,15 +176,18 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ---
 
 #### **c) Book Route** (`api/routes/tbo/book.js`)
+
 **Endpoint:** `POST /api/tbo/book`
 
 **Enhancements:**
+
 - ✅ Updates existing booking record OR creates new one
 - ✅ Captures confirmation/voucher details
 - ✅ Marks if price changed during book stage
 - ✅ Records booking status as "confirmed"
 
 **Request:**
+
 ```json
 {
   "traceId": "TR-20250515-001",
@@ -189,6 +207,7 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -202,6 +221,7 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ```
 
 **Database Changes:**
+
 - Updates row in `tbo_hotel_bookings` table with:
   - `book_price`, `book_status`
   - `price_changed_in_book` flag
@@ -211,12 +231,15 @@ const result = await TBOHotelRateHistory.recordPriceChange({
 ---
 
 ### **3. New Bookings Management Routes** (`api/routes/tbo/bookings.js`)
+
 **Base Endpoint:** `/api/tbo/bookings`
 
 #### **GET /api/tbo/bookings/:id**
+
 Get a single booking with rate history.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -236,9 +259,11 @@ Get a single booking with rate history.
 ---
 
 #### **GET /api/tbo/bookings/trace/:traceId**
+
 Get bookings by trace ID.
 
 **Usage:**
+
 ```bash
 GET /api/tbo/bookings/trace/TR-20250515-001
 ```
@@ -246,9 +271,11 @@ GET /api/tbo/bookings/trace/TR-20250515-001
 ---
 
 #### **GET /api/tbo/bookings**
+
 Get all bookings with filtering and pagination.
 
 **Query Parameters:**
+
 - `hotel_code` - Filter by hotel
 - `hotel_name` - Search by name
 - `block_status` - Filter by block status
@@ -257,6 +284,7 @@ Get all bookings with filtering and pagination.
 - `limit` - Results per page (default: 20)
 
 **Usage:**
+
 ```bash
 GET /api/tbo/bookings?hotel_code=DXB001&book_status=confirmed&page=1&limit=10
 ```
@@ -264,9 +292,11 @@ GET /api/tbo/bookings?hotel_code=DXB001&book_status=confirmed&page=1&limit=10
 ---
 
 #### **GET /api/tbo/bookings/:id/rate-history**
+
 Get price history for a booking.
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -299,18 +329,22 @@ Get price history for a booking.
 ---
 
 #### **GET /api/tbo/bookings/analytics/stats**
+
 Get booking analytics.
 
 **Query Parameters:**
+
 - `dateFrom` - Start date (YYYY-MM-DD)
 - `dateTo` - End date (YYYY-MM-DD)
 
 **Usage:**
+
 ```bash
 GET /api/tbo/bookings/analytics/stats?dateFrom=2025-05-01&dateTo=2025-05-31
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -332,17 +366,21 @@ GET /api/tbo/bookings/analytics/stats?dateFrom=2025-05-01&dateTo=2025-05-31
 ---
 
 #### **GET /api/tbo/bookings/analytics/price-changes**
+
 Get hotels with frequent price changes.
 
 **Query Parameters:**
+
 - `dateFrom`, `dateTo`, `threshold` (default: 5)
 
 **Usage:**
+
 ```bash
 GET /api/tbo/bookings/analytics/price-changes?dateFrom=2025-05-01&dateTo=2025-05-31&threshold=10
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -405,6 +443,7 @@ GET /api/tbo/bookings/analytics/price-changes?dateFrom=2025-05-01&dateTo=2025-05
 ## 📈 Data Structures
 
 ### **tbo_hotel_bookings Table**
+
 ```sql
 - id (PRIMARY KEY)
 - booking_id (FK to bookings table)
@@ -428,6 +467,7 @@ GET /api/tbo/bookings/analytics/price-changes?dateFrom=2025-05-01&dateTo=2025-05
 ```
 
 ### **tbo_hotel_rate_history Table**
+
 ```sql
 - id (PRIMARY KEY)
 - tbo_hotel_booking_id (FK to tbo_hotel_bookings)
@@ -451,6 +491,7 @@ GET /api/tbo/bookings/analytics/price-changes?dateFrom=2025-05-01&dateTo=2025-05
 ### **Step 4: Connect Frontend** (Currently In Progress)
 
 Files that need updating:
+
 - `client/components/HotelSearchForm.tsx` - Call `/api/tbo/search`
 - `client/pages/HotelResults.tsx` - Display results
 - `client/pages/HotelDetails.tsx` - Show room details
@@ -460,6 +501,7 @@ Files that need updating:
 ### **Step 5: Run Certification Tests**
 
 Execute test runner to validate 8 scenarios:
+
 ```bash
 node api/tests/tbo-cert-runner.js
 ```
@@ -491,6 +533,7 @@ node api/tests/tbo-cert-runner.js
 ## 📝 Summary
 
 **What Was Done:**
+
 - ✅ 2 new database models with full CRUD operations
 - ✅ 5 enhanced/new API routes for complete booking workflow
 - ✅ 6 GET endpoints for booking retrieval and analytics

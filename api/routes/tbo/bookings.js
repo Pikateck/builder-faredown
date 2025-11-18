@@ -101,7 +101,7 @@ router.get("/", async (req, res) => {
     const result = await TBOHotelBooking.getAll(
       filters,
       parseInt(page),
-      parseInt(limit)
+      parseInt(limit),
     );
 
     res.json(result);
@@ -191,7 +191,7 @@ router.get("/analytics/price-changes", async (req, res) => {
     const result = await TBOHotelRateHistory.getHotelsWithFrequentChanges(
       dateFrom,
       dateTo,
-      parseInt(threshold)
+      parseInt(threshold),
     );
 
     res.json({

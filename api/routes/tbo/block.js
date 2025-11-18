@@ -91,10 +91,14 @@ router.post("/", async (req, res) => {
       // Extract pricing information from hotelRoomDetails
       let blockPrice = null;
       let blockCurrency = null;
-      if (Array.isArray(result.hotelRoomDetails) && result.hotelRoomDetails.length > 0) {
+      if (
+        Array.isArray(result.hotelRoomDetails) &&
+        result.hotelRoomDetails.length > 0
+      ) {
         const firstRoom = result.hotelRoomDetails[0];
         if (firstRoom.price) {
-          blockPrice = firstRoom.price.offeredPrice || firstRoom.price.publishedPrice;
+          blockPrice =
+            firstRoom.price.offeredPrice || firstRoom.price.publishedPrice;
           blockCurrency = firstRoom.price.currencyCode;
         }
       }
@@ -106,7 +110,7 @@ router.post("/", async (req, res) => {
         hotel_name: hotelName,
         block_price: blockPrice,
         block_currency: blockCurrency,
-        block_status: result.responseStatus === 1 ? 'success' : 'failed',
+        block_status: result.responseStatus === 1 ? "success" : "failed",
         price_changed_in_block: result.isPriceChanged || false,
         supplier_response: result,
         room_config: JSON.stringify(hotelRoomDetails),
@@ -116,7 +120,10 @@ router.post("/", async (req, res) => {
       if (saveResult.success) {
         bookingRecord = saveResult.data;
       } else {
-        console.error("Warning: Failed to save booking record:", saveResult.error);
+        console.error(
+          "Warning: Failed to save booking record:",
+          saveResult.error,
+        );
       }
     } catch (dbError) {
       console.error("Error saving booking to database:", dbError);

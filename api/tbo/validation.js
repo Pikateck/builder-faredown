@@ -88,11 +88,17 @@ function validateNationality(nationalityCode) {
   const normalized = String(nationalityCode).toUpperCase().trim();
 
   if (!/^[A-Z]{2}$/.test(normalized)) {
-    return { valid: false, error: `Invalid nationality format: "${nationalityCode}". Expected ISO 2-letter code.` };
+    return {
+      valid: false,
+      error: `Invalid nationality format: "${nationalityCode}". Expected ISO 2-letter code.`,
+    };
   }
 
   if (!TBO_SUPPORTED_NATIONALITIES[normalized]) {
-    return { valid: false, error: `Nationality "${normalized}" not supported by TBO. See supported list.` };
+    return {
+      valid: false,
+      error: `Nationality "${normalized}" not supported by TBO. See supported list.`,
+    };
   }
 
   return { valid: true };
@@ -141,7 +147,10 @@ function validatePAN(pan) {
  */
 function validatePassportNumber(passportNo) {
   if (!passportNo) {
-    return { valid: false, error: "Passport number is required when IsPassportMandatory=true" };
+    return {
+      valid: false,
+      error: "Passport number is required when IsPassportMandatory=true",
+    };
   }
 
   const normalized = String(passportNo).toUpperCase().trim();
@@ -171,11 +180,17 @@ function validatePassportExpiry(expiryDate, checkInDate) {
   const checkIn = new Date(checkInDate);
 
   if (isNaN(expiry.getTime())) {
-    return { valid: false, error: `Invalid expiry date format: "${expiryDate}". Expected YYYY-MM-DD.` };
+    return {
+      valid: false,
+      error: `Invalid expiry date format: "${expiryDate}". Expected YYYY-MM-DD.`,
+    };
   }
 
   if (isNaN(checkIn.getTime())) {
-    return { valid: false, error: `Invalid check-in date format: "${checkInDate}". Expected YYYY-MM-DD.` };
+    return {
+      valid: false,
+      error: `Invalid check-in date format: "${checkInDate}". Expected YYYY-MM-DD.`,
+    };
   }
 
   if (expiry <= checkIn) {
@@ -216,22 +231,37 @@ function validatePassenger(passenger, roomConfig = {}) {
   }
 
   // Title validation
-  const validTitles = ["Mr", "Mrs", "Miss", "Ms", "Master", "Mademoiselle", "Dr", "Prof"];
+  const validTitles = [
+    "Mr",
+    "Mrs",
+    "Miss",
+    "Ms",
+    "Master",
+    "Mademoiselle",
+    "Dr",
+    "Prof",
+  ];
   const title = passenger.Title || passenger.title;
   if (!title || !validTitles.includes(title)) {
-    errors.push(`Invalid title: "${title}". Expected one of: ${validTitles.join(", ")}`);
+    errors.push(
+      `Invalid title: "${title}". Expected one of: ${validTitles.join(", ")}`,
+    );
   }
 
   // First name validation
   const firstName = passenger.FirstName || passenger.firstName;
   if (!firstName || !/^[a-zA-Z\s'-]{2,50}$/.test(firstName)) {
-    errors.push(`Invalid first name: "${firstName}". Must be 2-50 alphabetic characters.`);
+    errors.push(
+      `Invalid first name: "${firstName}". Must be 2-50 alphabetic characters.`,
+    );
   }
 
   // Last name validation
   const lastName = passenger.LastName || passenger.lastName;
   if (!lastName || !/^[a-zA-Z\s'-]{2,50}$/.test(lastName)) {
-    errors.push(`Invalid last name: "${lastName}". Must be 2-50 alphabetic characters.`);
+    errors.push(
+      `Invalid last name: "${lastName}". Must be 2-50 alphabetic characters.`,
+    );
   }
 
   // Email validation
@@ -244,7 +274,9 @@ function validatePassenger(passenger, roomConfig = {}) {
   // Phone number validation (basic)
   const phone = passenger.Phoneno || passenger.phoneno || passenger.phone;
   if (phone && !/^\+?[0-9\s\-()]{7,20}$/.test(phone)) {
-    errors.push(`Invalid phone number: "${phone}". Expected international format.`);
+    errors.push(
+      `Invalid phone number: "${phone}". Expected international format.`,
+    );
   }
 
   // Age validation
@@ -256,7 +288,9 @@ function validatePassenger(passenger, roomConfig = {}) {
   // PaxType validation
   const paxType = passenger.PaxType || passenger.paxType;
   if (!paxType || ![1, 2].includes(paxType)) {
-    errors.push(`Invalid PaxType: ${paxType}. Expected 1 (Adult) or 2 (Child).`);
+    errors.push(
+      `Invalid PaxType: ${paxType}. Expected 1 (Adult) or 2 (Child).`,
+    );
   }
 
   // Nationality validation
@@ -282,7 +316,8 @@ function validatePassenger(passenger, roomConfig = {}) {
       }
 
       // Validate expiry if provided
-      const passportExp = passenger.PassportExpDate || passenger.passportExpDate;
+      const passportExp =
+        passenger.PassportExpDate || passenger.passportExpDate;
       const checkInDate = roomConfig.checkInDate || "2025-12-15"; // Default for testing
       if (passportExp) {
         const expiryCheck = validatePassportExpiry(passportExp, checkInDate);
@@ -321,7 +356,9 @@ function validatePassenger(passenger, roomConfig = {}) {
   // Country code validation
   const countryCode = passenger.CountryCode || passenger.countryCode;
   if (!countryCode || !/^[A-Z]{2}$/.test(countryCode)) {
-    errors.push(`Invalid country code: "${countryCode}". Expected ISO 2-letter code.`);
+    errors.push(
+      `Invalid country code: "${countryCode}". Expected ISO 2-letter code.`,
+    );
   }
 
   return {
@@ -353,7 +390,9 @@ function validatePrice(price) {
   // Currency validation
   const currency = price.CurrencyCode || price.currencyCode;
   if (!currency || !/^[A-Z]{3}$/.test(currency)) {
-    errors.push(`Invalid currency code: "${currency}". Expected ISO 3-letter code (USD, INR, etc.).`);
+    errors.push(
+      `Invalid currency code: "${currency}". Expected ISO 3-letter code (USD, INR, etc.).`,
+    );
   }
 
   // Room price validation
@@ -369,7 +408,9 @@ function validatePrice(price) {
   }
 
   // Published price validation (RSP rule: PublishedPrice ≥ RoomPrice)
-  const publishedPrice = parseFloat(price.PublishedPrice || price.publishedPrice || roomPrice);
+  const publishedPrice = parseFloat(
+    price.PublishedPrice || price.publishedPrice || roomPrice,
+  );
   if (publishedPrice < roomPrice) {
     errors.push(
       `RSP violation: PublishedPrice (${publishedPrice}) < RoomPrice (${roomPrice}). ` +
@@ -378,7 +419,9 @@ function validatePrice(price) {
   }
 
   // Offered price validation (RSP rule: OfferedPrice ≤ PublishedPrice)
-  const offeredPrice = parseFloat(price.OfferedPrice || price.offeredPrice || publishedPrice);
+  const offeredPrice = parseFloat(
+    price.OfferedPrice || price.offeredPrice || publishedPrice,
+  );
   if (offeredPrice > publishedPrice) {
     errors.push(
       `RSP violation: OfferedPrice (${offeredPrice}) > PublishedPrice (${publishedPrice}). ` +
@@ -388,7 +431,8 @@ function validatePrice(price) {
 
   // Calculate discount percentage for warnings
   if (publishedPrice > 0) {
-    const discountPercentage = ((publishedPrice - offeredPrice) / publishedPrice) * 100;
+    const discountPercentage =
+      ((publishedPrice - offeredPrice) / publishedPrice) * 100;
     if (discountPercentage > 50) {
       warnings.push(
         `⚠️  High discount detected: ${discountPercentage.toFixed(1)}% off. ` +
@@ -398,7 +442,9 @@ function validatePrice(price) {
   }
 
   // Other charges validation
-  const otherCharges = parseFloat(price.OtherCharges || price.otherCharges || 0);
+  const otherCharges = parseFloat(
+    price.OtherCharges || price.otherCharges || 0,
+  );
   if (isNaN(otherCharges) || otherCharges < 0) {
     errors.push(`Invalid other charges: ${otherCharges}. Must be >= 0.`);
   }
@@ -426,7 +472,10 @@ function validateDates(checkInDate, noOfNights) {
   }
 
   if (!noOfNights || noOfNights < 1) {
-    return { valid: false, error: `Invalid number of nights: ${noOfNights}. Must be > 0.` };
+    return {
+      valid: false,
+      error: `Invalid number of nights: ${noOfNights}. Must be > 0.`,
+    };
   }
 
   // Parse check-in date
@@ -439,7 +488,10 @@ function validateDates(checkInDate, noOfNights) {
     // YYYY-MM-DD format
     checkInObj = new Date(checkInDate);
   } else {
-    return { valid: false, error: `Invalid date format: "${checkInDate}". Expected dd/MM/yyyy or YYYY-MM-DD.` };
+    return {
+      valid: false,
+      error: `Invalid date format: "${checkInDate}". Expected dd/MM/yyyy or YYYY-MM-DD.`,
+    };
   }
 
   if (isNaN(checkInObj.getTime())) {
@@ -450,7 +502,10 @@ function validateDates(checkInDate, noOfNights) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   if (checkInObj < today) {
-    return { valid: false, error: `Check-in date cannot be in the past: "${checkInDate}".` };
+    return {
+      valid: false,
+      error: `Check-in date cannot be in the past: "${checkInDate}".`,
+    };
   }
 
   // Calculate check-out date
@@ -487,13 +542,15 @@ function validateRoomConfig(roomConfig) {
   }
 
   // Adult count validation
-  const adults = roomConfig.NoOfAdults || roomConfig.adults || roomConfig.noOfAdults;
+  const adults =
+    roomConfig.NoOfAdults || roomConfig.adults || roomConfig.noOfAdults;
   if (!adults || adults < 1 || adults > 4) {
     errors.push(`Invalid adult count: ${adults}. Must be 1-4 per room.`);
   }
 
   // Child count validation
-  const children = roomConfig.NoOfChild || roomConfig.children || roomConfig.noOfChild || 0;
+  const children =
+    roomConfig.NoOfChild || roomConfig.children || roomConfig.noOfChild || 0;
   if (children < 0 || children > 3) {
     errors.push(`Invalid child count: ${children}. Must be 0-3 per room.`);
   }
@@ -513,8 +570,13 @@ function validateRoomConfig(roomConfig) {
         errors.push(`Invalid child age at index ${idx}: ${age}. Must be 0-17.`);
       }
     });
-  } else if (children > 0 && (!Array.isArray(childAges) || childAges.length === 0)) {
-    errors.push(`Child ages required when NoOfChild > 0. Provided: ${childAges}`);
+  } else if (
+    children > 0 &&
+    (!Array.isArray(childAges) || childAges.length === 0)
+  ) {
+    errors.push(
+      `Child ages required when NoOfChild > 0. Provided: ${childAges}`,
+    );
   }
 
   return {
@@ -557,7 +619,8 @@ function validateDeDupeContext(hotel, categoryId) {
     return {
       isDeDupe: true,
       categoryIdRequired: true,
-      error: `De-dupe hotel detected (IsTBOMapped=true) but CategoryId is missing. ` +
+      error:
+        `De-dupe hotel detected (IsTBOMapped=true) but CategoryId is missing. ` +
         `CategoryId is REQUIRED for de-dupe hotels in BlockRoom/Book.`,
     };
   }

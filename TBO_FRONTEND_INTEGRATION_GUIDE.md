@@ -9,9 +9,11 @@ This guide shows how to connect the frontend components to the new TBO hotel API
 ## 🎯 Integration Points
 
 ### **1. Hotel Search Form Integration**
+
 **File:** `client/components/HotelSearchForm.tsx`
 
 **Current Flow:**
+
 1. User fills search form (destination, dates, rooms)
 2. Submit handler calls some hotel search function
 3. Results displayed in HotelResults
@@ -74,6 +76,7 @@ const handleHotelSearch = async (formData) => {
 ---
 
 ### **2. Hotel Results Page Integration**
+
 **File:** `client/pages/HotelResults.tsx`
 
 **Required Changes:**
@@ -103,12 +106,15 @@ const loadTBOHotels = async (searchData) => {
 };
 
 // In render, show TBO hotels
-const displayedHotels = hotels.filter(h => h.supplier === "TBO" || !h.supplier);
+const displayedHotels = hotels.filter(
+  (h) => h.supplier === "TBO" || !h.supplier,
+);
 ```
 
 ---
 
 ### **3. Hotel Details Page Integration**
+
 **File:** `client/pages/HotelDetails.tsx`
 
 **Required Changes:**
@@ -149,6 +155,7 @@ const handleSelectHotel = async (hotel) => {
 ---
 
 ### **4. Hotel Booking Page Integration**
+
 **File:** `client/pages/HotelBooking.tsx`
 
 **This is where the BLOCK → BOOK flow happens**
@@ -226,7 +233,7 @@ const handlePassengerSubmit = async (passengers) => {
       noOfRooms: blockResponse.hotelRoomDetails.length,
       isVoucherBooking: true,
       hotelRoomDetails: blockResponse.hotelRoomDetails,
-      hotelPassenger: passengers.map(p => ({
+      hotelPassenger: passengers.map((p) => ({
         Title: p.title,
         FirstName: p.firstName,
         LastName: p.lastName,
@@ -273,6 +280,7 @@ const handlePassengerSubmit = async (passengers) => {
 ---
 
 ### **5. Booking Confirmation Page Integration**
+
 **File:** `client/pages/BookingVoucher.tsx`
 
 **Display booking confirmation and voucher:**
@@ -335,12 +343,14 @@ const loadBookingDetails = async (bookingId) => {
 ## 📋 Implementation Checklist
 
 ### **Phase 1: Search Form**
+
 - [ ] Update HotelSearchForm.tsx to call `/api/tbo/search`
 - [ ] Store search context (traceId, cityId, etc.)
 - [ ] Pass to HotelResults page
 - [ ] Test: Search hotels and see results
 
 ### **Phase 2: Results & Details**
+
 - [ ] Update HotelResults.tsx to display TBO results
 - [ ] Add hotel selection handler
 - [ ] Update HotelDetails.tsx to call `/api/tbo/room`
@@ -348,6 +358,7 @@ const loadBookingDetails = async (bookingId) => {
 - [ ] Test: Select hotel and see rooms
 
 ### **Phase 3: Booking Flow**
+
 - [ ] Create/Update HotelBooking.tsx
 - [ ] Implement Block step → Call `/api/tbo/block`
 - [ ] Show price change warnings
@@ -356,6 +367,7 @@ const loadBookingDetails = async (bookingId) => {
 - [ ] Test: Complete booking flow
 
 ### **Phase 4: Confirmation**
+
 - [ ] Update BookingVoucher.tsx
 - [ ] Call `/api/tbo/bookings/:id` to get details
 - [ ] Display booking confirmation
@@ -364,6 +376,7 @@ const loadBookingDetails = async (bookingId) => {
 - [ ] Test: View booking confirmation
 
 ### **Phase 5: Testing**
+
 - [ ] Manual testing of complete flow
 - [ ] Run `api/tests/tbo-cert-runner.js`
 - [ ] Fix any certification test failures
@@ -374,6 +387,7 @@ const loadBookingDetails = async (bookingId) => {
 ## 🔗 API Reference for Frontend
 
 ### **Search Hotels**
+
 ```
 POST /api/tbo/search
 Body: { destination, countryCode, checkIn, checkOut, rooms, currency, guestNationality }
@@ -381,6 +395,7 @@ Returns: { traceId, hotels, ... }
 ```
 
 ### **Get Room Details**
+
 ```
 POST /api/tbo/room
 Body: { traceId, resultIndex, hotelCode, ... }
@@ -388,6 +403,7 @@ Returns: { hotelRoomDetails: [...] }
 ```
 
 ### **Block Room**
+
 ```
 POST /api/tbo/block
 Body: { traceId, resultIndex, hotelCode, hotelRoomDetails, ... }
@@ -396,6 +412,7 @@ Returns: { bookingId, isPriceChanged, hotelRoomDetails, ... }
 ```
 
 ### **Book Hotel**
+
 ```
 POST /api/tbo/book
 Body: { traceId, resultIndex, hotelCode, hotelRoomDetails, hotelPassenger, ... }
@@ -404,12 +421,14 @@ Returns: { bookingId, confirmationNo, bookingRefNo, ... }
 ```
 
 ### **Get Booking Details**
+
 ```
 GET /api/tbo/bookings/:id
 Returns: { data: { ...booking }, rateHistory: [...] }
 ```
 
 ### **Get Voucher**
+
 ```
 GET /api/tbo/voucher/:id
 Returns: { data: { ...voucher } }

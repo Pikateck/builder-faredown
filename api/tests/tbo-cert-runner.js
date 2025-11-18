@@ -32,7 +32,7 @@ const CERTIFICATION_CASES = [
     name: "Single Room, Single Guest, Dubai (Basic Flow)",
     description: "Tests basic flow: search → room → block → book → voucher",
     destination: "Dubai",
-    cityId: 12345,  // Dubai city ID (replace with actual)
+    cityId: 12345, // Dubai city ID (replace with actual)
     countryCode: "AE",
     checkInDate: "15/12/2025",
     checkOutDate: "18/12/2025",
@@ -50,7 +50,8 @@ const CERTIFICATION_CASES = [
   {
     caseId: 2,
     name: "Single Room, 2 Adults, Mumbai",
-    description: "Tests multiple adults in one room with proper LeadPassenger flag",
+    description:
+      "Tests multiple adults in one room with proper LeadPassenger flag",
     destination: "Mumbai",
     cityId: 10449,
     countryCode: "IN",
@@ -95,7 +96,8 @@ const CERTIFICATION_CASES = [
   {
     caseId: 4,
     name: "Adult + Child Booking, Dubai",
-    description: "Tests family booking with adult and child, validates child-specific rules",
+    description:
+      "Tests family booking with adult and child, validates child-specific rules",
     destination: "Dubai",
     cityId: 12345,
     countryCode: "AE",
@@ -107,7 +109,7 @@ const CERTIFICATION_CASES = [
       {
         adults: 1,
         children: 1,
-        childAges: [5],  // 5-year-old child
+        childAges: [5], // 5-year-old child
       },
     ],
   },
@@ -115,9 +117,10 @@ const CERTIFICATION_CASES = [
   {
     caseId: 5,
     name: "De-Dupe Hotel with CategoryId, Singapore",
-    description: "Tests de-dupe hotel handling, validates CategoryId requirement",
+    description:
+      "Tests de-dupe hotel handling, validates CategoryId requirement",
     destination: "Singapore",
-    cityId: 11111,  // Singapore city ID (replace with actual)
+    cityId: 11111, // Singapore city ID (replace with actual)
     countryCode: "SG",
     checkInDate: "23/12/2025",
     checkOutDate: "25/12/2025",
@@ -135,9 +138,10 @@ const CERTIFICATION_CASES = [
   {
     caseId: 6,
     name: "Extended Stay (5 Nights), Bangkok",
-    description: "Tests longer booking duration, validates cancellation policy for extended stay",
+    description:
+      "Tests longer booking duration, validates cancellation policy for extended stay",
     destination: "Bangkok",
-    cityId: 9999,  // Bangkok city ID (replace with actual)
+    cityId: 9999, // Bangkok city ID (replace with actual)
     countryCode: "TH",
     checkInDate: "24/12/2025",
     checkOutDate: "29/12/2025",
@@ -155,7 +159,8 @@ const CERTIFICATION_CASES = [
   {
     caseId: 7,
     name: "Cancellation Flow Test",
-    description: "Tests complete flow → successful booking → cancellation → refund",
+    description:
+      "Tests complete flow → successful booking → cancellation → refund",
     destination: "Dubai",
     cityId: 12345,
     countryCode: "AE",
@@ -170,15 +175,16 @@ const CERTIFICATION_CASES = [
         childAges: [],
       },
     ],
-    testCancellation: true,  // Flag to test cancellation
+    testCancellation: true, // Flag to test cancellation
   },
 
   {
     caseId: 8,
     name: "Multiple Adults + Multiple Children, Maldives",
-    description: "Tests complex occupancy: multiple adults and children, validates all validations",
+    description:
+      "Tests complex occupancy: multiple adults and children, validates all validations",
     destination: "Maldives",
-    cityId: 8888,  // Maldives city ID (replace with actual)
+    cityId: 8888, // Maldives city ID (replace with actual)
     countryCode: "MV",
     checkInDate: "28/12/2025",
     checkOutDate: "30/12/2025",
@@ -255,11 +261,12 @@ async function runCertificationTests() {
         if (cancellationResult.success) {
           console.log(`✅ Cancellation successful`);
         } else {
-          console.log(`⚠️  Cancellation test failed: ${cancellationResult.error}`);
+          console.log(
+            `⚠️  Cancellation test failed: ${cancellationResult.error}`,
+          );
           results.summary.partialCases++;
         }
       }
-
     } catch (error) {
       results.summary.failedCases++;
       const caseError = {
@@ -275,7 +282,8 @@ async function runCertificationTests() {
 
   // Finalize results
   results.endTime = new Date().toISOString();
-  results.durationSeconds = (new Date(results.endTime) - new Date(results.startTime)) / 1000;
+  results.durationSeconds =
+    (new Date(results.endTime) - new Date(results.startTime)) / 1000;
 
   // Print summary
   printSummary(results);
@@ -302,12 +310,14 @@ async function testCancellationFlow(bookingDetails) {
 
     const { sendChangeRequest } = require("../tbo/cancel");
 
-    console.log(`  Testing cancellation for booking ${bookingDetails.bookingId}...`);
+    console.log(
+      `  Testing cancellation for booking ${bookingDetails.bookingId}...`,
+    );
 
     const changeRes = await sendChangeRequest({
       bookingId: bookingDetails.bookingId,
       confirmationNo: bookingDetails.confirmationNo,
-      requestType: 4,  // Cancellation
+      requestType: 4, // Cancellation
       remarks: "Test cancellation from certification runner",
     });
 
@@ -356,7 +366,9 @@ function printSummary(results) {
     if (testCase.bookingDetails) {
       console.log(`  BookingId: ${testCase.bookingDetails.bookingId}`);
       console.log(`  BookingRefNo: ${testCase.bookingDetails.bookingRefNo}`);
-      console.log(`  Balance: ${testCase.bookingDetails.balance} ${testCase.bookingDetails.currency}`);
+      console.log(
+        `  Balance: ${testCase.bookingDetails.balance} ${testCase.bookingDetails.currency}`,
+      );
     }
   });
 
@@ -368,7 +380,10 @@ function printSummary(results) {
   console.log(`  ❌ Failed: ${results.summary.failedCases}`);
   console.log(`  ⚠️  Partial: ${results.summary.partialCases}`);
 
-  const passRate = ((results.summary.passedCases / results.summary.totalCases) * 100).toFixed(1);
+  const passRate = (
+    (results.summary.passedCases / results.summary.totalCases) *
+    100
+  ).toFixed(1);
   console.log(`  Pass Rate: ${passRate}%\n`);
 
   // Errors
@@ -398,7 +413,10 @@ function saveAuditLog(results) {
     console.log(`\n✅ Audit log saved: ${outputPath}`);
 
     // Also generate a summary report
-    const summaryPath = path.join(process.cwd(), "tbo-certification-summary.txt");
+    const summaryPath = path.join(
+      process.cwd(),
+      "tbo-certification-summary.txt",
+    );
     const summaryText = generateSummaryReport(results);
     fs.writeFileSync(summaryPath, summaryText, "utf8");
     console.log(`✅ Summary report saved: ${summaryPath}`);
@@ -515,7 +533,8 @@ For detailed debugging, check:
 if (require.main === module) {
   runCertificationTests()
     .then((results) => {
-      const passRate = (results.summary.passedCases / results.summary.totalCases) * 100;
+      const passRate =
+        (results.summary.passedCases / results.summary.totalCases) * 100;
       process.exit(passRate === 100 ? 0 : 1);
     })
     .catch((error) => {

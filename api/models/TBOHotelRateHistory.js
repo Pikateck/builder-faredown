@@ -159,9 +159,7 @@ class TBOHotelRateHistory {
 
     if (filters.price_changed) {
       const priceField =
-        stage === "block"
-          ? "price_changed_in_block"
-          : "price_changed_in_book";
+        stage === "block" ? "price_changed_in_block" : "price_changed_in_book";
       whereConditions.push(`${priceField} = $${paramIndex}`);
       values.push(filters.price_changed);
       paramIndex++;

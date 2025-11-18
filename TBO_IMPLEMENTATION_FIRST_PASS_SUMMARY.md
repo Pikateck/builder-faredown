@@ -15,7 +15,7 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 ✅ **Validation Layer** - PAN, Passport, Nationality, Pricing, De-dupe detection  
 ✅ **FAQ & Guidelines** - Common issues, solutions, patterns, and best practices  
 ✅ **8 Certification Test Cases** - Comprehensive test runner with audit logging  
-✅ **Database Schema** - TBO booking tracking and rate history tables  
+✅ **Database Schema** - TBO booking tracking and rate history tables
 
 ---
 
@@ -24,6 +24,7 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 ### 1. API Specification & Documentation
 
 #### **api/tbo/API_SPECIFICATION.md** (NEW - 792 lines)
+
 - Complete TBO Hotel API v10.0 endpoint documentation
 - All 11 API endpoints with request/response examples
 - Validation rules for all fields
@@ -33,6 +34,7 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 - Environment variables reference
 
 **Key Sections:**
+
 - Authentication (Authenticate, GetDestinationSearchStaticData)
 - Hotel Search (GetHotelResult, GetHotelRoom)
 - Booking Flow (BlockRoom, Book, GenerateVoucher)
@@ -46,6 +48,7 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 - Package Fare Rules
 
 #### **api/tbo/FAQ_AND_GUIDELINES.md** (NEW - 550 lines)
+
 - 10 Frequently Asked Questions with detailed answers
 - Common error codes (5001-5008) and solutions
 - Implementation patterns (6 reusable patterns)
@@ -56,6 +59,7 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 - Integration checklist
 
 **Key Content:**
+
 - De-Dupe hotel detection and handling
 - Price change management during booking flow
 - Cancellation flow (2-step process)
@@ -67,9 +71,11 @@ This implementation provides a complete, spec-compliant TBO Hotel API v10.0 inte
 ### 2. Unified Hotel Client
 
 #### **api/tbo/hotel-client.js** (NEW - 645 lines)
+
 Centralized API client with comprehensive features:
 
 **Core Methods:**
+
 - `authenticate()` - Get TokenId with 1-hour caching
 - `search(params)` - Search hotels
 - `getRoom(params)` - Get room details
@@ -85,6 +91,7 @@ Centralized API client with comprehensive features:
 - `resolveCityId(cityName, countryCode)` - Resolve city ID
 
 **Features:**
+
 - Request/response logging for audit trail
 - TBO error code mapping (5001-5008)
 - Retry logic with exponential backoff
@@ -93,6 +100,7 @@ Centralized API client with comprehensive features:
 - Normalized response format
 
 **Error Handling:**
+
 ```javascript
 TBO_ERROR_CODES = {
   5001: "Invalid TokenId or authentication failed",
@@ -102,13 +110,14 @@ TBO_ERROR_CODES = {
   5005: "Invalid guest details",
   5006: "Invalid passenger information",
   5007: "Price changed significantly",
-  5008: "Cancellation policy changed"
-}
+  5008: "Cancellation policy changed",
+};
 ```
 
 ### 3. Validation Layer
 
 #### **api/tbo/validation.js** (NEW - 652 lines)
+
 Comprehensive validation module:
 
 **Validation Functions:**
@@ -172,9 +181,11 @@ IN, US, GB, CA, AU, NZ, SG, MY, TH, ID, PH, VN, AE, SA, KW, QA, BH, OM, JO, EG, 
 ### 4. Test Runner
 
 #### **api/tests/tbo-cert-runner.js** (NEW - 528 lines)
+
 8-scenario certification test runner:
 
 **Test Cases:**
+
 1. **Case 1:** Single room, single guest, Dubai (basic flow)
 2. **Case 2:** Single room, 2 adults, Mumbai (multiple adults)
 3. **Case 3:** 2 rooms, multiple guests, Delhi (multiple rooms)
@@ -185,6 +196,7 @@ IN, US, GB, CA, AU, NZ, SG, MY, TH, ID, PH, VN, AE, SA, KW, QA, BH, OM, JO, EG, 
 8. **Case 8:** Multiple adults + children, Maldives (complex occupancy)
 
 **Features:**
+
 - Each case runs complete flow: search → room → block → book → voucher → balance
 - Optional cancellation testing for selected cases
 - Comprehensive audit logging
@@ -193,10 +205,12 @@ IN, US, GB, CA, AU, NZ, SG, MY, TH, ID, PH, VN, AE, SA, KW, QA, BH, OM, JO, EG, 
 - Error tracking and recommendations
 
 **Output Files:**
+
 - `tbo-certification-results.json` - Complete audit log with all API calls
 - `tbo-certification-summary.txt` - Human-readable summary report
 
 **Run Command:**
+
 ```bash
 node api/tests/tbo-cert-runner.js
 ```
@@ -211,54 +225,54 @@ node api/tests/tbo-cert-runner.js
 -- TBO Hotel Bookings Tracking Table
 CREATE TABLE IF NOT EXISTS tbo_hotel_bookings (
   id SERIAL PRIMARY KEY,
-  
+
   -- TBO Identifiers
   booking_id VARCHAR(50) NOT NULL UNIQUE,
   booking_ref_no VARCHAR(100),
   confirmation_no VARCHAR(100),
-  
+
   -- Booking Context
   trace_id VARCHAR(255),
   hotel_code VARCHAR(50),
   hotel_name VARCHAR(255),
   result_index INT,
   category_id VARCHAR(50),
-  
+
   -- Dates & Destination
   check_in_date DATE,
   check_out_date DATE,
   city_id INT,
   city_name VARCHAR(255),
-  
+
   -- Pricing (captured at booking time)
   currency VARCHAR(3),
   total_price DECIMAL(12, 2),
   price_details JSONB DEFAULT '{}'::jsonb,
-  
+
   -- Passenger Info (snapshot)
   lead_passenger_name VARCHAR(255),
   lead_passenger_email VARCHAR(255),
   passenger_count INT,
-  
+
   -- Room Details (snapshot)
   no_of_rooms INT,
   room_details JSONB DEFAULT '[]'::jsonb,
-  
+
   -- Status Tracking
   booking_status VARCHAR(50) DEFAULT 'confirmed',
   voucher_id VARCHAR(100),
   voucher_status VARCHAR(50),
-  
+
   -- Cancellation/Change Tracking
   change_request_id VARCHAR(100),
   cancellation_charge DECIMAL(12, 2),
   refund_amount DECIMAL(12, 2),
-  
+
   -- Audit Trail
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW(),
   supplier_api_response JSONB DEFAULT '{}'::jsonb,
-  
+
   -- Indexes
   CONSTRAINT fk_tbo_booking_city FOREIGN KEY (city_id) REFERENCES tbo_cities(id) ON DELETE SET NULL
 );
@@ -283,35 +297,35 @@ COMMENT ON TABLE tbo_hotel_bookings IS 'Tracks TBO hotel bookings with full requ
 -- Hotel Rate History - Track prices across booking stages
 CREATE TABLE IF NOT EXISTS tbo_hotel_rate_history (
   id SERIAL PRIMARY KEY,
-  
+
   -- Hotel & Rate Identifiers
   trace_id VARCHAR(255),
   result_index INT,
   hotel_code VARCHAR(50),
   room_id INT,
-  
+
   -- Rate Details (snapshot from each API call)
   check_in_date DATE,
   check_out_date DATE,
   nights INT,
-  
+
   -- Price at different stages
   search_price DECIMAL(12, 2),
   search_currency VARCHAR(3),
-  
+
   block_price DECIMAL(12, 2),
   block_currency VARCHAR(3),
   price_changed_in_block BOOLEAN DEFAULT FALSE,
-  
+
   book_price DECIMAL(12, 2),
   book_currency VARCHAR(3),
-  
+
   -- Price Components (for RSP validation)
   published_price DECIMAL(12, 2),
   offered_price DECIMAL(12, 2),
   agent_commission DECIMAL(12, 2),
   agent_markup DECIMAL(12, 2),
-  
+
   -- Audit
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -331,7 +345,7 @@ COMMENT ON TABLE tbo_hotel_rate_history IS 'Tracks hotel prices across search, b
 
 ```sql
 -- Add TBO-specific columns to existing bookings table
-ALTER TABLE bookings 
+ALTER TABLE bookings
 ADD COLUMN IF NOT EXISTS tbo_booking_id VARCHAR(50),
 ADD COLUMN IF NOT EXISTS tbo_confirmation_no VARCHAR(100),
 ADD COLUMN IF NOT EXISTS tbo_trace_id VARCHAR(255),
@@ -462,11 +476,13 @@ const validation = require("./api/tbo/validation");
 const passengerCheck = validation.validatePassenger(passenger, {
   isPassportMandatory: true,
   isPANMandatory: true,
-  checkInDate: "2025-12-15"
+  checkInDate: "2025-12-15",
 });
 
 if (!passengerCheck.valid) {
-  throw new Error(`Passenger validation failed: ${passengerCheck.errors.join(", ")}`);
+  throw new Error(
+    `Passenger validation failed: ${passengerCheck.errors.join(", ")}`,
+  );
 }
 
 // Validate price (RSP rules)
@@ -494,7 +510,7 @@ if (deDupeCheck.categoryIdRequired && !deDupeCheck.providedCategoryId) {
 # Run all 8 certification cases
 node api/tests/tbo-cert-runner.js
 
-# Output: 
+# Output:
 # - tbo-certification-results.json (full audit log)
 # - tbo-certification-summary.txt (readable report)
 ```
@@ -558,6 +574,7 @@ No additional env var changes needed.
 ### Testing Phase
 
 1. **Run Certification Tests**
+
    ```bash
    node api/tests/tbo-cert-runner.js
    ```
@@ -589,14 +606,14 @@ No additional env var changes needed.
 
 ## File Summary
 
-| File | Type | Lines | Purpose |
-|------|------|-------|---------|
-| api/tbo/API_SPECIFICATION.md | Spec | 792 | Complete TBO API v10.0 specification |
-| api/tbo/FAQ_AND_GUIDELINES.md | Guide | 550 | FAQs, patterns, best practices |
-| api/tbo/hotel-client.js | Code | 645 | Unified API client |
-| api/tbo/validation.js | Code | 652 | Field validation rules |
-| api/tests/tbo-cert-runner.js | Test | 528 | 8-scenario test runner |
-| **TOTAL** | | **3,167** | Complete implementation |
+| File                          | Type  | Lines     | Purpose                              |
+| ----------------------------- | ----- | --------- | ------------------------------------ |
+| api/tbo/API_SPECIFICATION.md  | Spec  | 792       | Complete TBO API v10.0 specification |
+| api/tbo/FAQ_AND_GUIDELINES.md | Guide | 550       | FAQs, patterns, best practices       |
+| api/tbo/hotel-client.js       | Code  | 645       | Unified API client                   |
+| api/tbo/validation.js         | Code  | 652       | Field validation rules               |
+| api/tests/tbo-cert-runner.js  | Test  | 528       | 8-scenario test runner               |
+| **TOTAL**                     |       | **3,167** | Complete implementation              |
 
 ---
 
@@ -618,6 +635,7 @@ No additional env var changes needed.
 ## Support & Next Steps
 
 **Ready to:**
+
 1. Apply database changes
 2. Push code to Render
 3. Run certification tests
@@ -625,6 +643,7 @@ No additional env var changes needed.
 5. Prepare for TBO submission
 
 **Questions?**
+
 - Check api/tbo/FAQ_AND_GUIDELINES.md
 - Review api/tbo/API_SPECIFICATION.md
 - Check error code in TBO_ERROR_CODES reference
