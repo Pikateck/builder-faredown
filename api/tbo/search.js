@@ -75,15 +75,31 @@ async function searchHotels(params = {}) {
     throw new Error(`City not found: ${destination} in ${countryCode}`);
   }
 
-  // 3. Calculate nights
-  const checkInDate = new Date(checkIn);
-  const checkOutDate = new Date(checkOut);
+  // 3. Calculate nights (parse dd/MM/yyyy or YYYY-MM-DD)
+  function parseDate(dateStr) {
+    // Try dd/MM/yyyy format first
+    const match = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+    if (match) {
+      const [, day, month, year] = match;
+      return new Date(year, month - 1, day);
+    }
+    // Fall back to ISO/other format
+    return new Date(dateStr);
+  }
+
+  const checkInDate = parseDate(checkIn);
+  const checkOutDate = parseDate(checkOut);
+
+  if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
+    throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}`);
+  }
+
   const noOfNights = Math.ceil(
     (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24),
   );
 
   if (noOfNights < 1) {
-    throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}`);
+    throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}. NoOfNights=${noOfNights}`);
   }
 
   // 4. Build RoomGuests (exact TBO format)
