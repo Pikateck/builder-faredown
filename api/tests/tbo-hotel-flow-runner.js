@@ -341,6 +341,44 @@ async function runTboHotelFlow(config = {}) {
     // STEP 4: BLOCK ROOM
     console.log("\n📍 STEP 4: BLOCK ROOM (BlockRoom)");
 
+    // STEP 4a: Map room details with case-insensitive field extraction
+    console.log("\nStep 2a: Mapping room details...");
+
+    // Normalize room fields case-insensitively
+    const roomTypeCode =
+      selectedRoom.RoomTypeCode ||
+      selectedRoom.roomTypeCode ||
+      selectedRoom.room_type_code;
+    const roomTypeName =
+      selectedRoom.RoomTypeName ||
+      selectedRoom.roomTypeName ||
+      selectedRoom.room_type_name;
+    const categoryId =
+      selectedRoom.CategoryId ||
+      selectedRoom.categoryId ||
+      selectedRoom.category_id;
+    const roomIndex =
+      selectedRoom.RoomIndex ??
+      selectedRoom.roomIndex ??
+      selectedRoom.room_index;
+    const ratePlanCode =
+      selectedRoom.RatePlanCode ||
+      selectedRoom.ratePlanCode ||
+      selectedRoom.rate_plan_code;
+
+    // STEP 4b: Validate room details against normalized fields
+    console.log("\nStep 2b: Validating room details...");
+    const errors = [];
+    if (!roomTypeCode) errors.push("RoomTypeCode is required");
+    if (!roomTypeName) errors.push("RoomTypeName is required");
+    if (!categoryId) errors.push("CategoryId is required");
+    if (roomIndex === undefined && roomIndex !== 0)
+      errors.push("RoomIndex is required");
+
+    if (errors.length > 0) {
+      throw new Error(`Room validation failed: ${errors.join(", ")}`);
+    }
+
     // Prepare hotelRoomDetails array for all rooms in this scenario
     const hotelRoomDetails = [];
     let passengerStartIndex = 0;
@@ -356,14 +394,29 @@ async function runTboHotelFlow(config = {}) {
       hotelRoomDetails.push({
         RoomIndex: hotelRoomDetails.length,
         RoomId: selectedRoom.RoomId,
-        CategoryId: selectedRoom.CategoryId,
+        CategoryId: categoryId,
         RoomName: selectedRoom.RoomName,
         Price: selectedRoom.Price,
         RoomPrice: selectedRoom.RoomPrice,
         SmokingPreference: selectedRoom.SmokingPreference,
         Guests: passengers,
+        // Mapped fields for BlockRoom (from normalized extraction)
+        RoomTypeCode: roomTypeCode,
+        RoomTypeName: roomTypeName,
+        RatePlanCode: ratePlanCode,
       });
     }
+
+    // Debug log before calling BlockRoom
+    console.log("\nBLOCK ROOM PARAMS:", {
+      traceId,
+      resultIndex,
+      hotelCode,
+      roomIndex,
+      roomTypeCode,
+      roomTypeName,
+      categoryId,
+    });
 
     const blockReq = {
       traceId: searchRes?.traceId || searchRes?.TraceId,
