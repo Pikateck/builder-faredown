@@ -127,7 +127,8 @@ function findCheapestHotel(searchResponse) {
       hotel.Price ||
       Infinity;
 
-    const numPrice = typeof price === "number" ? price : parseFloat(price) || Infinity;
+    const numPrice =
+      typeof price === "number" ? price : parseFloat(price) || Infinity;
 
     if (!cheapest || numPrice < cheapest.minPrice) {
       cheapest = {
@@ -182,7 +183,8 @@ function findCheapestRoom(roomResponse) {
       room.RoomPrice ||
       Infinity;
 
-    const numPrice = typeof price === "number" ? price : parseFloat(price) || Infinity;
+    const numPrice =
+      typeof price === "number" ? price : parseFloat(price) || Infinity;
 
     if (!cheapest || numPrice < cheapest.minPrice) {
       cheapest = {
@@ -291,7 +293,8 @@ async function runTboHotelFlow(config = {}) {
     const roomRes = await getHotelRoom(roomReq);
     results.steps.room = { request: roomReq, response: roomRes };
 
-    const roomCount = roomRes?.rooms?.length || roomRes?.HotelRoomsDetails?.length || 0;
+    const roomCount =
+      roomRes?.rooms?.length || roomRes?.HotelRoomsDetails?.length || 0;
     console.log(`✅ Got ${roomCount} room options`);
 
     if (roomCount === 0) {
