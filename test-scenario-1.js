@@ -70,6 +70,8 @@ async function testScenario1() {
     );
     if (!blockRes.data.success) throw new Error("Block failed");
     console.log("✅ Room blocked successfully");
+    console.log("Block response keys:", Object.keys(blockRes.data));
+    console.log("Block hotelRoomDetails exists:", !!blockRes.data.hotelRoomDetails);
 
     console.log("Step 4: Booking...");
     const bookRes = await axios.post(
