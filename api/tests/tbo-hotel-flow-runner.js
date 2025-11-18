@@ -353,10 +353,19 @@ async function runTboHotelFlow(config = {}) {
       selectedRoom.RoomTypeName ||
       selectedRoom.roomTypeName ||
       selectedRoom.room_type_name;
-    const categoryId =
+
+    // Extract CategoryId from room first, then fall back to hotel's SupplierHotelCodes
+    let categoryId =
       selectedRoom.CategoryId ||
       selectedRoom.categoryId ||
       selectedRoom.category_id;
+
+    if (!categoryId && hotel?.SupplierHotelCodes?.length) {
+      categoryId =
+        hotel.SupplierHotelCodes[0].CategoryId ||
+        hotel.SupplierHotelCodes[0].categoryId;
+    }
+
     const roomIndex =
       selectedRoom.RoomIndex ??
       selectedRoom.roomIndex ??
@@ -371,7 +380,12 @@ async function runTboHotelFlow(config = {}) {
     const errors = [];
     if (!roomTypeCode) errors.push("RoomTypeCode is required");
     if (!roomTypeName) errors.push("RoomTypeName is required");
-    if (!categoryId) errors.push("CategoryId is required");
+    // CategoryId is optional – only log a warning if not found
+    if (!categoryId) {
+      console.warn(
+        "⚠️  CategoryId missing – continuing without it (only required for de-dupe cases)",
+      );
+    }
     if (roomIndex === undefined && roomIndex !== 0)
       errors.push("RoomIndex is required");
 
