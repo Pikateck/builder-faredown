@@ -8,6 +8,8 @@
 const express = require("express");
 const router = express.Router();
 const { bookHotel } = require("../../tbo/book");
+const TBOHotelBooking = require("../../models/TBOHotelBooking");
+const TBOHotelRateHistory = require("../../models/TBOHotelRateHistory");
 
 /**
  * POST /api/tbo/book
