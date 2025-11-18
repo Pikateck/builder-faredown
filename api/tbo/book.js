@@ -135,7 +135,7 @@ async function blockRoom(params = {}) {
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
 
-  // ��� PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
+  // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
   // Extract from primary room or fall back to alternatives
   const primaryRoom = mappedRooms[0];
   const blockRequestCategoryId =
@@ -396,9 +396,9 @@ async function bookHotel(params = {}) {
   });
   console.log("");
 
-  // ✅ PER TBO SPEC: CategoryId should be at root level for de-dupe Book requests
-  // Use the CategoryId passed from BlockRoom response (mandatory field)
-  // Fallback to room CategoryId if not provided as parameter
+  // ✅ PER TBO SPEC: CategoryId should be at root level for de-dupe Book requests only
+  // Use the CategoryId passed from BlockRoom response (only send if we have it)
+  // Fallback to room CategoryId if not provided as parameter (for de-dupe cases)
   const bookCategoryId =
     categoryId || roomDetailsWithPassengers[0]?.CategoryId || undefined;
 
@@ -409,7 +409,6 @@ async function bookHotel(params = {}) {
     TraceId: traceId,
     ResultIndex: Number(resultIndex),
     HotelCode: String(hotelCode),
-    CategoryId: bookCategoryId, // ✅ TOP-LEVEL CategoryId for de-dupe Book requests
     HotelName: hotelName,
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
@@ -417,20 +416,22 @@ async function bookHotel(params = {}) {
     HotelRoomsDetails: roomDetailsWithPassengers, // ✅ WITH 's' - correct field name for Book API
   };
 
-  // ✅ CRITICAL DIAGNOSTIC: Verify CategoryId is present before sending Book request
-  console.log(
-    "🔍 BOOK CategoryId diagnostic (CRITICAL - must not be null or undefined):",
-  );
-  console.log(`  categoryId param received: "${categoryId || "<<MISSING>>"}"`);
-  console.log(
-    `  bookCategoryId to be sent: "${bookCategoryId || "<<MISSING>>"}"`,
-  );
-  console.log(`  Has valid CategoryId: ${!!bookCategoryId}`);
-  if (!bookCategoryId) {
-    console.error(
-      "❌ FATAL: CategoryId missing before Book request. This will fail.",
-    );
+  // Only include CategoryId in Book request if we actually have it (de-dupe flow)
+  if (bookCategoryId) {
+    request.CategoryId = bookCategoryId;
   }
+
+  // ✅ DIAGNOSTIC: Log CategoryId context before sending Book request
+  console.log(
+    "🔍 BOOK CategoryId (de-dupe aware - only send when present):",
+  );
+  console.log(`  categoryId param received: "${categoryId || "<<NOT PROVIDED>>"}"`);
+  console.log(
+    `  Room-level CategoryId: "${roomDetailsWithPassengers[0]?.CategoryId || "<<NOT FOUND>>"}"`
+  );
+  console.log(
+    `  BookCategoryId to be sent: "${bookCategoryId || "<<OMITTED (non-de-dupe)>>"}"`,
+  );
   console.log("");
 
   const url =
