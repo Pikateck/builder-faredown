@@ -1,18 +1,24 @@
 #!/usr/bin/env node
 const axios = require("axios");
-require("dotenv").config({ path: require("path").join(__dirname, ".env") });
-const API_BASE = process.env.API_BASE_URL || "http://localhost:3000/api";
+require("dotenv").config();
+const API_BASE = process.env.API_BASE_URL || "http://localhost:3000";
+
+// Add axios interceptor to log requests
+axios.interceptors.request.use(request => {
+  console.log('Request:', request.method.toUpperCase(), request.url);
+  return request;
+});
 
 async function testScenario1() {
   console.log("\n" + "=".repeat(80));
-  console.log("SCENARIO 1: Domestic (Mumbai, 1A)");
+  console.log("SCENARIO 1: Domestic (Mumbai, 1 Adult)");
   console.log("=".repeat(80));
   try {
+    console.log("Step 1: Searching hotels...");
     const searchRes = await axios.post(
-      `${API_BASE}/tbo/search`,
+      `${API_BASE}/api/tbo/search`,
       {
         destination: "Mumbai",
-        cityId: 10449,
         countryCode: "IN",
         checkIn: "2025-12-20",
         checkOut: "2025-12-22",
@@ -20,46 +26,62 @@ async function testScenario1() {
         currency: "INR",
         guestNationality: "IN",
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
     if (!searchRes.data.success) throw new Error("Search failed");
+    if (!searchRes.data.hotels || searchRes.data.hotels.length === 0) {
+      throw new Error("No hotels found");
+    }
     const hotel = searchRes.data.hotels[0];
+    console.log(`✅ Found ${searchRes.data.hotels.length} hotels. Selected: ${hotel.HotelName}`);
+
+    console.log("Step 2: Getting room details...");
     const roomRes = await axios.post(
-      `${API_BASE}/tbo/room`,
+      `${API_BASE}/api/tbo/room`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
         checkInDate: "2025-12-20",
         checkOutDate: "2025-12-22",
         noOfRooms: 1,
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
-    if (!roomRes.data.success) throw new Error("Room details failed");
+    if (!roomRes.data.success) throw new Error("Room failed");
+    console.log("✅ Room details retrieved");
+    console.log("Room response keys:", Object.keys(roomRes.data));
+
+    console.log("Step 3: Blocking room...");
     const blockRes = await axios.post(
-      `${API_BASE}/tbo/block`,
+      `${API_BASE}/api/tbo/block`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: roomRes.data.hotelRoomDetails,
+        hotelRoomDetails: [roomRes.data.rooms[0]],
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
     if (!blockRes.data.success) throw new Error("Block failed");
+    console.log("✅ Room blocked successfully");
+    console.log("Block response keys:", Object.keys(blockRes.data));
+    console.log("Block hotelRoomDetails exists:", !!blockRes.data.hotelRoomDetails);
+
+    console.log("Step 4: Booking...");
     const bookRes = await axios.post(
-      `${API_BASE}/tbo/book`,
+      `${API_BASE}/api/tbo/book`,
       {
         traceId: searchRes.data.traceId,
-        resultIndex: hotel.resultIndex,
-        hotelCode: hotel.hotelCode,
-        hotelName: hotel.hotelName,
+        resultIndex: hotel.ResultIndex,
+        hotelCode: hotel.HotelCode,
+        hotelName: hotel.HotelName,
+        categoryId: blockRes.data.categoryId,
         bookingId: blockRes.data.bookingId,
         guestNationality: "IN",
         noOfRooms: 1,
@@ -80,15 +102,23 @@ async function testScenario1() {
       { timeout: 30000 },
     );
     if (!bookRes.data.success) throw new Error("Book failed");
-    console.log(`✅ Booked! Confirmation: ${bookRes.data.confirmationNo}`);
+    console.log(`✅ PASSED | Confirmation: ${bookRes.data.confirmationNo}`);
     return {
       scenario: 1,
       status: "PASSED",
       confirmationNo: bookRes.data.confirmationNo,
     };
   } catch (error) {
-    console.error("❌ FAILED:", error.message);
-    return { scenario: 1, status: "FAILED", error: error.message };
+    console.error(`❌ FAILED: ${error.message}`);
+    if (error.response?.data) {
+      console.error("Response data:", JSON.stringify(error.response.data, null, 2));
+    }
+    return {
+      scenario: 1,
+      status: "FAILED",
+      error: error.message,
+      details: error.response?.data
+    };
   }
 }
 testScenario1().then((r) => {

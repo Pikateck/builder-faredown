@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 const axios = require("axios");
-require("dotenv").config({ path: require("path").join(__dirname, ".env") });
-const API_BASE = process.env.API_BASE_URL || "http://localhost:3000/api";
+require("dotenv").config();
+const API_BASE = process.env.API_BASE_URL || "http://localhost:3000";
 
 async function testScenario8() {
   console.log("\n" + "=".repeat(80));
-  console.log("SCENARIO 8: International (Paris, 2R mixed 1A+2C+2A, CA)");
+  console.log(
+    "SCENARIO 8: International (Paris, 2 Rooms Mixed: 1A+2C + 2A, CA)",
+  );
   console.log("=".repeat(80));
   try {
     const searchRes = await axios.post(
-      `${API_BASE}/tbo/search`,
+      `${API_BASE}/api/tbo/search`,
       {
         destination: "Paris",
         cityId: 3,
@@ -28,7 +30,7 @@ async function testScenario8() {
     if (!searchRes.data.success) throw new Error("Search failed");
     const hotel = searchRes.data.hotels[0];
     const roomRes = await axios.post(
-      `${API_BASE}/tbo/room`,
+      `${API_BASE}/api/tbo/room`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
@@ -40,9 +42,9 @@ async function testScenario8() {
       },
       { timeout: 30000 },
     );
-    if (!roomRes.data.success) throw new Error("Room details failed");
+    if (!roomRes.data.success) throw new Error("Room failed");
     const blockRes = await axios.post(
-      `${API_BASE}/tbo/block`,
+      `${API_BASE}/api/tbo/block`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
@@ -57,7 +59,7 @@ async function testScenario8() {
     );
     if (!blockRes.data.success) throw new Error("Block failed");
     const bookRes = await axios.post(
-      `${API_BASE}/tbo/book`,
+      `${API_BASE}/api/tbo/book`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
@@ -121,14 +123,14 @@ async function testScenario8() {
       { timeout: 30000 },
     );
     if (!bookRes.data.success) throw new Error("Book failed");
-    console.log(`✅ Booked! Confirmation: ${bookRes.data.confirmationNo}`);
+    console.log(`✅ PASSED | Confirmation: ${bookRes.data.confirmationNo}`);
     return {
       scenario: 8,
       status: "PASSED",
       confirmationNo: bookRes.data.confirmationNo,
     };
   } catch (error) {
-    console.error("❌ FAILED:", error.message);
+    console.error(`❌ FAILED: ${error.message}`);
     return { scenario: 8, status: "FAILED", error: error.message };
   }
 }
