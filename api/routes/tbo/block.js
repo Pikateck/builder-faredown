@@ -138,6 +138,7 @@ router.post("/", async (req, res) => {
       isCancellationPolicyChanged: result.isCancellationPolicyChanged,
       availabilityType: result.availabilityType,
       hotelRoomDetails: result.hotelRoomDetails,
+      categoryId: result.categoryId,
     });
   } catch (error) {
     console.error("TBO Block Room Error:", error);
