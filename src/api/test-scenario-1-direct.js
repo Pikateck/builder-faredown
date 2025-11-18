@@ -57,7 +57,9 @@ async function getCityId(destination, countryCode, tokenId) {
     TokenId: tokenId,
     SearchType: 1,
   });
-  const destinations = response.data.Destinations || [];
+
+  console.log("Response keys:", Object.keys(response.data).slice(0, 10));
+  const destinations = response.data.Destinations || response.data.Destination || [];
   console.log(`Found ${destinations.length} destinations`);
 
   // Try various field names
@@ -67,9 +69,11 @@ async function getCityId(destination, countryCode, tokenId) {
     (d.CityDescription && d.CityDescription.includes(destination))
   );
 
-  if (!found) {
+  if (!found && destinations.length > 0) {
     // List first few destinations for debugging
-    console.log("Sample destinations:", destinations.slice(0, 3).map(d => ({ CityName: d.CityName, DestinationName: d.DestinationName, id: d.DestinationId })));
+    const sampleDest = destinations[0];
+    console.log("Sample destination keys:", Object.keys(sampleDest));
+    console.log("First destination:", sampleDest);
   }
 
   return found?.DestinationId;
