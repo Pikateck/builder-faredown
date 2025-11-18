@@ -13,9 +13,8 @@ async function testScenario1() {
   console.log("\n" + "=".repeat(80));
   console.log("SCENARIO 1: Domestic (Mumbai, 1 Adult)");
   console.log("=".repeat(80));
-  console.log("API_BASE:", API_BASE);
-  console.log("Search URL:", `${API_BASE}/api/tbo/search`);
   try {
+    console.log("Step 1: Searching hotels...");
     const searchRes = await axios.post(
       `${API_BASE}/api/tbo/search`,
       {
@@ -30,15 +29,13 @@ async function testScenario1() {
       { timeout: 60000 },
     );
     if (!searchRes.data.success) throw new Error("Search failed");
-    console.log("Search response keys:", Object.keys(searchRes.data));
-    console.log("Hotels count:", searchRes.data.hotels?.length || 0);
     if (!searchRes.data.hotels || searchRes.data.hotels.length === 0) {
-      throw new Error("No hotels found in search results");
+      throw new Error("No hotels found");
     }
     const hotel = searchRes.data.hotels[0];
-    console.log("Selected hotel keys:", Object.keys(hotel));
-    console.log("Hotel resultIndex:", hotel.resultIndex || hotel.ResultIndex);
-    console.log("Hotel hotelCode:", hotel.hotelCode || hotel.HotelCode);
+    console.log(`✅ Found ${searchRes.data.hotels.length} hotels. Selected: ${hotel.HotelName}`);
+
+    console.log("Step 2: Getting room details...");
     const roomRes = await axios.post(
       `${API_BASE}/api/tbo/room`,
       {
@@ -53,6 +50,9 @@ async function testScenario1() {
       { timeout: 60000 },
     );
     if (!roomRes.data.success) throw new Error("Room failed");
+    console.log("✅ Room details retrieved");
+
+    console.log("Step 3: Blocking room...");
     const blockRes = await axios.post(
       `${API_BASE}/api/tbo/block`,
       {
@@ -68,6 +68,9 @@ async function testScenario1() {
       { timeout: 30000 },
     );
     if (!blockRes.data.success) throw new Error("Block failed");
+    console.log("✅ Room blocked successfully");
+
+    console.log("Step 4: Booking...");
     const bookRes = await axios.post(
       `${API_BASE}/api/tbo/book`,
       {
