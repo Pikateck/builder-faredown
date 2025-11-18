@@ -484,6 +484,8 @@ async function runTboHotelFlow(config = {}) {
     // STEP 5: BOOK HOTEL
     console.log("\n���� STEP 5: BOOK HOTEL (BookRoom)");
 
+    // ✅ CRITICAL: Use categoryId from BlockRoom response, not the initial extraction
+    // BlockRoom may return updated categoryId context for the Book request
     const bookReq = {
       traceId: searchRes?.traceId || searchRes?.TraceId,
       resultIndex,
@@ -491,9 +493,14 @@ async function runTboHotelFlow(config = {}) {
       hotelName: hotel.HotelName || hotel.hotelName || "Unknown Hotel",
       guestNationality: nationality,
       noOfRooms: roomConfigs.length,
-      hotelRoomDetails,
-      categoryId,
+      hotelRoomDetails: blockRes.hotelRoomDetails, // ✅ Use rooms from BlockRoom response
+      categoryId: blockRes.categoryId, // ✅ Use categoryId from BlockRoom response
       isVoucherBooking: false,
+      hotelPassenger: generatePassengers(
+        0,
+        roomConfigs.reduce((sum, r) => sum + r.adults, 0),
+        roomConfigs.reduce((sum, r) => sum + r.children, 0),
+      ),
     };
 
     const bookRes = await bookHotel(bookReq);
