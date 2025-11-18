@@ -100,8 +100,12 @@ async function searchHotels(tokenId, cityId, checkIn, checkOut) {
     MinRating: 0,
   });
 
+  console.log("Hotel search response Status:", response.data.Status);
+  console.log("Hotel search response keys:", Object.keys(response.data).slice(0, 10));
+
   if (response.data.Status !== 1) {
-    throw new Error("Hotel search failed: " + response.data.Error?.ErrorMessage);
+    console.log("Full error object:", response.data.Error);
+    throw new Error("Hotel search failed: " + JSON.stringify(response.data.Error || {Status: response.data.Status}));
   }
 
   return response.data;
