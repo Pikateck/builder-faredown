@@ -102,9 +102,12 @@ async function searchHotels(tokenId, cityId, checkIn, checkOut) {
 
   // Handle wrapped response
   const result = response.data.HotelSearchResult || response.data;
+  console.log("Parsed result keys:", Object.keys(result).slice(0, 10));
+  console.log("Status:", result.Status);
+  console.log("Hotels count:", result.Hotels?.length || 0);
 
-  if (result.Status !== 1) {
-    throw new Error("Hotel search failed: " + result.Error?.ErrorMessage);
+  if (!result.Hotels || result.Hotels.length === 0) {
+    throw new Error("No hotels found in search results. Status: " + result.Status);
   }
 
   return result;
