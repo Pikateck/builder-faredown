@@ -39,9 +39,7 @@ const TEST_CASES = {
     destination: "Delhi",
     cityId: 10448,
     countryCode: "IN",
-    roomConfigs: [
-      { adults: 2, children: 2, childAges: [5, 7] },
-    ],
+    roomConfigs: [{ adults: 2, children: 2, childAges: [5, 7] }],
   },
   3: {
     name: "Domestic - 1 Adult, 1 Adult (2 Rooms)",
@@ -75,9 +73,7 @@ const TEST_CASES = {
     destination: "Paris",
     cityId: 16408,
     countryCode: "FR",
-    roomConfigs: [
-      { adults: 2, children: 2, childAges: [6, 9] },
-    ],
+    roomConfigs: [{ adults: 2, children: 2, childAges: [6, 9] }],
   },
   7: {
     name: "International - 1 Adult, 1 Adult (2 Rooms)",
@@ -119,8 +115,8 @@ const TEST_CASES = {
  * 12. credit-response
  */
 function saveResultsToFile(caseId, results) {
-  const logsDir = process.env.TBO_CERT_LOGS_DIR ||
-    path.join(process.cwd(), "tbo-cert-logs");
+  const logsDir =
+    process.env.TBO_CERT_LOGS_DIR || path.join(process.cwd(), "tbo-cert-logs");
   const caseDir = path.join(logsDir, `case-${caseId}`);
 
   // Create directories
@@ -162,20 +158,12 @@ function saveResultsToFile(caseId, results) {
     if (step) {
       // Request
       const reqPath = path.join(caseDir, files.req);
-      fs.writeFileSync(
-        reqPath,
-        JSON.stringify(step.request, null, 2),
-        "utf8",
-      );
+      fs.writeFileSync(reqPath, JSON.stringify(step.request, null, 2), "utf8");
       console.log(`✅ Saved: ${files.req}`);
 
       // Response
       const resPath = path.join(caseDir, files.res);
-      fs.writeFileSync(
-        resPath,
-        JSON.stringify(step.response, null, 2),
-        "utf8",
-      );
+      fs.writeFileSync(resPath, JSON.stringify(step.response, null, 2), "utf8");
       console.log(`✅ Saved: ${files.res}`);
     }
   }
@@ -229,9 +217,7 @@ async function main() {
       console.log(`\n✅ Case #${TEST_CASE} completed successfully`);
       console.log(`   Confirmation: ${results.bookingDetails.confirmationNo}`);
     } else {
-      console.error(
-        `\n❌ Case #${TEST_CASE} failed: ${results.error}`,
-      );
+      console.error(`\n❌ Case #${TEST_CASE} failed: ${results.error}`);
     }
 
     // Save to disk

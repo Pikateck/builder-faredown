@@ -7,15 +7,18 @@ The TBO Hotel Certification Test Runner executes 8 mandatory test scenarios for 
 ## Files Created
 
 ### 1. `api/tests/tbo-hotel-flow-runner.js`
+
 Core reusable function that orchestrates the complete booking flow:
+
 - Search Hotels (GetHotelResult)
-- Get Hotel Room Details (GetHotelRoom)  
+- Get Hotel Room Details (GetHotelRoom)
 - Block Room (BlockRoom)
 - Book Hotel (BookRoom)
 - Generate Voucher (GenerateVoucher)
 - Check Agency Balance (GetAgencyBalance)
 
 **Key Features:**
+
 - Automatically selects the cheapest hotel and cheapest room
 - Dynamically generates passenger data
 - Handles multi-room scenarios
@@ -23,7 +26,9 @@ Core reusable function that orchestrates the complete booking flow:
 - Graceful error handling
 
 ### 2. `api/tests/tbo-hotel-cert-cases.js`
+
 Test case orchestrator that:
+
 - Maps test cases 1-8 to room configurations
 - Executes the booking flow for each case
 - Saves all JSONs to disk (12 files per case)
@@ -31,21 +36,23 @@ Test case orchestrator that:
 
 ## Test Cases
 
-| Case | Type           | Room Configuration                    |
-|------|----------------|---------------------------------------|
-| 1    | Domestic (DEL) | 1 Adult                              |
-| 2    | Domestic (DEL) | 2 Adults, 2 Children                 |
-| 3    | Domestic (DEL) | 1 Adult, 1 Adult (2 Rooms)           |
-| 4    | Domestic (DEL) | 1 Adult + 2 Children, 2 Adults       |
-| 5    | Intl (Paris)   | 1 Adult                              |
-| 6    | Intl (Paris)   | 2 Adults, 2 Children                 |
-| 7    | Intl (Paris)   | 1 Adult, 1 Adult (2 Rooms)           |
-| 8    | Intl (Paris)   | 1 Adult + 2 Children, 2 Adults       |
+| Case | Type           | Room Configuration             |
+| ---- | -------------- | ------------------------------ |
+| 1    | Domestic (DEL) | 1 Adult                        |
+| 2    | Domestic (DEL) | 2 Adults, 2 Children           |
+| 3    | Domestic (DEL) | 1 Adult, 1 Adult (2 Rooms)     |
+| 4    | Domestic (DEL) | 1 Adult + 2 Children, 2 Adults |
+| 5    | Intl (Paris)   | 1 Adult                        |
+| 6    | Intl (Paris)   | 2 Adults, 2 Children           |
+| 7    | Intl (Paris)   | 1 Adult, 1 Adult (2 Rooms)     |
+| 8    | Intl (Paris)   | 1 Adult + 2 Children, 2 Adults |
 
 ## Execution on Render
 
 ### Prerequisites
+
 Ensure these environment variables are set on Render:
+
 ```
 TBO_CLIENT_ID=tboprod
 TBO_HOTEL_USER_ID=BOMF145
@@ -56,12 +63,14 @@ FIXIE_URL=http://fixie:password@criterium.usefixie.com:80
 ```
 
 ### Run Individual Case
+
 ```bash
 cd /opt/render/project/src
 TBO_TEST_CASE=1 node api/tests/tbo-hotel-cert-cases.js
 ```
 
 ### Run All Cases
+
 ```bash
 for i in {1..8}; do
   TBO_TEST_CASE=$i node api/tests/tbo-hotel-cert-cases.js
@@ -104,6 +113,7 @@ case-1/
 ## Success Criteria
 
 Each test case must:
+
 1. ✅ Search: Return hotel results with TraceId
 2. ✅ Room Details: Return room pricing and policies
 3. ✅ Block: Return acknowledgment without error
@@ -187,13 +197,17 @@ Files: 12 JSON files (requests + responses)
 ## Troubleshooting
 
 **Issue**: "Agency do not have enough balance"
+
 - **Solution**: Contact TBO to load test credits on agency BOMF145
 
 **Issue**: No hotels found in search
+
 - **Solution**: Verify CityId is correct (Delhi: 10448, Paris: 16408)
 
 **Issue**: Proxy connection timeout
+
 - **Solution**: Ensure FIXIE_URL is configured and whitelisted IP is correct
 
 **Issue**: CategoryId cannot be null
+
 - **Solution**: Verify room response includes CategoryId; escalate to TBO if missing

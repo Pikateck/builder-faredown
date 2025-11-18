@@ -213,17 +213,16 @@ async function runTboHotelFlow(config = {}) {
     results.steps.search = { request: searchReq, response: searchRes };
     console.log(`✅ Found ${searchRes.HotelResults?.length || 0} hotels`);
 
-    if (
-      !searchRes.HotelResults ||
-      searchRes.HotelResults.length === 0
-    ) {
+    if (!searchRes.HotelResults || searchRes.HotelResults.length === 0) {
       throw new Error("Search returned no hotels");
     }
 
     // STEP 2: FIND CHEAPEST HOTEL & GET ROOM DETAILS
     console.log("\n📍 STEP 2: GET HOTEL ROOM DETAILS (GetHotelRoom)");
     const { hotel, resultIndex, hotelCode } = findCheapestHotel(searchRes);
-    console.log(`✅ Selected cheapest hotel: ${hotelCode} (Index: ${resultIndex})`);
+    console.log(
+      `✅ Selected cheapest hotel: ${hotelCode} (Index: ${resultIndex})`,
+    );
 
     const roomReq = {
       traceId: searchRes.TraceId,
@@ -349,7 +348,9 @@ async function runTboHotelFlow(config = {}) {
     const creditReq = {};
     const creditRes = await getAgencyBalance();
     results.steps.credit = { request: creditReq, response: creditRes };
-    console.log(`✅ Current Balance: ${creditRes.balance} ${creditRes.currency}`);
+    console.log(
+      `✅ Current Balance: ${creditRes.balance} ${creditRes.currency}`,
+    );
 
     results.success = true;
     results.bookingDetails = {
