@@ -180,6 +180,9 @@ async function runTboHotelFlow(config = {}) {
   console.log("\n" + "=".repeat(80));
   console.log(`TBO CERTIFICATION CASE #${caseId}: ${destination}`);
   console.log("=".repeat(80));
+  console.log(`📅 Check-in: ${checkInDate}, Check-out: ${checkOutDate}`);
+  console.log(`🏨 Destination: ${destination} (CityId: ${cityId})`);
+  console.log(`🛏️  Rooms: ${roomConfigs.length}`);
 
   const results = {
     caseId,
@@ -187,6 +190,7 @@ async function runTboHotelFlow(config = {}) {
     cityId,
     countryCode,
     checkInDate,
+    checkOutDate,
     roomConfigs,
     steps: {},
     errors: [],
@@ -208,6 +212,8 @@ async function runTboHotelFlow(config = {}) {
         childAges: rc.childAges || [],
       })),
     };
+
+    console.log(`  Params: CheckIn=${checkInDate}, CheckOut=${checkOutDate}`);
 
     const searchRes = await searchHotels(searchReq);
     results.steps.search = { request: searchReq, response: searchRes };
