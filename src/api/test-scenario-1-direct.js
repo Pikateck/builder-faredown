@@ -100,15 +100,14 @@ async function searchHotels(tokenId, cityId, checkIn, checkOut) {
     MinRating: 0,
   });
 
-  console.log("Hotel search response Status:", response.data.Status);
-  console.log("Hotel search response keys:", Object.keys(response.data).slice(0, 10));
+  // Handle wrapped response
+  const result = response.data.HotelSearchResult || response.data;
 
-  if (response.data.Status !== 1) {
-    console.log("Full error object:", response.data.Error);
-    throw new Error("Hotel search failed: " + JSON.stringify(response.data.Error || {Status: response.data.Status}));
+  if (result.Status !== 1) {
+    throw new Error("Hotel search failed: " + result.Error?.ErrorMessage);
   }
 
-  return response.data;
+  return result;
 }
 
 async function getHotelRoom(tokenId, traceId, resultIndex, hotelCode) {
