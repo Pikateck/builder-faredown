@@ -3,6 +3,12 @@ const axios = require("axios");
 require("dotenv").config();
 const API_BASE = process.env.API_BASE_URL || "http://localhost:3000";
 
+// Add axios interceptor to log requests
+axios.interceptors.request.use(request => {
+  console.log('Request:', request.method.toUpperCase(), request.url);
+  return request;
+});
+
 async function testScenario1() {
   console.log("\n" + "=".repeat(80));
   console.log("SCENARIO 1: Domestic (Mumbai, 1 Adult)");
