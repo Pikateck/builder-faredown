@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const axios = require("axios");
 require("dotenv").config();
-const API_BASE = process.env.API_BASE_URL || "http://localhost:3000/api";
+const API_BASE = process.env.API_BASE_URL || "http://localhost:3000";
 
 async function testScenario8() {
   console.log("\n" + "=".repeat(80));
@@ -11,7 +11,7 @@ async function testScenario8() {
   console.log("=".repeat(80));
   try {
     const searchRes = await axios.post(
-      `${API_BASE}/tbo/search`,
+      `${API_BASE}/api/tbo/search`,
       {
         destination: "Paris",
         cityId: 3,
@@ -30,7 +30,7 @@ async function testScenario8() {
     if (!searchRes.data.success) throw new Error("Search failed");
     const hotel = searchRes.data.hotels[0];
     const roomRes = await axios.post(
-      `${API_BASE}/tbo/room`,
+      `${API_BASE}/api/tbo/room`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
@@ -44,7 +44,7 @@ async function testScenario8() {
     );
     if (!roomRes.data.success) throw new Error("Room failed");
     const blockRes = await axios.post(
-      `${API_BASE}/tbo/block`,
+      `${API_BASE}/api/tbo/block`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
@@ -59,7 +59,7 @@ async function testScenario8() {
     );
     if (!blockRes.data.success) throw new Error("Block failed");
     const bookRes = await axios.post(
-      `${API_BASE}/tbo/book`,
+      `${API_BASE}/api/tbo/book`,
       {
         traceId: searchRes.data.traceId,
         resultIndex: hotel.resultIndex,
