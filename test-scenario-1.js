@@ -30,7 +30,15 @@ async function testScenario1() {
       { timeout: 60000 },
     );
     if (!searchRes.data.success) throw new Error("Search failed");
+    console.log("Search response keys:", Object.keys(searchRes.data));
+    console.log("Hotels count:", searchRes.data.hotels?.length || 0);
+    if (!searchRes.data.hotels || searchRes.data.hotels.length === 0) {
+      throw new Error("No hotels found in search results");
+    }
     const hotel = searchRes.data.hotels[0];
+    console.log("Selected hotel keys:", Object.keys(hotel));
+    console.log("Hotel resultIndex:", hotel.resultIndex || hotel.ResultIndex);
+    console.log("Hotel hotelCode:", hotel.hotelCode || hotel.HotelCode);
     const roomRes = await axios.post(
       `${API_BASE}/api/tbo/room`,
       {
