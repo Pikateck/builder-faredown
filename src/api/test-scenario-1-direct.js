@@ -58,7 +58,20 @@ async function getCityId(destination, countryCode, tokenId) {
     SearchType: 1,
   });
   const destinations = response.data.Destinations || [];
-  const found = destinations.find(d => d.CityName === destination || d.DestinationName === destination);
+  console.log(`Found ${destinations.length} destinations`);
+
+  // Try various field names
+  const found = destinations.find(d =>
+    (d.CityName && d.CityName.includes(destination)) ||
+    (d.DestinationName && d.DestinationName.includes(destination)) ||
+    (d.CityDescription && d.CityDescription.includes(destination))
+  );
+
+  if (!found) {
+    // List first few destinations for debugging
+    console.log("Sample destinations:", destinations.slice(0, 3).map(d => ({ CityName: d.CityName, DestinationName: d.DestinationName, id: d.DestinationId })));
+  }
+
   return found?.DestinationId;
 }
 
