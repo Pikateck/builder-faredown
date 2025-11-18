@@ -362,10 +362,10 @@ async function runTboHotelFlow(config = {}) {
     console.log("\n📍 STEP 5: BOOK HOTEL (BookRoom)");
 
     const bookReq = {
-      traceId: searchRes.TraceId,
+      traceId: searchRes?.traceId || searchRes?.TraceId,
       resultIndex,
       hotelCode,
-      hotelName: hotel.HotelName,
+      hotelName: hotel.HotelName || hotel.hotelName || "Unknown Hotel",
       guestNationality: nationality,
       noOfRooms: roomConfigs.length,
       hotelRoomDetails,
