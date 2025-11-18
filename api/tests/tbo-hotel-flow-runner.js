@@ -440,10 +440,9 @@ async function runTboHotelFlow(config = {}) {
       );
     }
 
-    // Extract CategoryId from block response for booking
-    const categoryId = selectedRoom.CategoryId || blockRes.CategoryId;
+    // Verify CategoryId is available for booking
     if (!categoryId) {
-      throw new Error("CategoryId not found in block response");
+      throw new Error("CategoryId not found in room response");
     }
 
     // STEP 5: BOOK HOTEL
