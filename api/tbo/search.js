@@ -30,7 +30,9 @@ function formatDateForTBO(dateStr) {
   // Parse YYYY-MM-DD or ISO format
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) {
-    throw new Error(`Invalid date format: ${dateStr}. Expected dd/MM/yyyy or YYYY-MM-DD`);
+    throw new Error(
+      `Invalid date format: ${dateStr}. Expected dd/MM/yyyy or YYYY-MM-DD`,
+    );
   }
 
   const day = String(d.getDate()).padStart(2, "0");
@@ -99,7 +101,9 @@ async function searchHotels(params = {}) {
   );
 
   if (noOfNights < 1) {
-    throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}. NoOfNights=${noOfNights}`);
+    throw new Error(
+      `Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}. NoOfNights=${noOfNights}`,
+    );
   }
 
   // 4. Build RoomGuests (exact TBO format)
