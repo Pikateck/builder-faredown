@@ -335,8 +335,8 @@ async function runTboHotelFlow(config = {}) {
 
     // STEP 3: FIND CHEAPEST ROOM
     console.log("\n📍 STEP 3: SELECT CHEAPEST ROOM");
-    const { room: selectedRoom, roomIndex } = findCheapestRoom(roomRes);
-    console.log(`✅ Selected cheapest room (Index: ${roomIndex})`);
+    const { room: selectedRoom } = findCheapestRoom(roomRes);
+    console.log(`✅ Selected cheapest room`);
 
     // STEP 4: BLOCK ROOM
     console.log("\n📍 STEP 4: BLOCK ROOM (BlockRoom)");
