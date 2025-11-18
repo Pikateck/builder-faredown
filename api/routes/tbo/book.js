@@ -131,6 +131,63 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // Update or create booking record in database
+    try {
+      // Extract pricing information
+      let bookPrice = null;
+      let bookCurrency = null;
+      let voucherId = null;
+      let confirmationId = result.bookingId || result.confirmationNo;
+
+      if (result.hotelBookingDetails) {
+        const details = result.hotelBookingDetails;
+        if (details.price) {
+          bookPrice = details.price.offeredPrice || details.price.publishedPrice;
+          bookCurrency = details.price.currencyCode;
+        }
+        if (details.voucherId) {
+          voucherId = details.voucherId;
+        }
+      }
+
+      // Check if we have an existing booking record from block
+      let existingBooking = null;
+      if (req.body.bookingId) {
+        const findResult = await TBOHotelBooking.findById(req.body.bookingId);
+        if (findResult.success) {
+          existingBooking = findResult.data;
+        }
+      }
+
+      const bookingData = {
+        trace_id: traceId,
+        result_index: resultIndex,
+        hotel_code: hotelCode,
+        hotel_name: hotelName,
+        book_price: bookPrice,
+        book_currency: bookCurrency,
+        book_status: result.responseStatus === 1 ? 'confirmed' : 'failed',
+        price_changed_in_book: result.isPriceChanged || false,
+        voucher_id: voucherId,
+        confirmation_id: confirmationId,
+        supplier_response: result,
+      };
+
+      if (existingBooking) {
+        // Update existing booking
+        await TBOHotelBooking.updateBook(existingBooking.id, bookingData);
+      } else {
+        // Create new booking record if it doesn't exist
+        await TBOHotelBooking.create({
+          ...bookingData,
+          booking_id: null,
+        });
+      }
+    } catch (dbError) {
+      console.error("Error saving booking confirmation to database:", dbError);
+      // Continue anyway - don't fail the API response
+    }
+
     res.json({
       success: true,
       bookingId: result.bookingId,
