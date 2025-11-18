@@ -135,8 +135,8 @@ async function blockRoom(params = {}) {
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
 
-  // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
-  // Extract from primary room or fall back to alternatives
+  // ✅ PER TBO BLOCKROOM SPEC: CategoryId is optional for non-de-dupe, required for de-dupe
+  // Extract from primary room if available
   const primaryRoom = mappedRooms[0];
   const blockRequestCategoryId =
     primaryRoom?.CategoryId ||
@@ -150,13 +150,17 @@ async function blockRoom(params = {}) {
     TraceId: traceId,
     ResultIndex: Number(resultIndex),
     HotelCode: String(hotelCode),
-    CategoryId: blockRequestCategoryId, // ✅ TOP-LEVEL CategoryId per TBO docs (field 6, mandatory)
     HotelName: hotelName,
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
     HotelRoomsDetails: mappedRooms, // ✅ WITH 's' - correct field name, WITH mapped rooms (SmokingPreference as integer)
   };
+
+  // Only include CategoryId in BlockRoom request if we actually have it (de-dupe flow)
+  if (blockRequestCategoryId) {
+    request.CategoryId = blockRequestCategoryId;
+  }
 
   const url =
     process.env.TBO_HOTEL_BLOCKROOM_URL ||
