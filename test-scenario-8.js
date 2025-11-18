@@ -8,22 +8,22 @@ async function testScenario8() {
   console.log('\n' + '='.repeat(80));
   console.log('SCENARIO 8: International Booking (2 Rooms, Mixed occupancy)');
   console.log('Room 1: 1 Adult + 2 Children | Room 2: 2 Adults');
-  console.log('Destination: Dubai | Dates: 2026-01-14 to 2026-01-16 | Nationality: CA');
+  console.log('Destination: Paris | Dates: 2026-01-14 to 2026-01-16 | Nationality: CA');
   console.log('='.repeat(80));
 
   try {
     console.log('\n[Step 1/4] Searching for hotels...');
     const searchRes = await axios.post(`${API_BASE}/tbo/search`, {
-      destination: 'Dubai',
-      cityId: 12345,
-      countryCode: 'AE',
+      destination: 'Paris',
+      cityId: 3,
+      countryCode: 'FR',
       checkIn: '2026-01-14',
       checkOut: '2026-01-16',
       rooms: [
         { adults: 1, children: 2, childAges: [5, 9] },
         { adults: 2, children: 0, childAges: [] }
       ],
-      currency: 'USD',
+      currency: 'EUR',
       guestNationality: 'CA'
     }, { timeout: 30000 });
 
