@@ -98,6 +98,7 @@ const tboBlockRoutes = require("./routes/tbo/block.js");
 const tboBookRoutes = require("./routes/tbo/book.js");
 const tboVoucherRoutes = require("./routes/tbo/voucher.js");
 const tboBalanceRoutes = require("./routes/tbo/balance.js");
+const tboBookingsRoutes = require("./routes/tbo/bookings.js");
 
 const rewardsRoutes = require("./routes/rewards.js");
 const v1BookingsRoutes = require("./routes/v1-bookings.js");
