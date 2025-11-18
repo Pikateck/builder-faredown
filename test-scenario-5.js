@@ -40,7 +40,7 @@ async function testScenario5() {
     }, { timeout: 30000 });
 
     if (!roomRes.data.success) throw new Error('Room details failed: ' + roomRes.data.error);
-    console.log(`✅ Room details retrieved`);
+    console.log(`✅ Room details retrieved | Price: ${hotel.price?.offeredPrice} EUR`);
 
     console.log('\n[Step 3/4] Blocking room...');
     const blockRes = await axios.post(`${API_BASE}/tbo/block`, {
