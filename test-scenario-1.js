@@ -51,6 +51,7 @@ async function testScenario1() {
     );
     if (!roomRes.data.success) throw new Error("Room failed");
     console.log("✅ Room details retrieved");
+    console.log("Room response keys:", Object.keys(roomRes.data));
 
     console.log("Step 3: Blocking room...");
     const blockRes = await axios.post(
