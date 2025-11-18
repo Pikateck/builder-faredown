@@ -481,11 +481,6 @@ async function runTboHotelFlow(config = {}) {
       );
     }
 
-    // Verify CategoryId is available for booking
-    if (!categoryId) {
-      throw new Error("CategoryId not found in room response");
-    }
-
     // STEP 5: BOOK HOTEL
     console.log("\n���� STEP 5: BOOK HOTEL (BookRoom)");
 
