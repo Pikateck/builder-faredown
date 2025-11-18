@@ -7,6 +7,8 @@ async function testScenario1() {
   console.log("\n" + "=".repeat(80));
   console.log("SCENARIO 1: Domestic (Mumbai, 1 Adult)");
   console.log("=".repeat(80));
+  console.log("API_BASE:", API_BASE);
+  console.log("Search URL:", `${API_BASE}/api/tbo/search`);
   try {
     const searchRes = await axios.post(
       `${API_BASE}/api/tbo/search`,
