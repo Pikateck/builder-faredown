@@ -243,9 +243,11 @@ async function runTboHotelFlow(config = {}) {
 
     const searchRes = await searchHotels(searchReq);
     results.steps.search = { request: searchReq, response: searchRes };
-    console.log(`✅ Found ${searchRes.HotelResults?.length || 0} hotels`);
 
-    if (!searchRes.HotelResults || searchRes.HotelResults.length === 0) {
+    const hotelCount = searchRes?.hotels?.length || 0;
+    console.log(`✅ Found ${hotelCount} hotels`);
+
+    if (hotelCount === 0) {
       throw new Error("Search returned no hotels");
     }
 
