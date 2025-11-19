@@ -88,6 +88,7 @@ const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
 const tboDebugRoutes = require("./tbo/tbo-debug.js");
 const adminApiLogsRoutes = require("./routes/admin-api-logs.js");
+const adminHotelsRoutes = require("./routes/admin-hotels.js");
 
 // TBO Production Routes (Complete Hotel Booking Pipeline)
 const tboAuthRoutes = require("./routes/tbo/auth.js");
