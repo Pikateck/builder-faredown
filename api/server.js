@@ -557,6 +557,7 @@ app.use("/api/admin/bookings", adminBookingsRoutes);
 app.use("/api/admin/ai", adminAiRoutes);
 app.use("/api/admin/airports", adminAirportsRoutes);
 app.use("/api/admin/api-logs", adminKeyMiddleware, adminApiLogsRoutes);
+app.use("/api/admin/hotels", adminKeyMiddleware, adminHotelsRoutes);
 app.use("/api/db-test", dbTestRoutes);
 app.use(
   "/api/admin/sightseeing",
