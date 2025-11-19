@@ -9,6 +9,8 @@ const HotelbedsAdapter = require("./hotelbedsAdapter");
 const RateHawkAdapter = require("./ratehawkAdapter");
 const redisService = require("../redisService");
 const cpoRepository = require("../cpoRepository");
+// NOTE: manager is in /services/adapters, caching file is in /services
+const { applyCompleteCaching } = require("../hotelAdapterCachingIntegration");
 const winston = require("winston");
 
 class SupplierAdapterManager {
@@ -19,7 +21,9 @@ class SupplierAdapterManager {
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
-          return `${timestamp} [${level.toUpperCase()}] [ADAPTER_MANAGER] ${message} ${Object.keys(meta).length ? JSON.stringify(meta) : ""}`;
+          return `${timestamp} [${level.toUpperCase()}] [ADAPTER_MANAGER] ${message} ${
+            Object.keys(meta).length ? JSON.stringify(meta) : ""
+          }`;
         }),
       ),
       transports: [new winston.transports.Console()],
@@ -43,14 +47,16 @@ class SupplierAdapterManager {
         );
       }
 
-      // Initialize TBO adapter
+      // Initialize TBO adapter (with full caching + logging integration)
       if (
         process.env.TBO_AGENCY_ID ||
         process.env.TBO_API_USER_ID ||
         process.env.TBO_HOTEL_USER_ID
       ) {
-        this.adapters.set("TBO", new TBOAdapter());
-        this.logger.info("TBO adapter initialized");
+        let tboAdapter = new TBOAdapter();
+        tboAdapter = applyCompleteCaching(tboAdapter); // enable caching/coalescing/logging
+        this.adapters.set("TBO", tboAdapter);
+        this.logger.info("TBO adapter initialized with caching");
       } else {
         this.logger.warn("TBO credentials not found, adapter not initialized");
       }
@@ -135,9 +141,6 @@ class SupplierAdapterManager {
   // UNIFIED SEARCH METHODS
   // ==========================================
 
-  /**
-   * Search across all flight suppliers
-   */
   async searchAllFlights(searchParams, suppliers = ["AMADEUS", "TBO"]) {
     const cached = await this.getCachedSearchResults("flight", searchParams);
     if (cached?.results) {
@@ -157,9 +160,6 @@ class SupplierAdapterManager {
     return this.aggregateResults(results);
   }
 
-  /**
-   * Search across all hotel suppliers
-   */
   async searchAllHotels(searchParams, suppliers = null) {
     const defaultSuppliers = (
       process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO"
@@ -190,9 +190,6 @@ class SupplierAdapterManager {
     return this.aggregateResults(results);
   }
 
-  /**
-   * Search across all sightseeing suppliers
-   */
   async searchAllSightseeing(searchParams, suppliers = ["HOTELBEDS"]) {
     const cached = await this.getCachedSearchResults(
       "sightseeing",
@@ -215,9 +212,6 @@ class SupplierAdapterManager {
     return this.aggregateResults(results);
   }
 
-  /**
-   * Execute parallel search across multiple suppliers
-   */
   async executeParallelSearch(productType, searchParams, supplierCodes) {
     const searchPromises = supplierCodes
       .map((code) => this.getAdapter(code))
@@ -282,9 +276,6 @@ class SupplierAdapterManager {
     );
   }
 
-  /**
-   * Aggregate and deduplicate results from multiple suppliers
-   */
   aggregateResults(supplierResults) {
     const allResults = [];
     const seenProducts = new Set();
@@ -300,7 +291,6 @@ class SupplierAdapterManager {
 
       if (supplierResult.success && supplierResult.results) {
         for (const product of supplierResult.results) {
-          // Create a deduplication key based on product attributes
           const dedupKey = this.createDeduplicationKey(product);
 
           if (!seenProducts.has(dedupKey)) {
@@ -315,7 +305,6 @@ class SupplierAdapterManager {
       }
     }
 
-    // Sort by price ascending (handle numeric, object, or missing)
     const getNumericPrice = (p) => {
       if (typeof p.price === "number") return p.price;
       if (p && p.price && typeof p.price === "object") {
@@ -340,37 +329,27 @@ class SupplierAdapterManager {
     };
   }
 
-  /**
-   * Create deduplication key for products
-   */
   createDeduplicationKey(product) {
     if (product.airline && product.origin && product.destination) {
-      // Flight product
       return `flight:${product.airline}-${product.origin}-${product.destination}-${product.departureDate}-${product.flightNumber}`;
     } else if (product.hotelId) {
-      // Hotel product
       return `hotel:${product.hotelId}-${product.roomCode}-${product.checkIn}-${product.checkOut}`;
     } else if (product.activityCode) {
-      // Sightseeing product
       return `activity:${product.activityCode}-${product.location}-${product.activityDate}`;
     } else {
-      // Fallback to original ID
       return `unknown:${product.id || product.originalId}`;
     }
   }
 
-  /**
-   * Cache search results for performance
-   */
   async cacheSearchResults(productType, searchParams, results) {
     try {
       const cacheKey = this.generateSearchCacheKey(productType, searchParams);
 
       const cacheData = {
-        results: results,
-        searchParams: searchParams,
+        results,
+        searchParams,
         timestamp: new Date().toISOString(),
-        ttl: 300, // 5 minutes
+        ttl: 300,
       };
 
       await redisService.set(cacheKey, cacheData, 300);
@@ -380,9 +359,6 @@ class SupplierAdapterManager {
     }
   }
 
-  /**
-   * Get cached search results
-   */
   async getCachedSearchResults(productType, searchParams) {
     try {
       const cacheKey = this.generateSearchCacheKey(productType, searchParams);
@@ -393,11 +369,7 @@ class SupplierAdapterManager {
     }
   }
 
-  /**
-   * Generate cache key for search parameters
-   */
   generateSearchCacheKey(productType, searchParams) {
-    // Include maxResults so increasing it yields a different cache entry
     const keyParams = { ...searchParams };
 
     const paramString = JSON.stringify(
@@ -416,9 +388,6 @@ class SupplierAdapterManager {
   // BOOKING METHODS
   // ==========================================
 
-  /**
-   * Book product through appropriate supplier
-   */
   async bookProduct(productType, supplierCode, bookingData) {
     const adapter = this.getAdapter(supplierCode);
     if (!adapter) {
@@ -445,7 +414,7 @@ class SupplierAdapterManager {
       }
 
       this.logger.info(`Booking successful via ${supplierCode}`, {
-        productType: productType,
+        productType,
         bookingId: bookingResult.bookingId,
         reference: bookingResult.reference,
       });
@@ -461,9 +430,6 @@ class SupplierAdapterManager {
   // SUPPLIER MANAGEMENT
   // ==========================================
 
-  /**
-   * Get health status of all adapters
-   */
   async getAdapterHealthStatus() {
     const healthChecks = Array.from(this.adapters.values()).map(
       async (adapter) => {
@@ -494,9 +460,6 @@ class SupplierAdapterManager {
     );
   }
 
-  /**
-   * Get adapter metrics
-   */
   getAdapterMetrics() {
     const metrics = {};
 
@@ -511,9 +474,6 @@ class SupplierAdapterManager {
     };
   }
 
-  /**
-   * Reset circuit breaker for specific adapter
-   */
   resetAdapterCircuitBreaker(supplierCode) {
     const adapter = this.getAdapter(supplierCode);
     if (adapter) {
@@ -524,9 +484,6 @@ class SupplierAdapterManager {
     return false;
   }
 
-  /**
-   * Update adapter configuration
-   */
   updateAdapterConfig(supplierCode, config) {
     const adapter = this.getAdapter(supplierCode);
     if (adapter) {
@@ -537,12 +494,8 @@ class SupplierAdapterManager {
     return false;
   }
 
-  /**
-   * Refresh supplier rate snapshots for active products
-   */
   async refreshSupplierSnapshots(productType = null, limit = 100) {
     try {
-      // Get top products to refresh
       const products = await cpoRepository.getTopProducts(productType, limit);
 
       const refreshResults = {
@@ -557,7 +510,6 @@ class SupplierAdapterManager {
           const adapters = this.getAdaptersByProductType(product.product_type);
 
           for (const adapter of adapters) {
-            // Create a mock search to get fresh pricing
             const searchParams = this.createSearchParamsFromProduct(product);
 
             switch (product.product_type) {
@@ -591,9 +543,6 @@ class SupplierAdapterManager {
     }
   }
 
-  /**
-   * Create search parameters from existing product
-   */
   createSearchParamsFromProduct(product) {
     const attrs = product.attrs;
 
@@ -637,7 +586,5 @@ class SupplierAdapterManager {
   }
 }
 
-// Export singleton instance
 const supplierAdapterManager = new SupplierAdapterManager();
-
 module.exports = supplierAdapterManager;
