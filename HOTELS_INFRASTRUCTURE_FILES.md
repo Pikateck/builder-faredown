@@ -15,9 +15,11 @@
 ### 1. Database & Migrations
 
 #### `api/database/migrations/20250220_hotel_caching_infrastructure.sql`
+
 **Purpose**: PostgreSQL schema creation  
 **Lines**: 241  
 **Contents**:
+
 - `hotel_supplier_api_logs` table (audit trail)
 - `hotels_master_inventory` table (master data)
 - Indexes (6 on logs, 5 on inventory)
@@ -33,39 +35,42 @@
 ### 2. Core Services
 
 #### `api/services/hotelApiCachingService.js`
+
 **Purpose**: Redis caching, request coalescing, logging hub  
 **Lines**: 632  
 **Exports**: Singleton instance  
 **Key Classes**: `HotelApiCachingService`
 
 **Methods**:
+
 ```javascript
 // Cache management
-generateSearchHash(params)
-getCachedSearchResults(hash)
-cacheSearchResults(hash, results)
-getCachedRoomDetails(key)
-cacheRoomDetails(key, details)
+generateSearchHash(params);
+getCachedSearchResults(hash);
+cacheSearchResults(hash, results);
+getCachedRoomDetails(key);
+cacheRoomDetails(key, details);
 
 // Execution wrappers
-executeHotelSearch(config)
-executeRoomDetailsCall(config)
+executeHotelSearch(config);
+executeRoomDetailsCall(config);
 
 // Request coalescing
-getOrCreatePendingRequest(hash)
-completePendingRequest(hash, result)
-failPendingRequest(hash, error)
-clearCoalescingRequests()
+getOrCreatePendingRequest(hash);
+completePendingRequest(hash, result);
+failPendingRequest(hash, error);
+clearCoalescingRequests();
 
 // Monitoring
-getSupplierMetrics(supplier, days)
+getSupplierMetrics(supplier, days);
 
 // Logging
-logApiCall(params)
+logApiCall(params);
 ```
 
 **Dependencies**: `redisClient`, `pool` (postgres), `uuid`, `crypto`  
 **TTL Config**:
+
 - Hotel searches: 180 seconds
 - Room details: 120 seconds
 - City info: 3600 seconds
@@ -76,30 +81,32 @@ logApiCall(params)
 ---
 
 #### `api/services/tboStaticDataService.js`
+
 **Purpose**: Sync TBO static data to master inventory  
 **Lines**: 612  
 **Exports**: Singleton instance  
 **Key Class**: `TBOStaticDataService`
 
 **Methods**:
+
 ```javascript
 // Authentication
-getStaticAuthToken()
+getStaticAuthToken();
 
 // Data retrieval
-fetchCountries(tokenId)
-fetchCities(tokenId, countryCode)
-fetchHotelsForCity(tokenId, cityId)
-fetchHotelDetails(tokenId, hotelCode)
+fetchCountries(tokenId);
+fetchCities(tokenId, countryCode);
+fetchHotelsForCity(tokenId, cityId);
+fetchHotelDetails(tokenId, hotelCode);
 
 // Sync operations
-fullSync(options)
-syncCityHotels(tokenId, cityInfo)
-syncSpecificCities(countryCodes, cityIds)
-upsertHotel(supplier, hotel, cityInfo)
+fullSync(options);
+syncCityHotels(tokenId, cityInfo);
+syncSpecificCities(countryCodes, cityIds);
+upsertHotel(supplier, hotel, cityInfo);
 
 // Status
-getSyncStatus()
+getSyncStatus();
 ```
 
 **Dependencies**: `axios`, `tboVia`, `pool` (postgres)  
@@ -110,17 +117,20 @@ getSyncStatus()
 ---
 
 #### `api/services/hotelAdapterCachingIntegration.js`
+
 **Purpose**: Wrapper functions to apply caching to adapters  
 **Lines**: 100  
 **Exports**: 3 functions  
 **Key Functions**:
+
 ```javascript
-wrapAdapterSearchWithCaching(adapter, supplier)
-wrapAdapterRoomDetailsWithCaching(adapter, supplier)
-applyCompleteCaching(adapter)
+wrapAdapterSearchWithCaching(adapter, supplier);
+wrapAdapterRoomDetailsWithCaching(adapter, supplier);
+applyCompleteCaching(adapter);
 ```
 
 **Usage Pattern**:
+
 ```javascript
 const adapter = new TBOAdapter();
 applyCompleteCaching(adapter);
@@ -135,6 +145,7 @@ applyCompleteCaching(adapter);
 ### 3. API Routes
 
 #### `api/routes/admin-hotels.js`
+
 **Purpose**: REST API for monitoring and management  
 **Lines**: 560  
 **Base URL**: `/api/admin/hotels/*`  
@@ -143,17 +154,20 @@ applyCompleteCaching(adapter);
 **Endpoint Groups**:
 
 **Cache Management** (3 endpoints):
+
 - `GET /cache/status` - Current cache metrics
 - `GET /cache/clear-coalescing` - Clear pending requests
 - `GET /metrics/:supplier` - Performance metrics
 
 **Logging & Audit** (4 endpoints):
+
 - `GET /logs` - API call logs with filtering
 - `GET /logs/trace/:traceId` - Trace-specific logs
 - `GET /logs/errors` - Error logs with analytics
 - `GET /logs/stats` - Aggregated statistics
 
 **Sync & Inventory** (8 endpoints):
+
 - `POST /sync/full` - Full TBO sync (async)
 - `POST /sync/cities` - Specific city sync (async)
 - `GET /sync/status` - Sync status and stats
@@ -170,8 +184,11 @@ applyCompleteCaching(adapter);
 ### 4. Modified Files
 
 #### `api/server.js`
+
 **Changes Made**: 2 additions
+
 1. **Line 91**: Import admin-hotels route
+
    ```javascript
    const adminHotelsRoutes = require("./routes/admin-hotels.js");
    ```
@@ -189,11 +206,13 @@ applyCompleteCaching(adapter);
 ## Migration & Setup
 
 #### `api/database/run-hotel-caching-migration.js`
+
 **Purpose**: Safe migration runner with verification  
 **Lines**: 167  
 **Executable**: Yes (#!/usr/bin/env node)
 
 **Features**:
+
 - Connection verification
 - Fallback path handling
 - Comprehensive error logging
@@ -201,6 +220,7 @@ applyCompleteCaching(adapter);
 - Logging to file
 
 **Usage**:
+
 ```bash
 node api/database/run-hotel-caching-migration.js
 ```
@@ -212,8 +232,10 @@ node api/database/run-hotel-caching-migration.js
 ## Documentation Files
 
 ### 1. `HOTEL_CACHING_INFRASTRUCTURE.md` (516 lines)
+
 **Audience**: Developers, DevOps, Technical Leads  
 **Contents**:
+
 - Complete architecture overview
 - Service descriptions with code examples
 - Installation and setup steps
@@ -224,6 +246,7 @@ node api/database/run-hotel-caching-migration.js
 - Future enhancements
 
 **Sections**:
+
 1. Overview (infrastructure components)
 2. Database tables (detailed schema)
 3. Redis caching layer (config, keys, TTLs)
@@ -242,8 +265,10 @@ node api/database/run-hotel-caching-migration.js
 ---
 
 ### 2. `HOTEL_CACHING_QUICK_START.md` (359 lines)
+
 **Audience**: All team members, operators  
 **Contents**:
+
 - 5-minute setup guide
 - Usage examples with curl commands
 - Testing procedures
@@ -252,6 +277,7 @@ node api/database/run-hotel-caching-migration.js
 - API endpoints quick reference
 
 **Sections**:
+
 1. Prerequisites
 2. Setup (3 steps)
 3. Usage examples (6 tested examples)
@@ -266,8 +292,10 @@ node api/database/run-hotel-caching-migration.js
 ---
 
 ### 3. `IMPLEMENTATION_SUMMARY.md` (451 lines)
+
 **Audience**: Project leads, stakeholders  
 **Contents**:
+
 - Implementation overview
 - Files created manifest
 - Architecture diagram
@@ -279,6 +307,7 @@ node api/database/run-hotel-caching-migration.js
 - Maintenance guidelines
 
 **Sections**:
+
 1. Overview (what was built)
 2. Files created (detailed manifest)
 3. Architecture diagram (visual)
@@ -298,8 +327,10 @@ node api/database/run-hotel-caching-migration.js
 ---
 
 ### 4. `HOTELS_INFRASTRUCTURE_FILES.md` (this file)
+
 **Audience**: Technical teams  
 **Contents**:
+
 - Complete file manifest
 - Purpose of each file
 - Dependencies and relationships
@@ -338,6 +369,7 @@ faredown-booking-db/
 ## Dependencies
 
 ### NPM Packages Required
+
 (Should already be installed in project):
 
 - `redis` (>=4.0.0) - for Redis client
@@ -417,6 +449,7 @@ For new users, follow this order:
 ## Quick Reference
 
 ### File Sizes
+
 ```
 hotelApiCachingService.js      - 632 lines
 tboStaticDataService.js        - 612 lines
@@ -433,34 +466,37 @@ TOTAL                          - 2,600+ lines
 
 ### Key Metrics
 
-| Metric | Value |
-|--------|-------|
-| Files Created | 6 core + 4 docs |
-| Lines of Code | 2,600+ |
-| Database Tables | 2 (+ views) |
-| Admin Endpoints | 15+ |
-| Cache TTLs | 4 configured |
+| Metric              | Value                             |
+| ------------------- | --------------------------------- |
+| Files Created       | 6 core + 4 docs                   |
+| Lines of Code       | 2,600+                            |
+| Database Tables     | 2 (+ views)                       |
+| Admin Endpoints     | 15+                               |
+| Cache TTLs          | 4 configured                      |
 | Supported Suppliers | TBO (ready), others (easy to add) |
-| Setup Time | ~15 minutes |
-| Integration Time | ~30 minutes |
+| Setup Time          | ~15 minutes                       |
+| Integration Time    | ~30 minutes                       |
 
 ---
 
 ## Support & Resources
 
 ### Documentation
+
 - **Full Technical**: HOTEL_CACHING_INFRASTRUCTURE.md
 - **Quick Start**: HOTEL_CACHING_QUICK_START.md
 - **Summary**: IMPLEMENTATION_SUMMARY.md
 - **Reference**: This file (HOTELS_INFRASTRUCTURE_FILES.md)
 
 ### Code Locations
+
 - **Caching**: `api/services/hotelApiCachingService.js`
 - **Sync**: `api/services/tboStaticDataService.js`
 - **API**: `api/routes/admin-hotels.js`
 - **Integration**: `api/services/hotelAdapterCachingIntegration.js`
 
 ### Debugging
+
 - Check logs: `tail -f logs/*.log | grep HOTEL`
 - Database: `SELECT COUNT(*) FROM hotel_supplier_api_logs;`
 - Cache: `GET /api/admin/hotels/cache/status`
@@ -470,9 +506,9 @@ TOTAL                          - 2,600+ lines
 
 ## Version History
 
-| Version | Date | Status | Notes |
-|---------|------|--------|-------|
-| 1.0 | Feb 20, 2025 | Production | Initial implementation complete |
+| Version | Date         | Status     | Notes                           |
+| ------- | ------------ | ---------- | ------------------------------- |
+| 1.0     | Feb 20, 2025 | Production | Initial implementation complete |
 
 ---
 
@@ -487,4 +523,4 @@ TOTAL                          - 2,600+ lines
 
 **Last Updated**: February 20, 2025  
 **Implementation Status**: 🎉 COMPLETE  
-**Production Ready**: YES  
+**Production Ready**: YES

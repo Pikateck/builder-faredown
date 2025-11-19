@@ -71,7 +71,10 @@ router.get("/metrics/:supplier", async (req, res) => {
     const { supplier } = req.params;
     const { days = 7 } = req.query;
 
-    const metrics = await hotelApiCachingService.getSupplierMetrics(supplier, days);
+    const metrics = await hotelApiCachingService.getSupplierMetrics(
+      supplier,
+      days,
+    );
 
     if (!metrics) {
       return res.status(404).json({
@@ -391,7 +394,8 @@ router.get("/inventory", async (req, res) => {
       active = true,
     } = req.query;
 
-    let query = "SELECT * FROM public.hotels_master_inventory WHERE supplier_code = $1";
+    let query =
+      "SELECT * FROM public.hotels_master_inventory WHERE supplier_code = $1";
     const params = [supplier];
 
     if (cityId) {
@@ -409,7 +413,8 @@ router.get("/inventory", async (req, res) => {
     const result = await pool.query(query, params);
 
     // Get total count
-    let countQuery = "SELECT COUNT(*) as count FROM public.hotels_master_inventory WHERE supplier_code = $1";
+    let countQuery =
+      "SELECT COUNT(*) as count FROM public.hotels_master_inventory WHERE supplier_code = $1";
     const countParams = [supplier];
 
     if (cityId) {
@@ -466,7 +471,8 @@ router.get("/inventory/cities", async (req, res) => {
       query += ` AND country_code = $${params.length}`;
     }
 
-    query += " GROUP BY city_id, city_name, country_code ORDER BY hotel_count DESC";
+    query +=
+      " GROUP BY city_id, city_name, country_code ORDER BY hotel_count DESC";
 
     const result = await pool.query(query, params);
 

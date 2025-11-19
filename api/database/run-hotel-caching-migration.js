@@ -100,9 +100,7 @@ async function runMigration() {
 
     logger.info("✅ Created indexes:", {
       count: indexCheck.rows.length,
-      indexes: indexCheck.rows.map(
-        (r) => `${r.tablename}.${r.indexname}`,
-      ),
+      indexes: indexCheck.rows.map((r) => `${r.tablename}.${r.indexname}`),
     });
 
     logger.info("🎉 Hotel Caching Infrastructure ready for use!");

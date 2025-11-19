@@ -33,6 +33,7 @@ node api/database/run-hotel-caching-migration.js
 ```
 
 **Expected output:**
+
 ```
 ✅ Database connection OK
 📝 Executing SQL migration...
@@ -63,6 +64,7 @@ curl http://localhost:3000/api/admin/hotels/cache/status \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -95,6 +97,7 @@ curl http://localhost:3000/api/admin/hotels/metrics/TBO \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -126,6 +129,7 @@ curl -X POST http://localhost:3000/api/admin/hotels/sync/full \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -140,6 +144,7 @@ curl -X POST http://localhost:3000/api/admin/hotels/sync/full \
 ```
 
 Sync runs in the background. Check logs for progress:
+
 ```bash
 tail -f logs/api.log | grep "Sync"
 ```
@@ -153,6 +158,7 @@ curl http://localhost:3000/api/admin/hotels/sync/status \
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -206,6 +212,7 @@ curl "http://localhost:3000/api/admin/hotels/logs?limit=2" \
 ```
 
 **Expected results:**
+
 - First request: ~500-1000ms, `cache_hit: false`
 - Second request: ~50-100ms, `cache_hit: true`
 
@@ -251,6 +258,7 @@ curl "http://localhost:3000/api/admin/hotels/logs?limit=1" \
 ### Issue: "Redis connection failed"
 
 **Solution**: Check Redis is running and REDIS_URL is correct
+
 ```bash
 redis-cli ping
 # Should return: PONG
@@ -259,6 +267,7 @@ redis-cli ping
 ### Issue: "Admin API key invalid"
 
 **Solution**: Ensure you're passing the correct ADMIN_API_KEY
+
 ```bash
 export ADMIN_API_KEY="your-key"
 curl http://localhost:3000/api/admin/hotels/cache/status \
@@ -268,6 +277,7 @@ curl http://localhost:3000/api/admin/hotels/cache/status \
 ### Issue: No data in hotel_supplier_api_logs
 
 **Solution**: Run a hotel search first, then check logs
+
 ```bash
 curl -X POST http://localhost:3000/api/hotels/search \
   -H "Content-Type: application/json" \
@@ -324,6 +334,7 @@ curl "http://localhost:3000/api/admin/hotels/logs?limit=1000" \
 ## API Endpoints Reference
 
 ### Monitoring
+
 - `GET /api/admin/hotels/cache/status` - Current cache state
 - `GET /api/admin/hotels/metrics/:supplier` - Performance metrics
 - `GET /api/admin/hotels/logs` - API call logs (paginated)
@@ -332,17 +343,20 @@ curl "http://localhost:3000/api/admin/hotels/logs?limit=1000" \
 - `GET /api/admin/hotels/logs/trace/:traceId` - Logs for specific trace
 
 ### Inventory
+
 - `GET /api/admin/hotels/inventory` - Browse hotels
 - `GET /api/admin/hotels/inventory/cities` - Cities with counts
 - `GET /api/admin/hotels/inventory/countries` - Countries with counts
 - `GET /api/admin/hotels/inventory/:hotelCode` - Specific hotel
 
 ### Sync Operations
+
 - `POST /api/admin/hotels/sync/full` - Full sync (async)
 - `POST /api/admin/hotels/sync/cities` - Sync specific cities (async)
 - `GET /api/admin/hotels/sync/status` - Sync status
 
 ### Utilities
+
 - `GET /api/admin/hotels/cache/clear-coalescing` - Clear pending requests
 
 ## Getting Help

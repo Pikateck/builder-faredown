@@ -27,7 +27,9 @@ class TBOStaticDataService {
     this.config = {
       staticUserName: process.env.TBO_STATIC_USER || "travelcategory",
       staticPassword: process.env.TBO_STATIC_PASSWORD || "Tra@59334536",
-      baseUrl: process.env.TBO_HOTEL_STATIC_DATA || "https://apiwr.tboholidays.com/HotelAPI/",
+      baseUrl:
+        process.env.TBO_HOTEL_STATIC_DATA ||
+        "https://apiwr.tboholidays.com/HotelAPI/",
       timeout: 30000,
     };
 
@@ -65,7 +67,9 @@ class TBOStaticDataService {
         return response.data.TokenId;
       }
 
-      throw new Error(`Failed to get auth token: ${response.data?.Error || "Unknown error"}`);
+      throw new Error(
+        `Failed to get auth token: ${response.data?.Error || "Unknown error"}`,
+      );
     } catch (error) {
       this.logger.error("Failed to get static auth token:", error.message);
       throw error;

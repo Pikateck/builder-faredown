@@ -78,6 +78,7 @@ When multiple identical requests arrive within milliseconds:
 4. Reduces supplier load significantly during peak traffic
 
 **Key Benefits**:
+
 - Single API call for 10+ simultaneous identical requests
 - Faster response times for users
 - Reduced supplier API costs
@@ -88,6 +89,7 @@ When multiple identical requests arrive within milliseconds:
 #### HotelApiCachingService (`api/services/hotelApiCachingService.js`)
 
 **Responsibilities**:
+
 - Generate search hashes from parameters
 - Manage Redis cache operations
 - Handle request coalescing (promise locking)
@@ -95,6 +97,7 @@ When multiple identical requests arrive within milliseconds:
 - Provide performance metrics
 
 **Key Methods**:
+
 ```javascript
 // Execute hotel search with caching
 await executeHotelSearch({
@@ -125,24 +128,26 @@ clearCoalescingRequests();
 #### TBOStaticDataService (`api/services/tboStaticDataService.js`)
 
 **Responsibilities**:
+
 - Sync TBO static data (countries, cities, hotels)
 - Populate hotels_master_inventory table
 - Handle authentication with TBO static APIs
 - Provide sync status and monitoring
 
 **Key Methods**:
+
 ```javascript
 // Full sync: Countries -> Cities -> Hotels
 const result = await fullSync({
-  countryCodes: ['AE', 'IN'],  // Optional: specific countries
+  countryCodes: ["AE", "IN"], // Optional: specific countries
   countryLimit: 5,
-  cityLimit: 10
+  cityLimit: 10,
 });
 
 // Sync specific cities
 await syncSpecificCities(
-  ['AE', 'IN'],          // Country codes
-  [1, 2, 3]              // City IDs (optional)
+  ["AE", "IN"], // Country codes
+  [1, 2, 3], // City IDs (optional)
 );
 
 // Get sync status
@@ -155,11 +160,11 @@ const status = await getSyncStatus();
 **Wraps adapter methods to add caching**:
 
 ```javascript
-const TBOAdapter = require('./adapters/tboAdapter');
-const { applyCompleteCaching } = require('./hotelAdapterCachingIntegration');
+const TBOAdapter = require("./adapters/tboAdapter");
+const { applyCompleteCaching } = require("./hotelAdapterCachingIntegration");
 
 const adapter = new TBOAdapter();
-applyCompleteCaching(adapter);  // Wrap both search and details methods
+applyCompleteCaching(adapter); // Wrap both search and details methods
 
 // Now all calls are automatically cached and logged
 const results = await adapter.searchHotels(searchParams);
@@ -170,6 +175,7 @@ const results = await adapter.searchHotels(searchParams);
 **Endpoint**: `/api/admin/hotels/*`
 
 #### Cache Management
+
 ```
 GET  /api/admin/hotels/cache/status
 GET  /api/admin/hotels/cache/clear-coalescing
@@ -177,6 +183,7 @@ GET  /api/admin/hotels/metrics/:supplier
 ```
 
 #### Logging & Analytics
+
 ```
 GET  /api/admin/hotels/logs?supplier=TBO&limit=100&offset=0&errorOnly=false
 GET  /api/admin/hotels/logs/trace/:traceId
@@ -185,6 +192,7 @@ GET  /api/admin/hotels/logs/stats?days=7
 ```
 
 #### Sync & Inventory Management
+
 ```
 POST /api/admin/hotels/sync/full
      Body: { countryCodes?, countryLimit?, cityLimit? }
@@ -213,6 +221,7 @@ npm run migrate:hotel-caching
 ```
 
 This creates:
+
 - `hotel_supplier_api_logs` table with indexes
 - `hotels_master_inventory` table with indexes
 - Materialized views for analytics
@@ -233,6 +242,7 @@ redis://localhost:6379
 ### Step 3: Initialize Services
 
 Services are automatically initialized on startup. Check logs for:
+
 ```
 ✅ Redis connected
 ✅ Database migration completed
@@ -259,12 +269,12 @@ curl -X POST http://localhost:3000/api/admin/hotels/sync/full \
 ```javascript
 // api/services/adapters/supplierAdapterManager.js
 
-const { applyCompleteCaching } = require('./hotelAdapterCachingIntegration');
+const { applyCompleteCaching } = require("./hotelAdapterCachingIntegration");
 
 // In initializeAdapters():
 if (process.env.TBO_HOTEL_USER_ID) {
   let tboAdapter = new TBOAdapter();
-  tboAdapter = applyCompleteCaching(tboAdapter);  // <-- ADD THIS
+  tboAdapter = applyCompleteCaching(tboAdapter); // <-- ADD THIS
   this.adapters.set("TBO", tboAdapter);
 }
 ```
@@ -273,21 +283,21 @@ if (process.env.TBO_HOTEL_USER_ID) {
 
 ```javascript
 // In a hotel search route
-const hotelApiCachingService = require('../services/hotelApiCachingService');
+const hotelApiCachingService = require("../services/hotelApiCachingService");
 const tboAdapter = new TBOAdapter();
 
 const results = await hotelApiCachingService.executeHotelSearch({
-  supplierCode: 'TBO',
+  supplierCode: "TBO",
   endpoint: tboAdapter.config.hotelSearchUrl,
   searchParams: {
     cityId: 2,
-    checkInDate: '2025-03-01',
-    checkOutDate: '2025-03-02',
-    nationality: 'IN',
-    rooms: [{ adults: 2, children: 0 }]
+    checkInDate: "2025-03-01",
+    checkOutDate: "2025-03-02",
+    nationality: "IN",
+    rooms: [{ adults: 2, children: 0 }],
   },
   searchFunction: () => tboAdapter.searchHotels(searchParams),
-  requestPayload: searchParams
+  requestPayload: searchParams,
 });
 
 console.log(results);
@@ -303,7 +313,7 @@ console.log(results);
 
 ```javascript
 // Get TBO performance metrics
-const metrics = await hotelApiCachingService.getSupplierMetrics('TBO', 7);
+const metrics = await hotelApiCachingService.getSupplierMetrics("TBO", 7);
 console.log(metrics);
 // {
 //   supplier_code: 'TBO',
@@ -445,6 +455,7 @@ curl http://localhost:3000/api/admin/hotels/sync/status \
 ### Issue: Cache hits are 0%
 
 **Solution**: Verify Redis is connected
+
 ```bash
 # Check Redis connection logs
 grep "Redis connected" logs/*.log
@@ -456,6 +467,7 @@ echo $REDIS_URL
 ### Issue: Sync job hangs
 
 **Solution**: Check TBO API connectivity
+
 ```bash
 # Test TBO static data endpoint
 curl -X POST https://apiwr.tboholidays.com/HotelAPI/SharedData.svc/rest/Authenticate \
@@ -466,6 +478,7 @@ curl -X POST https://apiwr.tboholidays.com/HotelAPI/SharedData.svc/rest/Authenti
 ### Issue: High memory usage
 
 **Solution**: Check ongoing coalescing requests
+
 ```bash
 curl http://localhost:3000/api/admin/hotels/cache/status \
   -H "Authorization: Bearer YOUR_ADMIN_KEY"

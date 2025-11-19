@@ -54,7 +54,10 @@ class HotelApiCachingService {
 
     // Create a normalized string representation
     const roomsStr = rooms
-      .map((r) => `${r.adults || 0}-${r.children || 0}-${(r.childAges || []).join(",")}`)
+      .map(
+        (r) =>
+          `${r.adults || 0}-${r.children || 0}-${(r.childAges || []).join(",")}`,
+      )
       .join("|");
 
     const searchString = JSON.stringify({
@@ -84,9 +87,12 @@ class HotelApiCachingService {
    */
   getOrCreatePendingRequest(searchHash) {
     if (this.ongoingRequests.has(searchHash)) {
-      this.logger.info("Request coalescing: waiting for identical in-progress request", {
-        searchHash,
-      });
+      this.logger.info(
+        "Request coalescing: waiting for identical in-progress request",
+        {
+          searchHash,
+        },
+      );
       return this.ongoingRequests.get(searchHash);
     }
 
@@ -385,7 +391,11 @@ class HotelApiCachingService {
 
       // If we just created the pending request, execute the search
       const pending = this.ongoingRequests.get(searchHash);
-      if (pending && pending.promise === pendingPromise && pending.startTime === pending.startTime) {
+      if (
+        pending &&
+        pending.promise === pendingPromise &&
+        pending.startTime === pending.startTime
+      ) {
         // This is the first request, proceed with execution
         try {
           const responsePayload = await searchFunction();
@@ -468,7 +478,10 @@ class HotelApiCachingService {
       } else {
         // This is a coalesced request, wait for the first one to complete
         const coalesced = await pendingPromise;
-        this.logger.info("Coalesced request completed", { traceId, searchHash });
+        this.logger.info("Coalesced request completed", {
+          traceId,
+          searchHash,
+        });
         return { ...coalesced, traceId };
       }
     } catch (error) {
@@ -495,7 +508,12 @@ class HotelApiCachingService {
     requestPayload,
   }) {
     const traceId = uuidv4();
-    const roomCacheKey = this.generateRoomKey(hotelCode, roomKey, checkInDate, checkOutDate);
+    const roomCacheKey = this.generateRoomKey(
+      hotelCode,
+      roomKey,
+      checkInDate,
+      checkOutDate,
+    );
     const startTime = Date.now();
 
     this.logger.info("Starting room details call", {
