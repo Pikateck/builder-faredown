@@ -4,7 +4,7 @@
  * Flow:
  * 1. Check cache for matching search hash
  * 2. If cache hit & fresh → return from DB
- * 3. If cache miss → call TBO, normalize, store, return
+ * 3. If cache miss ��� call TBO, normalize, store, return
  */
 
 const express = require("express");
@@ -102,6 +102,7 @@ router.post("/search", async (req, res) => {
     // ============================================================
     const adapter = supplierAdapterManager.getAdapter("TBO");
     if (!adapter) {
+      console.error("❌ TBO adapter not initialized [${traceId}]");
       throw new Error("TBO adapter not initialized");
     }
 
@@ -120,16 +121,32 @@ router.post("/search", async (req, res) => {
       childAges: searchParams.childAges || []
     };
 
-    const searchPromise = adapter.searchHotels(tboSearchParams);
-
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(
-        () => reject(new Error("TBO search timeout after 90 seconds")),
-        90000,
-      );
+    console.log(`📤 Calling TBO search with params [${traceId}]:`, {
+      destination: tboSearchParams.destination,
+      checkIn: tboSearchParams.checkIn,
+      checkOut: tboSearchParams.checkOut,
+      rooms: tboSearchParams.rooms,
     });
 
-    const tboHotels = await Promise.race([searchPromise, timeoutPromise]);
+    let tboHotels = [];
+    try {
+      const searchPromise = adapter.searchHotels(tboSearchParams);
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error("TBO search timeout after 90 seconds")),
+          90000,
+        );
+      });
+
+      tboHotels = await Promise.race([searchPromise, timeoutPromise]);
+    } catch (adapterError) {
+      console.error(`❌ TBO adapter error [${traceId}]:`, {
+        message: adapterError.message,
+        stack: adapterError.stack,
+      });
+      throw adapterError;
+    }
 
     if (!Array.isArray(tboHotels) || tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`);
