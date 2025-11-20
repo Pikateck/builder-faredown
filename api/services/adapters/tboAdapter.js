@@ -260,11 +260,11 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getCityId(destination, countryCode) {
     // ✅ Hardcoded fallback for known cities (while debugging)
     const KNOWN_CITIES = {
-      'DUBAI-AE': 115936,
-      'ABU DHABI-AE': 110394,
-      'LONDON-GB': 100264,
-      'PARIS-FR': 121909,
-      'NEW YORK-US': 113646,
+      "DUBAI-AE": 115936,
+      "ABU DHABI-AE": 110394,
+      "LONDON-GB": 100264,
+      "PARIS-FR": 121909,
+      "NEW YORK-US": 113646,
     };
 
     const normalizedDestination = destination.replace(/,.*$/, "").trim();
@@ -346,7 +346,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         hasError: !!ApiError,
         errorMessage: ApiError?.ErrorMessage,
         rawResponseKeys: Object.keys(response.data || {}),
-        firstDestinations: destinations.slice(0, 3).map(d => ({
+        firstDestinations: destinations.slice(0, 3).map((d) => ({
           city: d.CityName,
           country: d.CountryCode,
           id: d.DestinationId,
@@ -370,7 +370,7 @@ class TBOAdapter extends BaseSupplierAdapter {
             countryCode: normalizedCountryCode,
             rawResponse: JSON.stringify(response.data).substring(0, 500),
             responseKeys: Object.keys(response.data || {}),
-            hasDestinations: 'Destinations' in (response.data || {}),
+            hasDestinations: "Destinations" in (response.data || {}),
             destinationsValue: response.data?.Destinations,
           },
         );

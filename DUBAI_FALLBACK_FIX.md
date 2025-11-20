@@ -3,6 +3,7 @@
 ## Problem
 
 TBO's `GetDestinationSearchStaticData` API was failing to return Dubai, causing:
+
 ```json
 {
   "source": "tbo_empty",
@@ -15,6 +16,7 @@ TBO's `GetDestinationSearchStaticData` API was failing to return Dubai, causing:
 ## Root Cause
 
 The TBO static data API call was either:
+
 1. Returning an error
 2. Returning 0 destinations
 3. Authentication failing
@@ -27,15 +29,16 @@ Added a fallback map for popular cities in `getCityId()`:
 
 ```javascript
 const KNOWN_CITIES = {
-  'DUBAI-AE': 115936,
-  'ABU DHABI-AE': 110394,
-  'LONDON-GB': 100264,
-  'PARIS-FR': 121909,
-  'NEW YORK-US': 113646,
+  "DUBAI-AE": 115936,
+  "ABU DHABI-AE": 110394,
+  "LONDON-GB": 100264,
+  "PARIS-FR": 121909,
+  "NEW YORK-US": 113646,
 };
 ```
 
 **How it works:**
+
 1. Request comes in with `destination: "Dubai"`, `countryCode: "AE"`
 2. Creates lookup key: `"DUBAI-AE"`
 3. Finds match in `KNOWN_CITIES`: `115936`
@@ -67,6 +70,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 **Expected:**
+
 ```json
 {
   "success": true,
@@ -101,15 +105,16 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 
 ## Supported Cities (Hardcoded)
 
-| City | Country | DestinationId |
-|------|---------|---------------|
-| Dubai | AE | 115936 |
-| Abu Dhabi | AE | 110394 |
-| London | GB | 100264 |
-| Paris | FR | 121909 |
-| New York | US | 113646 |
+| City      | Country | DestinationId |
+| --------- | ------- | ------------- |
+| Dubai     | AE      | 115936        |
+| Abu Dhabi | AE      | 110394        |
+| London    | GB      | 100264        |
+| Paris     | FR      | 121909        |
+| New York  | US      | 113646        |
 
 To add more cities, just add to the `KNOWN_CITIES` map:
+
 ```javascript
 'MUMBAI-IN': 10449,
 'BANGKOK-TH': 112931,
@@ -118,6 +123,7 @@ To add more cities, just add to the `KNOWN_CITIES` map:
 ## Long-term Solution
 
 Once we debug why the static data API is failing:
+
 1. Keep the fallback for popular cities (performance boost)
 2. Use static API for less common destinations
 3. Cache static data results in database for future lookups
