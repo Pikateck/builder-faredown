@@ -30,6 +30,21 @@ router.post("/", async (req, res) => {
       body: req.body
     });
 
+    // Validate required fields
+    const { cityId, checkIn, checkOut } = req.body;
+    if (!cityId || !checkIn || !checkOut) {
+      console.error(`❌ Missing required fields [${traceId}]:`, {
+        cityId: !!cityId,
+        checkIn: !!checkIn,
+        checkOut: !!checkOut,
+      });
+      return res.status(400).json({
+        success: false,
+        error: `Missing required fields: cityId=${cityId}, checkIn=${checkIn}, checkOut=${checkOut}`,
+        traceId,
+      });
+    }
+
     // ============================================================
     // Step 1: Resolve guest nationality
     // ============================================================
