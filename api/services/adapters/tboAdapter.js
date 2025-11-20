@@ -268,6 +268,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       TokenId: this.tokenId,
       CountryCode: countryCode,
       SearchQuery: destination,
+      EndUserIp: this.config.endUserIp,
     };
 
     this.logger.debug("🏙️  TBO Static Data Request", {
@@ -275,6 +276,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       countryCode,
       endpoint: staticUrl,
       tokenId: this.tokenId ? "present" : "missing",
+      endUserIp: this.config.endUserIp,
     });
 
     try {
