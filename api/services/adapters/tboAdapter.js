@@ -460,10 +460,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       MinRating: 0,
     };
 
-    // ✅ CORRECTED: Use production GetHotelResult endpoint (NOT affiliate)
+    // ✅ CORRECTED: Use OFFICIAL TBO affiliate URL for hotel search
     const searchUrl =
       process.env.TBO_HOTEL_SEARCH_URL ||
-      "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+      this.config.hotelSearchUrl + "GetHotelResult";
 
     this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: searchUrl,
