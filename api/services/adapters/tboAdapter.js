@@ -299,7 +299,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       normalizedCountryCode,
       lookupKey,
       lookupKeyLength: lookupKey.length,
-      lookupKeyCharCodes: Array.from(lookupKey).map(c => c.charCodeAt(0)),
+      lookupKeyCharCodes: Array.from(lookupKey).map((c) => c.charCodeAt(0)),
       hasKeyInMap: lookupKey in KNOWN_CITIES,
       mapKeys: Object.keys(KNOWN_CITIES),
       foundValue: KNOWN_CITIES[lookupKey],
@@ -315,10 +315,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       return KNOWN_CITIES[lookupKey];
     }
 
-    this.logger.warn("⚠️ Lookup key not found in KNOWN_CITIES, will try TBO API", {
-      lookupKey,
-      availableKeys: Object.keys(KNOWN_CITIES),
-    });
+    this.logger.warn(
+      "⚠️ Lookup key not found in KNOWN_CITIES, will try TBO API",
+      {
+        lookupKey,
+        availableKeys: Object.keys(KNOWN_CITIES),
+      },
+    );
 
     // Otherwise, call TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
