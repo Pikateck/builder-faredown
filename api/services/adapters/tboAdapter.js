@@ -269,10 +269,13 @@ class TBOAdapter extends BaseSupplierAdapter {
     // Normalize and validate countryCode
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
     if (!normalizedCountryCode) {
-      this.logger.error("❌ CountryCode is required for GetDestinationSearchStaticData", {
-        destination,
-        countryCode,
-      });
+      this.logger.error(
+        "❌ CountryCode is required for GetDestinationSearchStaticData",
+        {
+          destination,
+          countryCode,
+        },
+      );
       return null;
     }
 
@@ -380,13 +383,16 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return match.DestinationId;
     } catch (error) {
-      this.logger.error("❌ Failed to get CityId - returning null to avoid crash", {
-        destination,
-        countryCode,
-        error: error.message,
-        stack: error.stack,
-        note: "Returning null instead of throwing to prevent Node process restart",
-      });
+      this.logger.error(
+        "❌ Failed to get CityId - returning null to avoid crash",
+        {
+          destination,
+          countryCode,
+          error: error.message,
+          stack: error.stack,
+          note: "Returning null instead of throwing to prevent Node process restart",
+        },
+      );
 
       // ✅ Return null instead of throwing to prevent Node crash
       // The caller (searchHotels) will handle null cityId gracefully
@@ -455,14 +461,17 @@ class TBOAdapter extends BaseSupplierAdapter {
         };
       }
     } catch (err) {
-      this.logger.error("❌ Failed to get CityId - returning empty array to prevent crash", {
-        destination,
-        countryCode,
-        error: err.message,
-        stack: err.stack,
-        returning: "empty array instead of crashing",
-        note: "Node process will continue running",
-      });
+      this.logger.error(
+        "❌ Failed to get CityId - returning empty array to prevent crash",
+        {
+          destination,
+          countryCode,
+          error: err.message,
+          stack: err.stack,
+          returning: "empty array instead of crashing",
+          note: "Node process will continue running",
+        },
+      );
       // ✅ Return empty array instead of throwing to prevent Node crash
       return {
         hotels: [],
@@ -615,12 +624,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       // ✅ CASE 2: Success - Hotels found
-      this.logger.info(`✅ TBO Search SUCCESS - ${hotels.length} hotels found`, {
-        traceId: searchResult?.TraceId,
-      });
+      this.logger.info(
+        `✅ TBO Search SUCCESS - ${hotels.length} hotels found`,
+        {
+          traceId: searchResult?.TraceId,
+        },
+      );
 
       // Transform to our format
-      const transformedHotels = this.transformHotelResults(hotels, searchParams);
+      const transformedHotels = this.transformHotelResults(
+        hotels,
+        searchParams,
+      );
 
       // Return hotels with session metadata
       return {

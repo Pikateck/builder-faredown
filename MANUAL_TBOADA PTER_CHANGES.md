@@ -9,6 +9,7 @@ The following changes need to be made manually to return session metadata with h
 ## Change 1: Empty Results Return (Line 588-591)
 
 ### Current Code:
+
 ```javascript
 if (hotels.length === 0) {
   this.logger.info("ℹ️ TBO returned 0 hotels for this search");
@@ -17,6 +18,7 @@ if (hotels.length === 0) {
 ```
 
 ### New Code:
+
 ```javascript
 if (hotels.length === 0) {
   this.logger.info("ℹ️ TBO returned 0 hotels for this search");
@@ -37,6 +39,7 @@ if (hotels.length === 0) {
 ## Change 2: Successful Results Return (Line 593-596)
 
 ### Current Code:
+
 ```javascript
 this.logger.info(`✅ TBO Search SUCCESS - ${hotels.length} hotels found`);
 
@@ -45,6 +48,7 @@ return this.transformHotelResults(hotels, searchParams);
 ```
 
 ### New Code:
+
 ```javascript
 this.logger.info(`✅ TBO Search SUCCESS - ${hotels.length} hotels found`, {
   traceId: searchResult?.TraceId,
@@ -70,6 +74,7 @@ return {
 ## Change 3: Error Handler Return (Line 597-606)
 
 ### Current Code:
+
 ```javascript
 } catch (error) {
   this.logger.error("❌ TBO Hotel Search FAILED", {
@@ -84,6 +89,7 @@ return {
 ```
 
 ### New Code:
+
 ```javascript
 } catch (error) {
   this.logger.error("❌ TBO Hotel Search FAILED", {
@@ -127,6 +133,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ```
 
 Expected response should include:
+
 ```json
 {
   "success": true,

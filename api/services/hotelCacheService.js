@@ -19,7 +19,8 @@ class HotelCacheService {
    */
   generateSearchHash(params) {
     // Use destination or cityId for hash generation
-    const cityIdentifier = params.cityId || params.destination || params.cityName || "unknown";
+    const cityIdentifier =
+      params.cityId || params.destination || params.cityName || "unknown";
 
     const hashKey = JSON.stringify({
       cityId: cityIdentifier,
@@ -88,11 +89,11 @@ class HotelCacheService {
       // Calculate session status
       if (cachedSearch.session_expires_at) {
         cachedSearch.session_status = tboSessionConfig.getSessionStatus(
-          cachedSearch.session_expires_at
+          cachedSearch.session_expires_at,
         );
         cachedSearch.session_ttl_seconds = tboSessionConfig.SESSION_TTL_SECONDS;
       } else {
-        cachedSearch.session_status = 'active';
+        cachedSearch.session_status = "active";
         cachedSearch.session_ttl_seconds = null;
       }
 
@@ -119,20 +120,18 @@ class HotelCacheService {
       // Calculate TTL and session expiry
       const ttlExpiresAt = new Date();
       ttlExpiresAt.setHours(
-        ttlExpiresAt.getHours() + tboSessionConfig.CACHE.SEARCH_RESULT_TTL_HOURS,
+        ttlExpiresAt.getHours() +
+          tboSessionConfig.CACHE.SEARCH_RESULT_TTL_HOURS,
       );
 
       const sessionStartedAt = new Date();
-      const sessionExpiresAt = tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+      const sessionExpiresAt =
+        tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
       const sessionTtlSeconds = tboSessionConfig.SESSION_TTL_SECONDS;
 
       // Extract TBO session metadata
-      const {
-        traceId,
-        tokenId,
-        supplierResponseFull,
-        destinationId,
-      } = sessionMetadata;
+      const { traceId, tokenId, supplierResponseFull, destinationId } =
+        sessionMetadata;
 
       // Insert search cache entry with session tracking
       await db.query(
@@ -154,7 +153,10 @@ class HotelCacheService {
            supplier_metadata = $17`,
         [
           searchHash,
-          params.cityId || destinationId || params.destination || params.cityName,
+          params.cityId ||
+            destinationId ||
+            params.destination ||
+            params.cityName,
           params.countryCode || "AE",
           params.checkIn || params.checkInDate,
           params.checkOut || params.checkOutDate,

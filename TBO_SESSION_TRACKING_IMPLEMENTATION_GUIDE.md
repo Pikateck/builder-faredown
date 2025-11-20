@@ -11,6 +11,7 @@ This document specifies the complete implementation for TBO session tracking, ca
 ### Migration Created: `20250610_hotel_session_tracking.sql`
 
 **New columns in `hotel_search_cache`:**
+
 - `tbo_trace_id` - TBO TraceId from GetHotelResult (required for BlockRoom/Book)
 - `tbo_token_id` - TBO TokenId used for this search (valid 24h)
 - `session_started_at` - When the search was performed
@@ -19,6 +20,7 @@ This document specifies the complete implementation for TBO session tracking, ca
 - `supplier_metadata` - Full supplier response metadata (JSONB)
 
 **New columns in `hotel_search_cache_results`:**
+
 - `result_index` - TBO ResultIndex (0-based)
 - `hotel_code` - TBO HotelCode
 - `category_id` - TBO CategoryId (for de-dupe hotels)
@@ -27,6 +29,7 @@ This document specifies the complete implementation for TBO session tracking, ca
 - `supplier_room_metadata` - Full room metadata (JSONB)
 
 **Apply migration:**
+
 ```bash
 psql $DATABASE_URL -f api/database/migrations/20250610_hotel_session_tracking.sql
 ```
@@ -38,6 +41,7 @@ psql $DATABASE_URL -f api/database/migrations/20250610_hotel_session_tracking.sq
 ### File Created: `api/config/tbo-session.config.js`
 
 **Environment Variables:**
+
 ```env
 # TBO Session Settings
 TBO_SESSION_TTL_MINUTES=10              # TraceId validity (default: 10 mins)
@@ -50,8 +54,9 @@ CACHE_STATIC_DATA_TTL_HOURS=168         # Cache static data for 7 days
 ```
 
 **Key Functions:**
+
 ```javascript
-const tboSessionConfig = require('../config/tbo-session.config');
+const tboSessionConfig = require("../config/tbo-session.config");
 
 // Calculate session expiry
 const sessionExpiry = tboSessionConfig.calculateSessionExpiry(new Date());
@@ -70,6 +75,7 @@ const remaining = tboSessionConfig.getSessionTimeRemaining(sessionExpiry);
 ### File Modified: `api/services/hotelCacheService.js`
 
 **Updated `cacheSearchResults` signature:**
+
 ```javascript
 async cacheSearchResults(
   searchHash,
@@ -81,6 +87,7 @@ async cacheSearchResults(
 ```
 
 **Session metadata structure:**
+
 ```javascript
 {
   traceId: 'abc123...',           // TBO TraceId from GetHotelResult
@@ -91,6 +98,7 @@ async cacheSearchResults(
 ```
 
 **Updated `getCachedSearch` returns:**
+
 ```javascript
 {
   search_hash: '...',
@@ -111,20 +119,22 @@ async cacheSearchResults(
 ### File To Modify: `api/services/adapters/tboAdapter.js`
 
 **Current `searchHotels` return value:**
+
 ```javascript
-return [hotels];  // ❌ Only returns array
+return [hotels]; // ❌ Only returns array
 ```
 
 **New `searchHotels` return value:**
+
 ```javascript
 return {
-  hotels: [hotels],              // Transformed hotels array
+  hotels: [hotels], // Transformed hotels array
   sessionMetadata: {
     traceId: searchResult?.TraceId || null,
     tokenId: this.tokenId,
     destinationId: cityId,
-    supplierResponseFull: searchResult
-  }
+    supplierResponseFull: searchResult,
+  },
 };
 ```
 
@@ -168,6 +178,7 @@ return {
 ```
 
 **Error handling:**
+
 ```javascript
 } catch (error) {
   this.logger.error("❌ TBO Hotel Search FAILED", {
@@ -214,7 +225,7 @@ await hotelCacheService.cacheSearchResults(
   searchHash,
   searchParams,
   hotelIds,
-  'tbo'
+  "tbo",
 );
 
 // NEW:
@@ -222,35 +233,33 @@ await hotelCacheService.cacheSearchResults(
   searchHash,
   searchParams,
   hotelIds,
-  'tbo',
-  sessionMetadata  // ✅ Pass session metadata
+  "tbo",
+  sessionMetadata, // ✅ Pass session metadata
 );
 ```
 
 **Update response structure (around line 250-280):**
 
 ```javascript
-const tboSessionConfig = require('../config/tbo-session.config');
+const tboSessionConfig = require("../config/tbo-session.config");
 
 // Calculate session validity
-const sessionExpiresAt = cachedSearch 
-  ? cachedSearch.session_expires_at 
+const sessionExpiresAt = cachedSearch
+  ? cachedSearch.session_expires_at
   : tboSessionConfig.calculateSessionExpiry(new Date());
 
-const sessionValid = cachedSearch
-  ? cachedSearch.session_valid
-  : true;
+const sessionValid = cachedSearch ? cachedSearch.session_valid : true;
 
 res.json({
   success: true,
-  source: cachedSearch ? 'tbo_cache' : 'tbo_live',  // ✅ Clear source indicator
+  source: cachedSearch ? "tbo_cache" : "tbo_live", // ✅ Clear source indicator
   hotels: responseHotels,
   totalResults: responseHotels.length,
-  cacheHit: !!cachedSearch,                        // ✅ Cache hit flag
+  cacheHit: !!cachedSearch, // ✅ Cache hit flag
   timestamp: new Date().toISOString(),
   duration: `${duration}ms`,
-  sessionExpiresAt: sessionExpiresAt,              // ✅ NEW: Session expiry
-  sessionValid: sessionValid,                       // ✅ NEW: Session validity flag
+  sessionExpiresAt: sessionExpiresAt, // ✅ NEW: Session expiry
+  sessionValid: sessionValid, // ✅ NEW: Session validity flag
   traceId,
 });
 ```
@@ -264,22 +273,24 @@ res.json({
 **Add to `client/pages/HotelResults.tsx` (top of results):**
 
 ```tsx
-{searchMetadata?.sessionExpiresAt && (
-  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-    <div className="flex items-center gap-2">
-      <Clock className="w-5 h-5 text-blue-600" />
-      <div>
-        <p className="text-sm font-medium text-blue-900">
-          Prices held by supplier
-        </p>
-        <p className="text-xs text-blue-700">
-          Complete your bargain and booking within the next{' '}
-          {formatTimeRemaining(searchMetadata.sessionExpiresAt)}
-        </p>
+{
+  searchMetadata?.sessionExpiresAt && (
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+      <div className="flex items-center gap-2">
+        <Clock className="w-5 h-5 text-blue-600" />
+        <div>
+          <p className="text-sm font-medium text-blue-900">
+            Prices held by supplier
+          </p>
+          <p className="text-xs text-blue-700">
+            Complete your bargain and booking within the next{" "}
+            {formatTimeRemaining(searchMetadata.sessionExpiresAt)}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-)}
+  );
+}
 ```
 
 **Add session countdown utility:**
@@ -289,12 +300,12 @@ function formatTimeRemaining(expiryDate: string): string {
   const now = new Date();
   const expiry = new Date(expiryDate);
   const diff = expiry.getTime() - now.getTime();
-  
-  if (diff <= 0) return 'expired';
-  
+
+  if (diff <= 0) return "expired";
+
   const minutes = Math.floor(diff / 60000);
   const seconds = Math.floor((diff % 60000) / 1000);
-  
+
   return `${minutes}m ${seconds}s`;
 }
 ```
@@ -312,7 +323,7 @@ const hotelWithMetadata = {
     hotelCode: hotel.hotelId,
     categoryId: hotel.categoryId,
     isTBOMapped: hotel.isTBOMapped,
-  }
+  },
 };
 ```
 
@@ -335,17 +346,17 @@ const hotelWithMetadata = {
 **File: `api/routes/hotels-booking.js` or `api/services/hotelBookingService.js`**
 
 ```javascript
-const tboSessionConfig = require('../config/tbo-session.config');
+const tboSessionConfig = require("../config/tbo-session.config");
 
 async function initiateBooking(hotelData, roomData, guestData) {
   const { tboMetadata } = hotelData;
   const { traceId, sessionExpiresAt } = tboMetadata;
-  
+
   // Validate session is still valid
   if (!tboSessionConfig.isSessionValid(new Date(sessionExpiresAt))) {
-    throw new Error('SESSION_EXPIRED');
+    throw new Error("SESSION_EXPIRED");
   }
-  
+
   // Proceed with BlockRoom
   const blockResult = await tboAdapter.blockRoom({
     traceId,
@@ -353,30 +364,30 @@ async function initiateBooking(hotelData, roomData, guestData) {
     hotelCode: tboMetadata.hotelCode,
     categoryId: tboMetadata.categoryId,
     roomIndex: roomData.roomIndex,
-    ...otherParams
+    ...otherParams,
   });
-  
+
   // Check for price changes
   if (blockResult.IsPriceChanged) {
     return {
       success: false,
-      error: 'PRICE_CHANGED',
+      error: "PRICE_CHANGED",
       newPrice: blockResult.HotelRoomsDetails[0].Price,
-      message: 'Price has changed. Please review and confirm.'
+      message: "Price has changed. Please review and confirm.",
     };
   }
-  
+
   // Proceed to book
   const bookResult = await tboAdapter.bookHotel({
     traceId,
     resultIndex: tboMetadata.resultIndex,
     hotelCode: tboMetadata.hotelCode,
-    ...bookingParams
+    ...bookingParams,
   });
-  
+
   return {
     success: true,
-    booking: bookResult
+    booking: bookResult,
   };
 }
 ```
@@ -385,13 +396,13 @@ async function initiateBooking(hotelData, roomData, guestData) {
 
 ```typescript
 try {
-  const bookingResult = await api.post('/api/hotels/book', bookingData);
+  const bookingResult = await api.post("/api/hotels/book", bookingData);
   // Success flow
 } catch (error) {
-  if (error.response?.data?.error === 'SESSION_EXPIRED') {
-    toast.error('Session expired. Please search again.');
-    navigate('/hotels');
-  } else if (error.response?.data?.error === 'PRICE_CHANGED') {
+  if (error.response?.data?.error === "SESSION_EXPIRED") {
+    toast.error("Session expired. Please search again.");
+    navigate("/hotels");
+  } else if (error.response?.data?.error === "PRICE_CHANGED") {
     // Show price change modal
     setShowPriceChangeModal(true);
     setNewPrice(error.response.data.newPrice);
@@ -404,6 +415,7 @@ try {
 ## 8. Testing Checklist
 
 ### 1. Cache Behavior
+
 ```bash
 # Test 1: First search (should hit TBO live)
 curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
@@ -436,6 +448,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ```
 
 ### 2. Session Expiry
+
 ```javascript
 // In QA environment, set TBO_SESSION_TTL_MINUTES=2
 
@@ -447,6 +460,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ```
 
 ### 3. Render Logs Verification
+
 ```
 [TBO] ✅ CityId resolved { destinationId: 115936, cityName: "Dubai" }
 [TBO] 🔍 TBO Hotel Search Request { cityId: 115936, ... }
@@ -459,11 +473,13 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ## 9. Deployment Steps
 
 1. **Apply database migration:**
+
    ```bash
    psql $DATABASE_URL -f api/database/migrations/20250610_hotel_session_tracking.sql
    ```
 
 2. **Set environment variables on Render:**
+
    ```env
    TBO_SESSION_TTL_MINUTES=10
    SESSION_SAFETY_BUFFER_SECONDS=60
@@ -478,6 +494,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
    - `api/routes/hotels-search.js` (updated)
 
 4. **Test with PowerShell:**
+
    ```powershell
    $body = @{
        destination = "Dubai"
@@ -530,6 +547,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ## Summary
 
 This implementation provides:
+
 - ✅ Full TBO session tracking with `TraceId` and expiry monitoring
 - ✅ Cached data includes all metadata needed for BlockRoom/Book
 - ✅ Session validity checks before bargain/booking attempts

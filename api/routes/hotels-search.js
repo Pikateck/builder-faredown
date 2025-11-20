@@ -46,11 +46,11 @@ router.post("/", async (req, res) => {
         success: false,
         error: `Missing required fields. Need: (cityId OR destination OR cityName) AND checkIn AND checkOut`,
         received: {
-          cityId: cityId || 'missing',
-          destination: destination || 'missing',
-          cityName: cityName || 'missing',
-          checkIn: checkIn || 'missing',
-          checkOut: checkOut || 'missing',
+          cityId: cityId || "missing",
+          destination: destination || "missing",
+          cityName: cityName || "missing",
+          checkIn: checkIn || "missing",
+          checkOut: checkOut || "missing",
         },
         traceId,
       });
@@ -153,8 +153,10 @@ router.post("/", async (req, res) => {
       const sessionData = {
         sessionStartedAt: cachedSearch.session_started_at,
         sessionExpiresAt: cachedSearch.session_expires_at,
-        sessionTtlSeconds: cachedSearch.session_ttl_seconds || tboSessionConfig.SESSION_TTL_SECONDS,
-        sessionStatus: cachedSearch.session_status || 'active',
+        sessionTtlSeconds:
+          cachedSearch.session_ttl_seconds ||
+          tboSessionConfig.SESSION_TTL_SECONDS,
+        sessionStatus: cachedSearch.session_status || "active",
         supplier: cachedSearch.supplier || "TBO",
       };
 
@@ -227,8 +229,8 @@ router.post("/", async (req, res) => {
 
     // Extract hotels and session metadata from response
     const tboHotels = Array.isArray(tboResponse)
-      ? tboResponse  // Backwards compatibility
-      : (tboResponse.hotels || []);
+      ? tboResponse // Backwards compatibility
+      : tboResponse.hotels || [];
     const sessionMetadata = tboResponse.sessionMetadata || {};
 
     if (tboHotels.length === 0) {
@@ -331,7 +333,8 @@ router.post("/", async (req, res) => {
     // Build session metadata for response
     const tboSessionConfig = require("../config/tbo-session.config");
     const sessionStartedAt = new Date();
-    const sessionExpiresAt = tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+    const sessionExpiresAt =
+      tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
     const sessionStatus = tboSessionConfig.getSessionStatus(sessionExpiresAt);
 
     res.json({

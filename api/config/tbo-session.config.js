@@ -1,6 +1,6 @@
 /**
  * TBO Session Configuration
- * 
+ *
  * Manages session TTL, bargain settings, and price hold windows
  * Based on TBO API specifications and real-world testing
  */
@@ -14,7 +14,10 @@ module.exports = {
    *
    * Configurable via environment variable TBO_SESSION_TTL_SECONDS
    */
-  SESSION_TTL_SECONDS: parseInt(process.env.TBO_SESSION_TTL_SECONDS || "600", 10), // 10 minutes
+  SESSION_TTL_SECONDS: parseInt(
+    process.env.TBO_SESSION_TTL_SECONDS || "600",
+    10,
+  ), // 10 minutes
 
   /**
    * Safety buffer before session expiry
@@ -102,9 +105,7 @@ module.exports = {
    */
   calculateSessionExpiry(startTime = new Date()) {
     const expiryTime = new Date(startTime);
-    expiryTime.setSeconds(
-      expiryTime.getSeconds() + this.SESSION_TTL_SECONDS,
-    );
+    expiryTime.setSeconds(expiryTime.getSeconds() + this.SESSION_TTL_SECONDS);
     return expiryTime;
   },
 
@@ -154,17 +155,19 @@ module.exports = {
     const expiryDate = new Date(sessionExpiry);
 
     if (now >= expiryDate) {
-      return 'expired';
+      return "expired";
     }
 
-    const remainingSeconds = Math.floor((expiryDate.getTime() - now.getTime()) / 1000);
+    const remainingSeconds = Math.floor(
+      (expiryDate.getTime() - now.getTime()) / 1000,
+    );
     const expiringThreshold = 180; // 3 minutes
 
     if (remainingSeconds < expiringThreshold) {
-      return 'expiring_soon';
+      return "expiring_soon";
     }
 
-    return 'active';
+    return "active";
   },
 
   /**
@@ -175,7 +178,9 @@ module.exports = {
   isSafeToCheckout(sessionExpiry) {
     const now = new Date();
     const expiryDate = new Date(sessionExpiry);
-    const remainingSeconds = Math.floor((expiryDate.getTime() - now.getTime()) / 1000);
+    const remainingSeconds = Math.floor(
+      (expiryDate.getTime() - now.getTime()) / 1000,
+    );
 
     return remainingSeconds >= this.ESTIMATED_CHECKOUT_FLOW_SECONDS;
   },

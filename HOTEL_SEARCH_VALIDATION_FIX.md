@@ -22,16 +22,18 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 The API route validation was expecting `cityId` but the request was sending `destination`:
 
 **Before (api/routes/hotels-search.js line 34):**
+
 ```javascript
 const { cityId, checkIn, checkOut } = req.body;
 if (!cityId || !checkIn || !checkOut) {
-  return res.status(400).json({ error: 'Missing cityId...' });
+  return res.status(400).json({ error: "Missing cityId..." });
 }
 ```
 
 **But the TBO adapter call (line 178) actually uses:**
+
 ```javascript
-destination: searchParams.destination || searchParams.cityName || "Dubai"
+destination: searchParams.destination || searchParams.cityName || "Dubai";
 ```
 
 This was a **mismatch** - validation required `cityId`, but the adapter needed `destination`.
@@ -41,20 +43,23 @@ This was a **mismatch** - validation required `cityId`, but the adapter needed `
 ### 1. Updated Route Validation (api/routes/hotels-search.js)
 
 **Changed from:**
+
 ```javascript
 const { cityId, checkIn, checkOut } = req.body;
 if (!cityId || !checkIn || !checkOut) { ... }
 ```
 
 **Changed to:**
+
 ```javascript
 const { cityId, destination, cityName, checkIn, checkOut } = req.body;
 const cityIdentifier = cityId || destination || cityName;
 
 if (!cityIdentifier || !checkIn || !checkOut) {
   return res.status(400).json({
-    error: 'Missing required fields. Need: (cityId OR destination OR cityName) AND checkIn AND checkOut',
-    received: { cityId, destination, cityName, checkIn, checkOut }
+    error:
+      "Missing required fields. Need: (cityId OR destination OR cityName) AND checkIn AND checkOut",
+    received: { cityId, destination, cityName, checkIn, checkOut },
   });
 }
 ```
@@ -64,6 +69,7 @@ Now accepts **any of**: `cityId`, `destination`, or `cityName`
 ### 2. Updated Search Hash Generation (api/services/hotelCacheService.js)
 
 **Changed from:**
+
 ```javascript
 generateSearchHash(params) {
   const hashKey = JSON.stringify({
@@ -74,10 +80,11 @@ generateSearchHash(params) {
 ```
 
 **Changed to:**
+
 ```javascript
 generateSearchHash(params) {
   const cityIdentifier = params.cityId || params.destination || params.cityName || "unknown";
-  
+
   const hashKey = JSON.stringify({
     cityId: cityIdentifier,  // ✅ Works with any city identifier
     ...
@@ -88,13 +95,15 @@ generateSearchHash(params) {
 ### 3. Updated Cache Storage (api/services/hotelCacheService.js)
 
 **Changed from:**
+
 ```javascript
-params.cityId || destinationId
+params.cityId || destinationId;
 ```
 
 **Changed to:**
+
 ```javascript
-params.cityId || destinationId || params.destination || params.cityName
+params.cityId || destinationId || params.destination || params.cityName;
 ```
 
 ## How It Works Now
@@ -109,6 +118,7 @@ params.cityId || destinationId || params.destination || params.cityName
 ## Test Commands
 
 ### Test 1: First Search (Live TBO Call)
+
 ```powershell
 $body = @{
     destination = "Dubai"
@@ -125,6 +135,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -147,6 +158,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 Run the same command again immediately:
 
 **Expected Response:**
+
 ```json
 {
   "success": true,

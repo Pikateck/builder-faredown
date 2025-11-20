@@ -72,6 +72,7 @@ psql $DATABASE_URL -f api/database/migrations/20250610_hotel_session_tracking.sq
 ```
 
 Or via Render dashboard:
+
 1. Go to your PostgreSQL database in Render
 2. Click "Shell" tab
 3. Copy-paste the contents of `api/database/migrations/20250610_hotel_session_tracking.sql`
@@ -84,7 +85,7 @@ Or via Render dashboard:
 Open `api/services/adapters/tboAdapter.js` and apply 3 changes documented in `MANUAL_TBOADAPTER_CHANGES.md`:
 
 1. Line 588-591: Update empty results return
-2. Line 593-596: Update successful results return  
+2. Line 593-596: Update successful results return
 3. Line 597-606: Update error handler return
 
 ### Step 3: Set Environment Variables
@@ -101,6 +102,7 @@ CACHE_SEARCH_TTL_HOURS=4
 ### Step 4: Deploy Code
 
 All modified files are ready to deploy:
+
 - `api/config/tbo-session.config.js` (created)
 - `api/services/hotelCacheService.js` (updated)
 - `api/routes/hotels-search.js` (updated)
@@ -109,6 +111,7 @@ All modified files are ready to deploy:
 ### Step 5: Test Caching Behavior
 
 **Test 1: First Search (TBO Live)**
+
 ```powershell
 $body = @{
     destination = "Dubai"
@@ -125,6 +128,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 Expected:
+
 - `source: "tbo_live"`
 - `cacheHit: false`
 - `session.sessionStatus: "active"`
@@ -135,12 +139,14 @@ Expected:
 Run same command immediately.
 
 Expected:
+
 - `source: "cache_tbo"`
 - `cacheHit: true`
 - Same `sessionExpiresAt` as first call
 - Response time < 1 second
 
 **Verify in Render logs:**
+
 ```
 First call:
 ✅ CACHE MISS [uuid] - Calling TBO API
@@ -160,47 +166,51 @@ Second call:
 ```tsx
 // In client/pages/HotelResults.tsx
 
-import HotelSessionTimer from '../components/HotelSessionTimer';
+import HotelSessionTimer from "../components/HotelSessionTimer";
 
 // ... inside component
 
 const [sessionData, setSessionData] = useState(null);
-const [source, setSource] = useState('');
+const [source, setSource] = useState("");
 
 // After fetching hotels:
-const response = await api.post('/api/hotels/search', searchParams);
+const response = await api.post("/api/hotels/search", searchParams);
 setHotels(response.data.hotels);
 setSessionData(response.data.session);
 setSource(response.data.source);
 
 // In render:
-{sessionData && (
-  <HotelSessionTimer 
-    session={sessionData}
-    source={source}
-    onSessionExpired={() => {
-      // Refresh search when session expires
-      handleRefreshSearch();
-    }}
-  />
-)}
+{
+  sessionData && (
+    <HotelSessionTimer
+      session={sessionData}
+      source={source}
+      onSessionExpired={() => {
+        // Refresh search when session expires
+        handleRefreshSearch();
+      }}
+    />
+  );
+}
 
-{/* Hotel cards below */}
+{
+  /* Hotel cards below */
+}
 ```
 
 ### Session-Aware Bargain Flow
 
 ```tsx
 // Before starting bargain
-if (sessionData?.sessionStatus === 'expired') {
-  toast.error('Session expired. Refreshing prices...');
+if (sessionData?.sessionStatus === "expired") {
+  toast.error("Session expired. Refreshing prices...");
   await handleRefreshSearch();
   return;
 }
 
-if (sessionData?.sessionStatus === 'expiring_soon') {
+if (sessionData?.sessionStatus === "expiring_soon") {
   // Show warning but allow bargain
-  toast.warning('Session expiring soon. Please complete quickly.');
+  toast.warning("Session expiring soon. Please complete quickly.");
 }
 
 // Pass session data to bargain modal
@@ -208,7 +218,7 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
   hotel={selectedHotel}
   sessionExpiry={sessionData?.sessionExpiresAt}
   onBook={handleBooking}
-/>
+/>;
 ```
 
 ---
@@ -216,6 +226,7 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
 ## 🧪 Complete Testing Scenarios
 
 ### Scenario 1: Caching Works
+
 1. Search Dubai (2025-07-01 to 2025-07-05)
 2. Verify `source: "tbo_live"`, `cacheHit: false`
 3. Immediately search again with same params
@@ -223,6 +234,7 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
 5. Check response time: < 1s for cached
 
 ### Scenario 2: Session Expiry
+
 1. In QA, set `TBO_SESSION_TTL_SECONDS=120` (2 minutes)
 2. Search hotels
 3. Wait 1 minute → status should be "active"
@@ -231,6 +243,7 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
 6. New search should hit TBO again
 
 ### Scenario 3: Different Searches Don't Collide
+
 1. Search Dubai (2025-07-01 to 2025-07-05)
 2. Search Dubai (2025-07-10 to 2025-07-15) - different dates
 3. Verify both are separate cache entries
@@ -238,6 +251,7 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
 5. Repeat step 2 → should hit cache
 
 ### Scenario 4: Session Timer UI
+
 1. Open hotel results page
 2. Verify timer shows "Prices locked for 9:XX"
 3. Wait 7 minutes → should show "Prices locked for 2:XX" in amber
@@ -253,57 +267,57 @@ if (sessionData?.sessionStatus === 'expiring_soon') {
 ```javascript
 // api/services/hotelBookingService.js
 
-const tboSessionConfig = require('../config/tbo-session.config');
+const tboSessionConfig = require("../config/tbo-session.config");
 
 async function initiateBooking(hotelData, roomData, guestData) {
   const { session } = hotelData;
-  
+
   // 1. Check session is still valid
   if (!tboSessionConfig.isSessionValid(new Date(session.sessionExpiresAt))) {
     return {
       success: false,
-      error: 'SESSION_EXPIRED',
-      message: 'Price session expired. Please search again.',
+      error: "SESSION_EXPIRED",
+      message: "Price session expired. Please search again.",
     };
   }
-  
+
   // 2. Check if safe to checkout
   if (!tboSessionConfig.isSafeToCheckout(new Date(session.sessionExpiresAt))) {
     return {
       success: false,
-      error: 'SESSION_EXPIRING',
-      message: 'Not enough time to complete booking. Please search again.',
+      error: "SESSION_EXPIRING",
+      message: "Not enough time to complete booking. Please search again.",
     };
   }
-  
+
   // 3. Call BlockRoom
   const blockResult = await tboAdapter.blockRoom({
     traceId: session.traceId,
     resultIndex: hotelData.resultIndex,
     hotelCode: hotelData.hotelCode,
-    ...roomParams
+    ...roomParams,
   });
-  
+
   // 4. Handle price changes
   if (blockResult.IsPriceChanged) {
     return {
       success: false,
-      error: 'PRICE_CHANGED',
+      error: "PRICE_CHANGED",
       oldPrice: hotelData.price,
       newPrice: blockResult.HotelRoomsDetails[0].Price,
-      message: 'Supplier updated the price. Please review and confirm.',
+      message: "Supplier updated the price. Please review and confirm.",
     };
   }
-  
+
   // 5. Proceed to Book
   const bookResult = await tboAdapter.bookHotel({
     traceId: session.traceId,
-    ...bookParams
+    ...bookParams,
   });
-  
+
   return {
     success: true,
-    booking: bookResult
+    booking: bookResult,
   };
 }
 ```
@@ -312,25 +326,25 @@ async function initiateBooking(hotelData, roomData, guestData) {
 
 ```tsx
 try {
-  const result = await api.post('/api/hotels/book', bookingData);
+  const result = await api.post("/api/hotels/book", bookingData);
   // Success
 } catch (error) {
   const errorCode = error.response?.data?.error;
-  
-  if (errorCode === 'SESSION_EXPIRED') {
-    toast.error('Session expired. Refreshing prices...');
+
+  if (errorCode === "SESSION_EXPIRED") {
+    toast.error("Session expired. Refreshing prices...");
     await handleRefreshSearch();
-  } else if (errorCode === 'SESSION_EXPIRING') {
-    toast.error('Not enough time left. Please search again.');
+  } else if (errorCode === "SESSION_EXPIRING") {
+    toast.error("Not enough time left. Please search again.");
     await handleRefreshSearch();
-  } else if (errorCode === 'PRICE_CHANGED') {
+  } else if (errorCode === "PRICE_CHANGED") {
     const { oldPrice, newPrice } = error.response.data;
     // Show price change modal
     setPriceChangeModal({
       show: true,
       oldPrice,
       newPrice,
-      message: error.response.data.message
+      message: error.response.data.message,
     });
   }
 }
@@ -341,6 +355,7 @@ try {
 ## 📊 Expected Logs
 
 ### First Search (TBO Live)
+
 ```
 🔍 Hotel search [uuid-1] - Hash: a1b2c3d4e5f6...
 ⚠️ CACHE MISS [uuid-1] - Calling TBO API
@@ -354,6 +369,7 @@ try {
 ```
 
 ### Second Search (Cache Hit)
+
 ```
 🔍 Hotel search [uuid-2] - Hash: a1b2c3d4e5f6...
 ✅ CACHE HIT [uuid-2] - 150 hotels cached
@@ -390,6 +406,7 @@ try {
 5. **Wire bargain flow session validation**
 
 Once these are complete, the system will:
+
 - Cache hotel searches for instant repeat queries
 - Track TBO session validity
 - Display countdown timer to users
