@@ -74,26 +74,57 @@ class HotelCacheService {
   }
 
   /**
-   * Store new search in cache
+   * Store new search in cache with session metadata
    */
-  async cacheSearchResults(searchHash, params, hotelIds, source = "tbo") {
+  async cacheSearchResults(
+    searchHash,
+    params,
+    hotelIds,
+    source = "tbo",
+    sessionMetadata = {},
+  ) {
     try {
-      const ttlExpiresAt = new Date();
-      ttlExpiresAt.setHours(ttlExpiresAt.getHours() + 4);
+      const tboSessionConfig = require("../config/tbo-session.config");
 
-      // Insert search cache entry
+      // Calculate TTL and session expiry
+      const ttlExpiresAt = new Date();
+      ttlExpiresAt.setHours(
+        ttlExpiresAt.getHours() + tboSessionConfig.CACHE.SEARCH_RESULT_TTL_HOURS,
+      );
+
+      const sessionStartedAt = new Date();
+      const sessionExpiresAt =
+        tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+
+      // Extract TBO session metadata
+      const {
+        traceId,
+        tokenId,
+        supplierResponseFull,
+        destinationId,
+      } = sessionMetadata;
+
+      // Insert search cache entry with session tracking
       await db.query(
         `INSERT INTO public.hotel_search_cache
          (search_hash, city_id, country_code, check_in_date, check_out_date,
-          guest_nationality, num_rooms, room_config, hotel_count, cache_source, ttl_expires_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+          guest_nationality, num_rooms, room_config, hotel_count, cache_source,
+          ttl_expires_at, tbo_trace_id, tbo_token_id, session_started_at,
+          session_expires_at, supplier, supplier_metadata)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
          ON CONFLICT (search_hash) DO UPDATE SET
            updated_at = NOW(),
            ttl_expires_at = $11,
-           is_fresh = true`,
+           is_fresh = true,
+           tbo_trace_id = $12,
+           tbo_token_id = $13,
+           session_started_at = $14,
+           session_expires_at = $15,
+           supplier = $16,
+           supplier_metadata = $17`,
         [
           searchHash,
-          params.cityId,
+          params.cityId || destinationId,
           params.countryCode || "AE",
           params.checkIn || params.checkInDate,
           params.checkOut || params.checkOutDate,
@@ -103,6 +134,12 @@ class HotelCacheService {
           hotelIds.length,
           source,
           ttlExpiresAt,
+          traceId || null,
+          tokenId || null,
+          sessionStartedAt,
+          sessionExpiresAt,
+          source.toUpperCase(),
+          JSON.stringify(supplierResponseFull || {}),
         ],
       );
 
@@ -119,6 +156,10 @@ class HotelCacheService {
 
       console.log(
         `✅ Cached search: ${searchHash} with ${hotelIds.length} hotels`,
+        {
+          traceId,
+          sessionExpiresAt: sessionExpiresAt.toISOString(),
+        },
       );
       return true;
     } catch (error) {
