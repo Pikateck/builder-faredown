@@ -258,6 +258,29 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    */
   async getCityId(destination, countryCode) {
+    // ✅ Hardcoded fallback for known cities (while debugging)
+    const KNOWN_CITIES = {
+      'DUBAI-AE': 115936,
+      'ABU DHABI-AE': 110394,
+      'LONDON-GB': 100264,
+      'PARIS-FR': 121909,
+      'NEW YORK-US': 113646,
+    };
+
+    const normalizedDestination = destination.replace(/,.*$/, "").trim();
+    const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
+    const lookupKey = `${normalizedDestination.toUpperCase()}-${normalizedCountryCode}`;
+
+    if (KNOWN_CITIES[lookupKey]) {
+      this.logger.info("✅ Using hardcoded DestinationId for known city", {
+        destination: normalizedDestination,
+        countryCode: normalizedCountryCode,
+        destinationId: KNOWN_CITIES[lookupKey],
+      });
+      return KNOWN_CITIES[lookupKey];
+    }
+
+    // Otherwise, call TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
 
     // Ensure we have a valid token before calling static data
@@ -266,8 +289,6 @@ class TBOAdapter extends BaseSupplierAdapter {
       await this.getHotelToken();
     }
 
-    // Normalize and validate countryCode
-    const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
     if (!normalizedCountryCode) {
       this.logger.error(
         "❌ CountryCode is required for GetDestinationSearchStaticData",
@@ -278,9 +299,6 @@ class TBOAdapter extends BaseSupplierAdapter {
       );
       return null;
     }
-
-    // Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
-    const normalizedDestination = destination.replace(/,.*$/, "").trim();
 
     // ✅ Request format - TBO requires CountryCode despite API_SPECIFICATION.md
     const staticRequest = {
