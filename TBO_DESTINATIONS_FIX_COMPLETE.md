@@ -23,6 +23,7 @@ From Render logs, TBO was successfully returning destination data:
 ```
 
 **But our code was looking for:**
+
 ```javascript
 const { Country = [] } = response.data;
 // Then: targetCountry.City.find(...)
@@ -34,6 +35,7 @@ const { Country = [] } = response.data;
 ## Root Cause
 
 The `getCityId` function in `api/services/adapters/tboAdapter.js` was using the **wrong response structure**:
+
 - ❌ Looking for `Country[]` array → TBO returns `Destinations[]`
 - ❌ Looking for `City[]` within Country → TBO has flat `Destinations[]`
 - ❌ Looking for `CityId` → TBO uses `DestinationId`
@@ -43,38 +45,53 @@ The `getCityId` function in `api/services/adapters/tboAdapter.js` was using the 
 ### Updated `getCityId` function (Lines 314-386)
 
 **Changed response parsing:**
+
 ```javascript
 // Before:
-const { Country = [], ResponseStatus, Status, Error: ApiError } = response.data || {};
+const {
+  Country = [],
+  ResponseStatus,
+  Status,
+  Error: ApiError,
+} = response.data || {};
 
 // After:
-const { Destinations, ResponseStatus, Status, Error: ApiError } = response.data || {};
+const {
+  Destinations,
+  ResponseStatus,
+  Status,
+  Error: ApiError,
+} = response.data || {};
 const destinations = Array.isArray(Destinations) ? Destinations : [];
 ```
 
 **Changed city matching logic:**
+
 ```javascript
 // Before:
-const targetCountry = Country.find(c => c.CountryCode === normalizedCountryCode);
-const matchingCity = targetCountry.City.find(city => 
-  city.CityName.toLowerCase() === normalizedDestination.toLowerCase()
+const targetCountry = Country.find(
+  (c) => c.CountryCode === normalizedCountryCode,
+);
+const matchingCity = targetCountry.City.find(
+  (city) => city.CityName.toLowerCase() === normalizedDestination.toLowerCase(),
 );
 return matchingCity.CityId;
 
 // After:
-const requestedCity = normalizedDestination.trim().toLowerCase();      // "dubai"
-const requestedCountry = normalizedCountryCode.trim().toUpperCase();  // "AE"
+const requestedCity = normalizedDestination.trim().toLowerCase(); // "dubai"
+const requestedCountry = normalizedCountryCode.trim().toUpperCase(); // "AE"
 
-const match = destinations.find(d =>
-  d.CityName?.trim().toLowerCase() === requestedCity &&
-  d.CountryCode?.trim().toUpperCase() === requestedCountry
+const match = destinations.find(
+  (d) =>
+    d.CityName?.trim().toLowerCase() === requestedCity &&
+    d.CountryCode?.trim().toUpperCase() === requestedCountry,
 );
 
 if (!match) {
-  logger.warn("[TBO] ⚠️  No destination match", { 
-    requestedCity, 
-    requestedCountry, 
-    destinationsCount: destinations.length 
+  logger.warn("[TBO] ⚠️  No destination match", {
+    requestedCity,
+    requestedCountry,
+    destinationsCount: destinations.length,
   });
   return null; // ✅ Let caller return tbo_empty without crashing
 }
@@ -91,17 +108,22 @@ return match.DestinationId;
 ### Error Handling (Already in place)
 
 **getCityId catch block (Lines 387-402):**
+
 ```javascript
 // ✅ Return null instead of throwing to prevent Node crash
 return null;
 ```
 
 **searchHotels null handling (Lines 443-471):**
+
 ```javascript
 if (!cityId) {
-  this.logger.error("❌ CityId not found - TBO Static Data returned no matches", {
-    returning: "empty array (tbo_empty)",
-  });
+  this.logger.error(
+    "❌ CityId not found - TBO Static Data returned no matches",
+    {
+      returning: "empty array (tbo_empty)",
+    },
+  );
   return []; // ✅ Return empty array, don't crash
 }
 ```
@@ -109,6 +131,7 @@ if (!cityId) {
 ## Expected Results
 
 ### Before Fix:
+
 ```
 [TBO] 📥 TBO Static Data Response { Status: 1, Destinations: [...] }
 [TBO] ⚠️  No countries found - TBO returned empty Country array
@@ -117,6 +140,7 @@ if (!cityId) {
 ```
 
 ### After Fix:
+
 ```
 [TBO] 📥 TBO Static Data Response { Status: 1, destinationsCount: 200 }
 [TBO] ✅ CityId resolved { cityName: "Dubai", countryCode: "AE", destinationId: 115936 }
@@ -128,6 +152,7 @@ if (!cityId) {
 ## Testing Instructions
 
 ### PowerShell Test:
+
 ```powershell
 $body = @{
     destination = "Dubai"
@@ -145,6 +170,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Expected Logs in Render:
+
 ```
 [TBO] 🏙️  TBO Static Data Request {
   endpoint: "GetDestinationSearchStaticData",
@@ -176,6 +202,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Expected Response:
+
 ```json
 {
   "success": true,
@@ -203,17 +230,17 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 
 ## Files Modified
 
-1. **api/services/adapters/tboAdapter.js** 
+1. **api/services/adapters/tboAdapter.js**
    - `getCityId` function (lines 314-386): Use `Destinations[]` and `DestinationId`
    - Error handling already in place to prevent Node crashes
 
 ## What's Used Where
 
-| Field Name | Where Used | Value Example |
-|------------|------------|---------------|
-| `DestinationId` | Returned by `getCityId()` | `115936` |
-| `CityId` | Used in `GetHotelResult` request | `115936` (same value) |
-| `cityId` | Variable name in `searchHotels` | `115936` (from getCityId) |
+| Field Name      | Where Used                       | Value Example             |
+| --------------- | -------------------------------- | ------------------------- |
+| `DestinationId` | Returned by `getCityId()`        | `115936`                  |
+| `CityId`        | Used in `GetHotelResult` request | `115936` (same value)     |
+| `cityId`        | Variable name in `searchHotels`  | `115936` (from getCityId) |
 
 **Note:** TBO uses `DestinationId` in static data but `CityId` in search requests. They're the same numeric value, just different field names in different APIs.
 
