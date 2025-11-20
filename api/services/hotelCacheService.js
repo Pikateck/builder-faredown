@@ -1,7 +1,7 @@
 /**
  * HotelCacheService
  * Manages hotel search cache and TBO response normalization
- * 
+ *
  * Responsibilities:
  * - Generate search hash from parameters
  * - Check cache freshness
@@ -9,8 +9,8 @@
  * - Map searches to hotel results
  */
 
-const crypto = require('crypto');
-const db = require('../database/connection');
+const crypto = require("crypto");
+const db = require("../database/connection");
 
 class HotelCacheService {
   /**
@@ -20,15 +20,15 @@ class HotelCacheService {
   generateSearchHash(params) {
     const hashKey = JSON.stringify({
       cityId: params.cityId,
-      countryCode: params.countryCode || 'AE',
-      guestNationality: params.guestNationality || 'IN',
+      countryCode: params.countryCode || "AE",
+      guestNationality: params.guestNationality || "IN",
       checkInDate: params.checkIn || params.checkInDate,
       checkOutDate: params.checkOut || params.checkOutDate,
-      numberOfRooms: params.rooms || '1',
-      roomOccupancy: this._normalizeRoomOccupancy(params)
+      numberOfRooms: params.rooms || "1",
+      roomOccupancy: this._normalizeRoomOccupancy(params),
     });
-    
-    return crypto.createHash('sha256').update(hashKey).digest('hex');
+
+    return crypto.createHash("sha256").update(hashKey).digest("hex");
   }
 
   /**
@@ -39,18 +39,18 @@ class HotelCacheService {
     const adults = params.adults || 2;
     const children = params.children || 0;
     const childAges = params.childAges || [];
-    
+
     const numRooms = parseInt(rooms) || 1;
     const occupancy = [];
-    
+
     for (let i = 0; i < numRooms; i++) {
       occupancy.push({
         adults: parseInt(adults) || 2,
         children: parseInt(children) || 0,
-        childAges: childAges.map(a => parseInt(a))
+        childAges: childAges.map((a) => parseInt(a)),
       });
     }
-    
+
     return occupancy;
   }
 
@@ -64,11 +64,11 @@ class HotelCacheService {
          WHERE search_hash = $1
          AND is_fresh = true
          AND ttl_expires_at > NOW()`,
-        [searchHash]
+        [searchHash],
       );
       return result.rows[0] || null;
     } catch (error) {
-      console.error('❌ Error checking cache:', error.message);
+      console.error("❌ Error checking cache:", error.message);
       return null;
     }
   }
@@ -76,7 +76,7 @@ class HotelCacheService {
   /**
    * Store new search in cache
    */
-  async cacheSearchResults(searchHash, params, hotelIds, source = 'tbo') {
+  async cacheSearchResults(searchHash, params, hotelIds, source = "tbo") {
     try {
       const ttlExpiresAt = new Date();
       ttlExpiresAt.setHours(ttlExpiresAt.getHours() + 4);
@@ -94,16 +94,16 @@ class HotelCacheService {
         [
           searchHash,
           params.cityId,
-          params.countryCode || 'AE',
+          params.countryCode || "AE",
           params.checkIn || params.checkInDate,
           params.checkOut || params.checkOutDate,
-          params.guestNationality || 'IN',
+          params.guestNationality || "IN",
           params.rooms || 1,
           JSON.stringify(this._normalizeRoomOccupancy(params)),
           hotelIds.length,
           source,
-          ttlExpiresAt
-        ]
+          ttlExpiresAt,
+        ],
       );
 
       // Insert individual result mappings
@@ -113,14 +113,16 @@ class HotelCacheService {
            (search_hash, tbo_hotel_code, result_rank)
            VALUES ($1, $2, $3)
            ON CONFLICT DO NOTHING`,
-          [searchHash, hotelId, rank + 1]
+          [searchHash, hotelId, rank + 1],
         );
       }
 
-      console.log(`✅ Cached search: ${searchHash} with ${hotelIds.length} hotels`);
+      console.log(
+        `✅ Cached search: ${searchHash} with ${hotelIds.length} hotels`,
+      );
       return true;
     } catch (error) {
-      console.error('❌ Error caching search results:', error.message);
+      console.error("❌ Error caching search results:", error.message);
       return false;
     }
   }
@@ -136,11 +138,11 @@ class HotelCacheService {
          JOIN public.hotel_search_cache_results cr ON h.tbo_hotel_code = cr.tbo_hotel_code
          WHERE cr.search_hash = $1
          ORDER BY cr.result_rank ASC`,
-        [searchHash]
+        [searchHash],
       );
       return result.rows;
     } catch (error) {
-      console.error('❌ Error fetching cached hotels:', error.message);
+      console.error("❌ Error fetching cached hotels:", error.message);
       return [];
     }
   }
@@ -171,7 +173,7 @@ class HotelCacheService {
         email,
         website,
         totalRooms,
-        tboResponseBlob
+        tboResponseBlob,
       } = hotelData;
 
       await db.query(
@@ -207,13 +209,13 @@ class HotelCacheService {
           email,
           website,
           totalRooms,
-          JSON.stringify(tboResponseBlob)
-        ]
+          JSON.stringify(tboResponseBlob),
+        ],
       );
 
       return true;
     } catch (error) {
-      console.error('❌ Error storing normalized hotel:', error.message);
+      console.error("❌ Error storing normalized hotel:", error.message);
       return false;
     }
   }
@@ -241,7 +243,7 @@ class HotelCacheService {
         cancellationPolicy,
         mealPlan,
         breakfastIncluded,
-        tboResponseBlob
+        tboResponseBlob,
       } = roomData;
 
       await db.query(
@@ -272,13 +274,13 @@ class HotelCacheService {
           JSON.stringify(cancellationPolicy || {}),
           mealPlan,
           breakfastIncluded || false,
-          JSON.stringify(tboResponseBlob)
-        ]
+          JSON.stringify(tboResponseBlob),
+        ],
       );
 
       return true;
     } catch (error) {
-      console.error('❌ Error storing normalized room:', error.message);
+      console.error("❌ Error storing normalized room:", error.message);
       return false;
     }
   }
@@ -292,11 +294,11 @@ class HotelCacheService {
         `SELECT * FROM public.tbo_rooms_normalized
          WHERE tbo_hotel_code = $1
          ORDER BY created_at ASC`,
-        [tboHotelCode]
+        [tboHotelCode],
       );
       return result.rows;
     } catch (error) {
-      console.error('❌ Error fetching hotel rooms:', error.message);
+      console.error("❌ Error fetching hotel rooms:", error.message);
       return [];
     }
   }
@@ -308,12 +310,12 @@ class HotelCacheService {
     try {
       await db.query(
         `UPDATE public.hotel_search_cache SET is_fresh = false WHERE search_hash = $1`,
-        [searchHash]
+        [searchHash],
       );
       console.log(`⚠️ Invalidated search cache: ${searchHash}`);
       return true;
     } catch (error) {
-      console.error('❌ Error invalidating search:', error.message);
+      console.error("❌ Error invalidating search:", error.message);
       return false;
     }
   }
@@ -326,12 +328,12 @@ class HotelCacheService {
       const result = await db.query(
         `DELETE FROM public.hotel_search_cache
          WHERE ttl_expires_at < NOW()
-         OR (is_fresh = false AND updated_at < NOW() - INTERVAL '7 days')`
+         OR (is_fresh = false AND updated_at < NOW() - INTERVAL '7 days')`,
       );
       console.log(`🧹 Cleaned up ${result.rowCount} stale cache entries`);
       return result.rowCount;
     } catch (error) {
-      console.error('❌ Error cleaning cache:', error.message);
+      console.error("❌ Error cleaning cache:", error.message);
       return 0;
     }
   }
@@ -350,11 +352,11 @@ class HotelCacheService {
            MAX(cached_at) as last_search,
            AVG(hotel_count) as avg_hotels_per_search
          FROM public.hotel_search_cache
-         WHERE cached_at > NOW() - INTERVAL '24 hours'`
+         WHERE cached_at > NOW() - INTERVAL '24 hours'`,
       );
       return result.rows[0] || {};
     } catch (error) {
-      console.error('❌ Error getting cache stats:', error.message);
+      console.error("❌ Error getting cache stats:", error.message);
       return {};
     }
   }

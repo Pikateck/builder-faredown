@@ -3,6 +3,7 @@
 ## Executive Summary
 
 This document proposes a **cache-first, TBO-second** architecture for hotel search that:
+
 1. **Normalizes and stores** full TBO responses into indexed Postgres tables
 2. **Caches searches** by parameter hash to serve repeat searches instantly from our DB
 3. **Only calls TBO for prices** on subsequent searches, falling back to full search if cache is stale
@@ -60,6 +61,7 @@ search_hash = SHA256(
 ### 2.1 New Core Tables
 
 #### **hotel_search_cache**
+
 Tracks which searches we've already completed and when.
 
 ```sql
@@ -73,7 +75,7 @@ CREATE TABLE hotel_search_cache (
   guest_nationality VARCHAR(10),
   num_rooms INTEGER,
   room_config JSONB,  -- [{adults: 2, children: 0}, ...]
-  
+
   -- Cache metadata
   hotel_count INTEGER,                      -- how many hotels cached
   cache_source VARCHAR(50),                 -- 'tbo', 'hotelbeds', etc.
@@ -81,7 +83,7 @@ CREATE TABLE hotel_search_cache (
   cached_at TIMESTAMPTZ DEFAULT NOW(),
   ttl_expires_at TIMESTAMPTZ,              -- NOW() + 4 hours
   last_price_refresh_at TIMESTAMPTZ,        -- when prices were last updated
-  
+
   -- Audit
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -93,6 +95,7 @@ CREATE INDEX idx_search_cache_freshness ON hotel_search_cache(is_fresh, cached_a
 ```
 
 #### **tbo_hotels_normalized**
+
 Stores normalized hotel metadata from TBO (replaces current `tbo_hotels` with richer data).
 
 ```sql
@@ -102,40 +105,40 @@ CREATE TABLE tbo_hotels_normalized (
   city_id VARCHAR(50) NOT NULL,
   city_name VARCHAR(255),
   country_code VARCHAR(10),
-  
+
   -- Basic Info
   name VARCHAR(500) NOT NULL,
   description TEXT,
   address TEXT,
   latitude NUMERIC(10, 8),
   longitude NUMERIC(11, 8),
-  
+
   -- Hotel Details
   star_rating NUMERIC(3, 1),
   check_in_time TIME,
   check_out_time TIME,
-  
+
   -- Amenities
   amenities JSONB,  -- ["WiFi", "Pool", "Gym", ...]
   facilities JSONB, -- more detailed facility info
-  
+
   -- Images
   images JSONB,  -- [{ url, caption, isPrimary }, ...]
   main_image_url TEXT,
-  
+
   -- Contact
   phone VARCHAR(50),
   email VARCHAR(100),
   website VARCHAR(500),
-  
+
   -- Metadata
   total_rooms INTEGER,
   popularity INTEGER DEFAULT 0,
   last_synced_at TIMESTAMPTZ,
-  
+
   -- Full TBO response (for fallback/debugging)
   tbo_response_blob JSONB,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -147,46 +150,47 @@ CREATE INDEX idx_hotels_normalized_rating ON tbo_hotels_normalized(star_rating D
 ```
 
 #### **tbo_rooms_normalized**
+
 Stores room type and rate plan details for each hotel.
 
 ```sql
 CREATE TABLE tbo_rooms_normalized (
   id BIGSERIAL PRIMARY KEY,
   tbo_hotel_code VARCHAR(100) NOT NULL REFERENCES tbo_hotels_normalized(tbo_hotel_code) ON DELETE CASCADE,
-  
+
   -- Room Type
   room_type_id VARCHAR(100),
   room_type_name VARCHAR(255),  -- "Standard Twin", "Deluxe Room", etc.
   room_description TEXT,
-  
+
   -- Occupancy & Size
   max_occupancy INTEGER,
   adults_max INTEGER,
   children_max INTEGER,
   room_size_sqm NUMERIC(6, 2),
-  
+
   -- Room Features
   bed_types JSONB,  -- ["King Bed", "Twin Beds"]
   room_features JSONB,  -- ["AC", "Balcony", "City View"]
   amenities JSONB,  -- room-specific amenities
-  
+
   -- Images
   images JSONB,  -- room images
-  
+
   -- Rate Plans (from GetHotelRoom)
   base_price_per_night NUMERIC(12, 2),
   currency VARCHAR(3),
-  
+
   -- Cancellation Policy
   cancellation_policy JSONB,  -- {type: "free", daysBeforeCheckIn: 3, ...}
-  
+
   -- Meal Plan
   meal_plan TEXT,  -- "breakfast_included", "half_board", "full_board"
   breakfast_included BOOLEAN DEFAULT false,
-  
+
   -- Full TBO response
   tbo_response_blob JSONB,
-  
+
   last_synced_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -197,6 +201,7 @@ CREATE INDEX idx_rooms_normalized_room_type ON tbo_rooms_normalized(room_type_na
 ```
 
 #### **hotel_search_cache_results**
+
 Maps search_hash to the hotel IDs in that search (join table).
 
 ```sql
@@ -208,7 +213,7 @@ CREATE TABLE hotel_search_cache_results (
   price_offered_per_night NUMERIC(12, 2),
   price_published_per_night NUMERIC(12, 2),
   available_rooms INTEGER,
-  
+
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -334,6 +339,7 @@ COMMIT;
 ### 3.1 POST /api/hotels/search (Cache-Backed)
 
 **Request**:
+
 ```json
 {
   "cityId": "1",
@@ -349,10 +355,11 @@ COMMIT;
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
-  "source": "cache",  // or "tbo" if fresh lookup
+  "source": "cache", // or "tbo" if fresh lookup
   "hotels": [
     {
       "hotelId": "tbo_12345",
@@ -397,17 +404,19 @@ COMMIT;
 Called when user expands a hotel or goes to details page.
 
 **Request**:
+
 ```json
 {
   "checkIn": "2025-06-15",
   "checkOut": "2025-06-20",
-  "roomConfig": [{"adults": 2, "children": 0}],
+  "roomConfig": [{ "adults": 2, "children": 0 }],
   "currency": "INR",
   "guestNationality": "IN"
 }
 ```
 
 **Response**: Fetches latest room details + prices from TBO's GetHotelRoom + BlockRoom, returns:
+
 ```json
 {
   "success": true,
@@ -435,6 +444,7 @@ Called when user expands a hotel or goes to details page.
 Called before final checkout to lock rates.
 
 **Request**:
+
 ```json
 {
   "hotelId": "tbo_12345",
@@ -454,8 +464,8 @@ Called before final checkout to lock rates.
 ### 4.1 Cache Service (`api/services/hotelCacheService.js`)
 
 ```javascript
-const crypto = require('crypto');
-const db = require('../database/connection');
+const crypto = require("crypto");
+const db = require("../database/connection");
 
 class HotelCacheService {
   /**
@@ -469,9 +479,9 @@ class HotelCacheService {
       checkInDate: params.checkIn,
       checkOutDate: params.checkOut,
       numberOfRooms: params.rooms,
-      roomOccupancy: params.roomOccupancy || []
+      roomOccupancy: params.roomOccupancy || [],
     });
-    return crypto.createHash('sha256').update(hashKey).digest('hex');
+    return crypto.createHash("sha256").update(hashKey).digest("hex");
   }
 
   /**
@@ -483,7 +493,7 @@ class HotelCacheService {
        WHERE search_hash = $1
        AND is_fresh = true
        AND ttl_expires_at > NOW()`,
-      [searchHash]
+      [searchHash],
     );
     return result.rows[0] || null;
   }
@@ -491,7 +501,7 @@ class HotelCacheService {
   /**
    * Store new search in cache
    */
-  async cacheSearchResults(searchHash, params, hotelIds, source = 'tbo') {
+  async cacheSearchResults(searchHash, params, hotelIds, source = "tbo") {
     const ttlExpiresAt = new Date();
     ttlExpiresAt.setHours(ttlExpiresAt.getHours() + 4);
 
@@ -511,8 +521,8 @@ class HotelCacheService {
         JSON.stringify(params.roomOccupancy || []),
         hotelIds.length,
         source,
-        ttlExpiresAt
-      ]
+        ttlExpiresAt,
+      ],
     );
 
     // Store individual results
@@ -521,7 +531,7 @@ class HotelCacheService {
         `INSERT INTO hotel_search_cache_results
          (search_hash, tbo_hotel_code, result_rank)
          VALUES ($1, $2, $3)`,
-        [searchHash, hotelId, rank + 1]
+        [searchHash, hotelId, rank + 1],
       );
     }
   }
@@ -535,7 +545,7 @@ class HotelCacheService {
        JOIN hotel_search_cache_results cr ON h.tbo_hotel_code = cr.tbo_hotel_code
        WHERE cr.search_hash = $1
        ORDER BY cr.result_rank`,
-      [searchHash]
+      [searchHash],
     );
     return result.rows;
   }
@@ -545,10 +555,20 @@ class HotelCacheService {
    */
   async storeNormalizedHotel(hotelData) {
     const {
-      tboHotelCode, cityId, cityName, countryCode,
-      name, description, address, starRating,
-      amenities, images, phone, email, website,
-      tboResponseBlob
+      tboHotelCode,
+      cityId,
+      cityName,
+      countryCode,
+      name,
+      description,
+      address,
+      starRating,
+      amenities,
+      images,
+      phone,
+      email,
+      website,
+      tboResponseBlob,
     } = hotelData;
 
     await db.query(
@@ -560,9 +580,22 @@ class HotelCacheService {
        ON CONFLICT (tbo_hotel_code) DO UPDATE SET
          last_synced_at = NOW(),
          tbo_response_blob = $14`,
-      [tboHotelCode, cityId, cityName, countryCode, name, description,
-       address, starRating, JSON.stringify(amenities), JSON.stringify(images),
-       phone, email, website, JSON.stringify(tboResponseBlob)]
+      [
+        tboHotelCode,
+        cityId,
+        cityName,
+        countryCode,
+        name,
+        description,
+        address,
+        starRating,
+        JSON.stringify(amenities),
+        JSON.stringify(images),
+        phone,
+        email,
+        website,
+        JSON.stringify(tboResponseBlob),
+      ],
     );
   }
 
@@ -571,9 +604,18 @@ class HotelCacheService {
    */
   async storeNormalizedRoom(roomData) {
     const {
-      tboHotelCode, roomTypeName, roomTypeId, maxOccupancy,
-      bedTypes, amenities, images, basePrice, currency,
-      cancellationPolicy, mealPlan, tboResponseBlob
+      tboHotelCode,
+      roomTypeName,
+      roomTypeId,
+      maxOccupancy,
+      bedTypes,
+      amenities,
+      images,
+      basePrice,
+      currency,
+      cancellationPolicy,
+      mealPlan,
+      tboResponseBlob,
     } = roomData;
 
     await db.query(
@@ -585,10 +627,20 @@ class HotelCacheService {
        ON CONFLICT (tbo_hotel_code, room_type_id) DO UPDATE SET
          last_synced_at = NOW(),
          tbo_response_blob = $12`,
-      [tboHotelCode, roomTypeName, roomTypeId, maxOccupancy,
-       JSON.stringify(bedTypes), JSON.stringify(amenities), JSON.stringify(images),
-       basePrice, currency, JSON.stringify(cancellationPolicy), mealPlan,
-       JSON.stringify(tboResponseBlob)]
+      [
+        tboHotelCode,
+        roomTypeName,
+        roomTypeId,
+        maxOccupancy,
+        JSON.stringify(bedTypes),
+        JSON.stringify(amenities),
+        JSON.stringify(images),
+        basePrice,
+        currency,
+        JSON.stringify(cancellationPolicy),
+        mealPlan,
+        JSON.stringify(tboResponseBlob),
+      ],
     );
   }
 
@@ -598,7 +650,7 @@ class HotelCacheService {
   async invalidateSearch(searchHash) {
     await db.query(
       `UPDATE hotel_search_cache SET is_fresh = false WHERE search_hash = $1`,
-      [searchHash]
+      [searchHash],
     );
   }
 }
@@ -609,12 +661,12 @@ module.exports = new HotelCacheService();
 ### 4.2 Updated Hotel Route (`api/routes/hotels-search.js`)
 
 ```javascript
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const tboAdapter = require('../services/adapters/tboAdapter');
-const hotelCacheService = require('../services/hotelCacheService');
+const tboAdapter = require("../services/adapters/tboAdapter");
+const hotelCacheService = require("../services/hotelCacheService");
 
-router.post('/search', async (req, res) => {
+router.post("/search", async (req, res) => {
   try {
     const params = req.body;
 
@@ -627,15 +679,15 @@ router.post('/search', async (req, res) => {
     if (cachedSearch) {
       // Cache hit: fetch hotels from DB
       const hotels = await hotelCacheService.getCachedHotels(searchHash);
-      
+
       return res.json({
         success: true,
-        source: 'cache',
+        source: "cache",
         hotels: hotels,
         totalResults: hotels.length,
         cacheHit: true,
         cachedAt: cachedSearch.cached_at,
-        ttlExpiresAt: cachedSearch.ttl_expires_at
+        ttlExpiresAt: cachedSearch.ttl_expires_at,
       });
     }
 
@@ -643,9 +695,9 @@ router.post('/search', async (req, res) => {
     const adapter = new tboAdapter();
     const tboHotels = await adapter.searchHotels({
       ...params,
-      rooms: params.rooms || '1',
-      adults: params.adults || '2',
-      children: params.children || '0'
+      rooms: params.rooms || "1",
+      adults: params.adults || "2",
+      children: params.children || "0",
     });
 
     // Step 4: Normalize and store results
@@ -659,29 +711,33 @@ router.post('/search', async (req, res) => {
         starRating: hotel.starRating,
         amenities: hotel.amenities,
         images: hotel.images,
-        tboResponseBlob: hotel // Full TBO response
+        tboResponseBlob: hotel, // Full TBO response
       });
     }
 
     // Step 5: Cache the search
-    const hotelIds = tboHotels.map(h => h.hotelId);
-    await hotelCacheService.cacheSearchResults(searchHash, params, hotelIds, 'tbo');
+    const hotelIds = tboHotels.map((h) => h.hotelId);
+    await hotelCacheService.cacheSearchResults(
+      searchHash,
+      params,
+      hotelIds,
+      "tbo",
+    );
 
     // Step 6: Return results
     return res.json({
       success: true,
-      source: 'tbo',
+      source: "tbo",
       hotels: tboHotels,
       totalResults: tboHotels.length,
       cacheHit: false,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
-    console.error('Hotel search error:', error);
+    console.error("Hotel search error:", error);
     return res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -711,14 +767,14 @@ interface HotelSearchParams {
 
 // Replace existing fetchTBOHotels with cache-backed version
 const fetchCachedHotels = async (params: HotelSearchParams) => {
-  const response = await fetch('/api/hotels/search', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(params)
+  const response = await fetch("/api/hotels/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
   });
 
   const data = await response.json();
-  
+
   if (data.success) {
     setHotels(data.hotels);
     setTotalResults(data.totalResults);
@@ -729,14 +785,14 @@ const fetchCachedHotels = async (params: HotelSearchParams) => {
 // In useEffect:
 const loadHotels = async () => {
   const params = {
-    cityId: searchParams.get('cityId'),
-    countryCode: 'AE',
+    cityId: searchParams.get("cityId"),
+    countryCode: "AE",
     checkIn: departureDate,
     checkOut: returnDate,
     guestNationality: selectedNationality,
     rooms: roomCount,
     adults,
-    children
+    children,
   };
 
   await fetchCachedHotels(params);
@@ -751,17 +807,17 @@ const loadHotels = async () => {
 
 const fetchRoomDetails = async (hotelId: string) => {
   const response = await fetch(`/api/hotels/rooms/${hotelId}`, {
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify({
       checkIn: departureDate,
       checkOut: returnDate,
       roomConfig: [{ adults, children }],
-      currency: selectedCurrency
-    })
+      currency: selectedCurrency,
+    }),
   });
 
   const data = await response.json();
-  
+
   // Combines cached hotel data with live pricing
   setRoomDetails(data.rooms);
   setPriceRefreshedAt(data.timestamp);
@@ -782,15 +838,16 @@ Only change: Update the API call in `HotelResults.tsx` to `POST /api/hotels/sear
 
 ## 6. CACHE TTL & REFRESH STRATEGY
 
-| Scenario | TTL | Action |
-|----------|-----|--------|
-| **First search** (no cache) | 4 hours | Store full hotel + room data from TBO |
-| **Repeat search** (cache fresh) | Extend +4h | Return from DB, optionally refresh prices from TBO if user requests |
-| **Cache stale** (>4h old) | 0 (expired) | Treat as cache miss, call TBO, update DB |
-| **Manual refresh** | User clicks "Refresh" | Invalidate cache entry, force TBO call |
-| **Room selection** | Per-request | Always call TBO's GetHotelRoom + BlockRoom for live price + policy |
+| Scenario                        | TTL                   | Action                                                              |
+| ------------------------------- | --------------------- | ------------------------------------------------------------------- |
+| **First search** (no cache)     | 4 hours               | Store full hotel + room data from TBO                               |
+| **Repeat search** (cache fresh) | Extend +4h            | Return from DB, optionally refresh prices from TBO if user requests |
+| **Cache stale** (>4h old)       | 0 (expired)           | Treat as cache miss, call TBO, update DB                            |
+| **Manual refresh**              | User clicks "Refresh" | Invalidate cache entry, force TBO call                              |
+| **Room selection**              | Per-request           | Always call TBO's GetHotelRoom + BlockRoom for live price + policy  |
 
 **Rationale**:
+
 - **4-hour TTL**: Hotel availability doesn't change drastically within 4 hours in most markets
 - **Live prices on details/checkout**: Critical business moments always get latest TBO data
 - **Stale-while-revalidate option**: Could serve stale cache instantly + background refresh for next request
@@ -800,6 +857,7 @@ Only change: Update the API call in `HotelResults.tsx` to `POST /api/hotels/sear
 ## 7. DEPLOYMENT CHECKLIST
 
 ### Phase 1: Database & Backend (Week 1)
+
 - [ ] Run migration: `20250205_hotel_cache_layer.sql`
 - [ ] Deploy `hotelCacheService.js`
 - [ ] Deploy updated `hotels-search.js` route
@@ -808,12 +866,14 @@ Only change: Update the API call in `HotelResults.tsx` to `POST /api/hotels/sear
 - [ ] Verify cache hit/miss behavior with logs
 
 ### Phase 2: Frontend Integration (Week 1-2)
+
 - [ ] Update `HotelResults.tsx` to call `/api/hotels/search`
 - [ ] Update `HotelDetails.tsx` to fetch room details from new endpoint
 - [ ] Test search flow: cache hit, cache miss, hotel details
 - [ ] QA on desktop + mobile
 
 ### Phase 3: Optimization & Monitoring (Week 2-3)
+
 - [ ] Add performance metrics (search time, cache hit %, DB query time)
 - [ ] Monitor error rates
 - [ ] Optimize indexes based on real query patterns
@@ -825,7 +885,7 @@ Only change: Update the API call in `HotelResults.tsx` to `POST /api/hotels/sear
 
 ```javascript
 // Check cache hit rate
-SELECT 
+SELECT
   DATE(cached_at) as date,
   COUNT(*) as total_searches,
   SUM(CASE WHEN is_fresh THEN 1 ELSE 0 END) as cached_searches,
@@ -835,7 +895,7 @@ GROUP BY DATE(cached_at)
 ORDER BY date DESC;
 
 // Find slow searches
-SELECT 
+SELECT
   search_hash,
   city_id,
   created_at,
@@ -865,12 +925,14 @@ WHERE is_fresh = false;
 ## 10. ALTERNATIVE APPROACHES (IF PREFERRED)
 
 ### A. Redis-First Cache (Faster, Higher Cost)
+
 - Store hot searches (last 100) in Redis before DB
 - Pros: Instant response for very recent searches
 - Cons: Added cost, requires Redis infrastructure
 - Recommendation: Start with Postgres, add Redis if performance needed
 
 ### B. Stale-While-Revalidate (Best UX)
+
 - Serve cached results instantly
 - Background job refreshes cache in parallel
 - Return updated results on next search
@@ -878,6 +940,7 @@ WHERE is_fresh = false;
 - Cons: Requires background job queue (Bull, Celery, etc.)
 
 ### C. Full Inventory Sync (Maximum Speed)
+
 - Nightly sync of ALL hotels in supported cities
 - No TBO calls on search (only pricing/booking)
 - Pros: Blazing fast, minimal TBO load
@@ -889,6 +952,7 @@ WHERE is_fresh = false;
 ## Summary
 
 This architecture gives you:
+
 - ✅ **Faster searches** (4-hour cache of static hotel data)
 - ✅ **Lower TBO costs** (one call per unique search, not per user)
 - ✅ **Fresh pricing** (live calls on details/booking)

@@ -9,24 +9,29 @@ All code for the cache-backed hotel search architecture has been implemented. Th
 ## 📦 Deliverables
 
 ### 1. **Database Migration**
+
 **File**: `api/database/migrations/20250205_hotel_cache_layer.sql`
 
 Creates 4 new tables:
+
 - `hotel_search_cache` – tracks search parameters and freshness
 - `tbo_hotels_normalized` – normalized hotel metadata from TBO
 - `tbo_rooms_normalized` – room type and rate details
 - `hotel_search_cache_results` – maps searches to hotels with ranking
 
 **Key Features**:
+
 - TTL = 4 hours (cache expires, forced refresh after)
 - Full TBO response blob stored for debugging
 - Comprehensive indexes for fast lookups
 - ON CONFLICT clauses for upsert safety
 
 ### 2. **Backend Service**
+
 **File**: `api/services/hotelCacheService.js`
 
 Manages all cache operations:
+
 - `generateSearchHash()` – SHA256 of search parameters
 - `getCachedSearch()` – check cache freshness
 - `cacheSearchResults()` – store normalized hotel data
@@ -35,9 +40,11 @@ Manages all cache operations:
 - `getCacheStats()` – monitoring and insights
 
 ### 3. **API Endpoint**
+
 **File**: `api/routes/hotels-search.js`
 
 Three endpoints:
+
 1. **POST /api/hotels/search** – cache-first hotel search
    - Returns: `{success, source, hotels, totalResults, cacheHit, duration, traceId}`
    - Source: `'cache'` (4h TTL) or `'tbo'` (fresh API call)
@@ -50,18 +57,22 @@ Three endpoints:
    - Returns: `{total_searches, fresh_searches, hit_rate, avg_hotels_per_search}`
 
 ### 4. **Frontend Integration**
+
 **File**: `client/pages/HotelResults.tsx`
 
 Updated `fetchTBOHotels()` function:
+
 - Changed from GET to POST `/api/hotels/search`
 - Passes structured payload: `{cityId, checkIn, checkOut, rooms, adults, children, currency}`
 - Handles new response format with `success` flag, `source`, and `cacheHit` metadata
 - Updated response parsing for new hotel object structure
 
 ### 5. **Route Registration**
+
 **File**: `api/server.js`
 
 Registered new endpoint:
+
 ```javascript
 app.use("/api/hotels/search", hotelsSearchRoutes);
 ```
@@ -151,6 +162,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ## 🧪 Testing Checklist
 
 ### Test 1: First Search (Cache Miss)
+
 ```bash
 # Make initial search → should call TBO
 curl -X POST http://localhost:3000/api/hotels/search \
@@ -169,6 +181,7 @@ curl -X POST http://localhost:3000/api/hotels/search \
 ```
 
 ### Test 2: Repeat Search (Cache Hit)
+
 ```bash
 # Make identical search immediately after
 # Expected: source="cache", cacheHit=true, 100x faster response
@@ -179,6 +192,7 @@ curl -X POST http://localhost:3000/api/hotels/search \
 ```
 
 ### Test 3: Room Details
+
 ```bash
 curl -X POST http://localhost:3000/api/hotels/rooms/1234 \
   -H "Content-Type: application/json" \
@@ -192,6 +206,7 @@ curl -X POST http://localhost:3000/api/hotels/rooms/1234 \
 ```
 
 ### Test 4: Cache Statistics
+
 ```bash
 curl http://localhost:3000/api/hotels/cache/stats
 
@@ -231,8 +246,9 @@ curl http://localhost:3000/api/hotels/cache/stats
 ## 📊 Monitoring & Metrics
 
 ### Cache Hit Rate
+
 ```sql
-SELECT 
+SELECT
   DATE(cached_at) as date,
   COUNT(*) as searches,
   ROUND(100.0 * SUM(CASE WHEN is_fresh THEN 1 ELSE 0 END) / COUNT(*), 2) as hit_rate
@@ -245,6 +261,7 @@ ORDER BY date DESC;
 Expected: >80% hit rate after first day
 
 ### Response Times
+
 ```sql
 -- This would be from API logs or APM tools
 -- Expected:
@@ -253,8 +270,9 @@ Expected: >80% hit rate after first day
 ```
 
 ### Hotel Data Quality
+
 ```sql
-SELECT 
+SELECT
   COUNT(*) as cached_hotels,
   AVG(array_length(amenities::jsonb || '[]'::jsonb, 1)) as avg_amenities,
   COUNT(DISTINCT city_id) as cities_covered
@@ -266,35 +284,45 @@ FROM tbo_hotels_normalized;
 ## 🔍 Troubleshooting
 
 ### Issue: "hotel_search_cache" table not found
+
 **Solution**: Run migration file
+
 ```bash
 psql $DATABASE_URL < api/database/migrations/20250205_hotel_cache_layer.sql
 ```
 
 ### Issue: Cache hit rate is 0%
+
 **Solution**: Check TTL settings and ensure cache is being written
+
 ```sql
-SELECT * FROM hotel_search_cache 
+SELECT * FROM hotel_search_cache
 WHERE cached_at > NOW() - INTERVAL '1 hour'
 LIMIT 5;
 ```
 
 ### Issue: Very slow cache hit responses
+
 **Solution**: Add missing indexes
+
 ```sql
 CREATE INDEX IF NOT EXISTS idx_search_cache_hash ON public.hotel_search_cache(search_hash);
 CREATE INDEX IF NOT EXISTS idx_hotels_normalized_city ON public.tbo_hotels_normalized(city_id);
 ```
 
 ### Issue: TBO adapter not initialized
+
 **Solution**: Verify TBO adapter is registered in `supplierAdapterManager`
+
 ```javascript
-const adapter = supplierAdapterManager.getAdapter('TBO');
+const adapter = supplierAdapterManager.getAdapter("TBO");
 console.log(adapter); // Should not be null
 ```
 
 ### Issue: Frontend showing old API format
+
 **Solution**: Clear browser cache, ensure latest HotelResults.tsx is deployed
+
 ```bash
 # Check browser console for:
 ✅ Cache-backed search with config
@@ -305,29 +333,32 @@ console.log(adapter); // Should not be null
 
 ## 🎯 Performance Improvements Expected
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| First search | ~3-5s | ~3-5s | - (same) |
-| Repeat search | ~3-5s | ~200ms | **25-30x faster** |
-| TBO API calls | Every search | Once per 4h | **95% reduction** |
-| Database load | Low | Medium | Due to normalization |
-| P95 response time | 5s | 300ms | **16x faster** |
+| Metric            | Before       | After       | Improvement          |
+| ----------------- | ------------ | ----------- | -------------------- |
+| First search      | ~3-5s        | ~3-5s       | - (same)             |
+| Repeat search     | ~3-5s        | ~200ms      | **25-30x faster**    |
+| TBO API calls     | Every search | Once per 4h | **95% reduction**    |
+| Database load     | Low          | Medium      | Due to normalization |
+| P95 response time | 5s           | 300ms       | **16x faster**       |
 
 ---
 
 ## 📋 Next Steps (Optional Enhancements)
 
 ### Phase 2: Stale-While-Revalidate
+
 - Serve cached results instantly
 - Background job refreshes cache
 - Next search gets updated data
 
 ### Phase 3: Redis Layer
+
 - Cache hot searches (last 100) in Redis
 - Sub-100ms response times for popular searches
 - Postgres remains source of truth
 
 ### Phase 4: Price-Only Refresh
+
 - Implement `/api/hotels/rooms/:hotelId` with live TBO calls
 - Only fetch prices when user expands hotel
 - Keep descriptions/images from cache
@@ -339,6 +370,7 @@ console.log(adapter); // Should not be null
 ✅ **Cache-backed hotel search is ready for staging deployment.**
 
 All files are in place:
+
 - 1 database migration
 - 1 backend service
 - 1 API route

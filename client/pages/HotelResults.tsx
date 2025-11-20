@@ -598,7 +598,9 @@ function HotelResultsContent() {
       }
 
       // Always use live data to ensure price consistency across all environments
-      console.log("✅ Using live TBO data for consistent pricing across all environments");
+      console.log(
+        "✅ Using live TBO data for consistent pricing across all environments",
+      );
 
       // STEP 1: Fetch metadata instantly from TBO
       setPricingStatus("loading");
@@ -652,10 +654,10 @@ function HotelResultsContent() {
         countryCode: countryCode,
         checkIn: checkInStr,
         checkOut: checkOutStr,
-        rooms: '1',
+        rooms: "1",
         adults: adultsCount.toString(),
         children: childrenCount.toString(),
-        currency: selectedCurrency?.code || 'INR'
+        currency: selectedCurrency?.code || "INR",
       };
 
       console.log(`📡 API Call: ${apiUrl}`, searchPayload);
@@ -742,10 +744,16 @@ function HotelResultsContent() {
       }
 
       // Log cache source for transparency
-      console.log(`✅ Results from ${metadataData.source === 'cache' ? 'CACHE (fast)' : 'TBO API (fresh)'}`);
+      console.log(
+        `✅ Results from ${metadataData.source === "cache" ? "CACHE (fast)" : "TBO API (fresh)"}`,
+      );
       if (metadataData.cacheHit) {
-        console.log(`📅 Cached at: ${new Date(metadataData.cachedAt).toLocaleTimeString()}`);
-        console.log(`⏰ Expires at: ${new Date(metadataData.ttlExpiresAt).toLocaleTimeString()}`);
+        console.log(
+          `📅 Cached at: ${new Date(metadataData.cachedAt).toLocaleTimeString()}`,
+        );
+        console.log(
+          `⏰ Expires at: ${new Date(metadataData.ttlExpiresAt).toLocaleTimeString()}`,
+        );
       }
 
       if (
@@ -780,7 +788,8 @@ function HotelResultsContent() {
           reviews: h.reviewCount || 0,
           reviewCount: h.reviewCount || 0,
           currentPrice: h.price?.offered || h.currentPrice || 0,
-          originalPrice: h.price?.published || h.originalPrice || h.price?.offered || 0,
+          originalPrice:
+            h.price?.published || h.originalPrice || h.price?.offered || 0,
           description: `Discover ${h.name}`,
           amenities: h.amenities || [],
           features: h.features || h.roomFeatures || [],
@@ -814,10 +823,11 @@ function HotelResultsContent() {
             postalCode: "00000",
           },
           starRating: h.starRating || h.reviewScore || h.stars || 4,
-          currency: h.price?.currency || h.currency || selectedCurrency?.code || "INR",
+          currency:
+            h.price?.currency || h.currency || selectedCurrency?.code || "INR",
           supplier: h.source || h.supplier || "TBO",
           supplierCode: h.supplier?.toLowerCase() || "tbo",
-          isLiveData: h.source === 'tbo' || h.isLiveData !== false,
+          isLiveData: h.source === "tbo" || h.isLiveData !== false,
           priceRange: {
             min: h.price?.offered || h.currentPrice || 0,
             max: h.price?.published || h.originalPrice || h.price?.offered || 0,
