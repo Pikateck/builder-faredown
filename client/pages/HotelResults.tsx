@@ -708,10 +708,17 @@ function HotelResultsContent() {
 
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
+        let errorBody = null;
+        try {
+          errorBody = JSON.parse(errorText);
+        } catch (e) {
+          errorBody = errorText;
+        }
+
         console.error("❌ TBO API returned error:", {
           status: metadataResponse.status,
           statusText: metadataResponse.statusText,
-          body: errorText.slice(0, 500),
+          body: errorBody,
           url: apiUrl,
         });
         console.error(
@@ -1306,7 +1313,7 @@ function HotelResultsContent() {
       ],
       rating: 4.8,
       reviews: 1234,
-      originalPrice: 1250, // ₹1250 per night (original price)
+      originalPrice: 1250, // ��1250 per night (original price)
       currentPrice: 950, // ₹950 per night (current discounted price)
       description: `Experience luxury in the heart of ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
