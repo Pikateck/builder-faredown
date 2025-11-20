@@ -731,14 +731,21 @@ function HotelResultsContent() {
         return loadMockHotels();
       }
 
-      // Check if TBO returned an error status
-      if (metadataData.tboStatus?.Code && metadataData.tboStatus.Code !== 1) {
-        console.warn("⚠️ TBO API returned error status", {
-          statusCode: metadataData.tboStatus.Code,
-          description: metadataData.tboStatus.Description,
+      // Check if API returned success
+      if (!metadataData.success) {
+        console.warn("⚠️ API returned error status", {
+          error: metadataData.error,
+          source: metadataData.source,
         });
-        console.log("⚠️ TBO error - falling back to mock data");
+        console.log("⚠️ API error - falling back to mock data");
         return loadMockHotels();
+      }
+
+      // Log cache source for transparency
+      console.log(`✅ Results from ${metadataData.source === 'cache' ? 'CACHE (fast)' : 'TBO API (fresh)'}`);
+      if (metadataData.cacheHit) {
+        console.log(`📅 Cached at: ${new Date(metadataData.cachedAt).toLocaleTimeString()}`);
+        console.log(`⏰ Expires at: ${new Date(metadataData.ttlExpiresAt).toLocaleTimeString()}`);
       }
 
       if (
@@ -768,15 +775,15 @@ function HotelResultsContent() {
               : h.image
                 ? [h.image]
                 : [],
-          rating: h.reviewScore || h.stars || 4.0,
-          reviewScore: h.reviewScore || h.stars || 4.0,
+          rating: h.starRating || h.reviewScore || h.stars || 4.0,
+          reviewScore: h.starRating || h.reviewScore || h.stars || 4.0,
           reviews: h.reviewCount || 0,
           reviewCount: h.reviewCount || 0,
-          currentPrice: h.price || h.currentPrice || 0,
-          originalPrice: h.originalPrice || h.price || h.currentPrice || 0,
+          currentPrice: h.price?.offered || h.currentPrice || 0,
+          originalPrice: h.price?.published || h.originalPrice || h.price?.offered || 0,
           description: `Discover ${h.name}`,
           amenities: h.amenities || [],
-          features: h.roomFeatures || [],
+          features: h.features || h.roomFeatures || [],
           roomTypes:
             h.rates && h.rates.length > 0
               ? h.rates.map((r: any) => ({
@@ -806,14 +813,14 @@ function HotelResultsContent() {
             country: "Unknown",
             postalCode: "00000",
           },
-          starRating: h.reviewScore || h.stars || 4,
-          currency: h.currency || selectedCurrency?.code || "INR",
-          supplier: h.supplier || "TBO",
-          supplierCode: h.supplierCode || "tbo",
-          isLiveData: h.isLiveData !== false,
+          starRating: h.starRating || h.reviewScore || h.stars || 4,
+          currency: h.price?.currency || h.currency || selectedCurrency?.code || "INR",
+          supplier: h.source || h.supplier || "TBO",
+          supplierCode: h.supplier?.toLowerCase() || "tbo",
+          isLiveData: h.source === 'tbo' || h.isLiveData !== false,
           priceRange: {
-            min: h.price || h.currentPrice || 0,
-            max: h.originalPrice || h.price || h.currentPrice || 0,
+            min: h.price?.offered || h.currentPrice || 0,
+            max: h.price?.published || h.originalPrice || h.price?.offered || 0,
           },
         }),
       );
