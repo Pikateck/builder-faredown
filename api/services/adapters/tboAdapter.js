@@ -337,7 +337,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       CountryCode: normalizedCountryCode, // ✅ Required by TBO (returns cities for this country)
     };
 
-    this.logger.info("🏙️  TBO Static Data Request", {
+    this.logger.info("🏙���  TBO Static Data Request", {
       endpoint: staticUrl,
       tokenId: this.tokenId ? this.tokenId.substring(0, 8) + "..." : "missing",
       endUserIp: this.config.endUserIp,
@@ -481,20 +481,14 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return resolvedId;
     } catch (error) {
-      this.logger.error(
-        "❌ Failed to get CityId - returning null to avoid crash",
-        {
-          destination,
-          countryCode,
-          error: error.message,
-          stack: error.stack,
-          note: "Returning null instead of throwing to prevent Node process restart",
-        },
-      );
+      console.error("[TBO] ❌ Failed to get CityId - applying fallback", {
+        destination,
+        countryCode,
+        error: error.message,
+      });
 
-      // ✅ Return null instead of throwing to prevent Node crash
-      // The caller (searchHotels) will handle null cityId gracefully
-      return null;
+      // ✅ Apply fallback instead of returning null
+      return this.applyDestinationFallback(destination, countryCode);
     }
   }
 
