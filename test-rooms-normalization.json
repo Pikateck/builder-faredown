@@ -1,0 +1,78 @@
+{
+  "info": {
+    "name": "Hotel Search - Rooms Normalization Test",
+    "description": "Test suite to verify rooms parameter normalization fix",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Test 1: Rooms as String",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cityId\": \"DXB\",\n  \"destination\": \"Dubai, United Arab Emirates\",\n  \"cityName\": \"Dubai, United Arab Emirates\",\n  \"countryCode\": \"AE\",\n  \"checkIn\": \"2025-11-30\",\n  \"checkOut\": \"2025-12-04\",\n  \"rooms\": \"1\",\n  \"adults\": \"1\",\n  \"children\": \"0\",\n  \"currency\": \"INR\"\n}"
+        },
+        "url": {
+          "raw": "https://builder-faredown-pricing.onrender.com/api/hotels/search",
+          "protocol": "https",
+          "host": ["builder-faredown-pricing", "onrender", "com"],
+          "path": ["api", "hotels", "search"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Test 2: Rooms as Array (Already Normalized)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cityId\": \"DXB\",\n  \"destination\": \"Dubai, United Arab Emirates\",\n  \"cityName\": \"Dubai, United Arab Emirates\",\n  \"countryCode\": \"AE\",\n  \"checkIn\": \"2025-11-30\",\n  \"checkOut\": \"2025-12-04\",\n  \"rooms\": [{\"adults\": 2, \"children\": 1, \"childAges\": [5]}],\n  \"currency\": \"INR\"\n}"
+        },
+        "url": {
+          "raw": "https://builder-faredown-pricing.onrender.com/api/hotels/search",
+          "protocol": "https",
+          "host": ["builder-faredown-pricing", "onrender", "com"],
+          "path": ["api", "hotels", "search"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Test 3: Multiple Rooms as String",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cityId\": \"DXB\",\n  \"destination\": \"Dubai, United Arab Emirates\",\n  \"cityName\": \"Dubai, United Arab Emirates\",\n  \"countryCode\": \"AE\",\n  \"checkIn\": \"2025-11-30\",\n  \"checkOut\": \"2025-12-04\",\n  \"rooms\": \"2\",\n  \"adults\": \"3\",\n  \"children\": \"1\",\n  \"currency\": \"INR\"\n}"
+        },
+        "url": {
+          "raw": "https://builder-faredown-pricing.onrender.com/api/hotels/search",
+          "protocol": "https",
+          "host": ["builder-faredown-pricing", "onrender", "com"],
+          "path": ["api", "hotels", "search"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
