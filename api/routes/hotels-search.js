@@ -31,16 +31,27 @@ router.post("/", async (req, res) => {
     });
 
     // Validate required fields
-    const { cityId, checkIn, checkOut } = req.body;
-    if (!cityId || !checkIn || !checkOut) {
+    const { cityId, destination, cityName, checkIn, checkOut } = req.body;
+    const cityIdentifier = cityId || destination || cityName;
+
+    if (!cityIdentifier || !checkIn || !checkOut) {
       console.error(`❌ Missing required fields [${traceId}]:`, {
         cityId: !!cityId,
+        destination: !!destination,
+        cityName: !!cityName,
         checkIn: !!checkIn,
         checkOut: !!checkOut,
       });
       return res.status(400).json({
         success: false,
-        error: `Missing required fields: cityId=${cityId}, checkIn=${checkIn}, checkOut=${checkOut}`,
+        error: `Missing required fields. Need: (cityId OR destination OR cityName) AND checkIn AND checkOut`,
+        received: {
+          cityId: cityId || 'missing',
+          destination: destination || 'missing',
+          cityName: cityName || 'missing',
+          checkIn: checkIn || 'missing',
+          checkOut: checkOut || 'missing',
+        },
         traceId,
       });
     }
