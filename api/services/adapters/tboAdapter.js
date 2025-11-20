@@ -327,6 +327,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         destinationsCount: destinations.length,
         hasError: !!ApiError,
         errorMessage: ApiError?.ErrorMessage,
+        rawResponseKeys: Object.keys(response.data || {}),
+        firstDestinations: destinations.slice(0, 3).map(d => ({
+          city: d.CityName,
+          country: d.CountryCode,
+          id: d.DestinationId,
+        })),
       });
 
       if (!statusOk) {
@@ -344,7 +350,10 @@ class TBOAdapter extends BaseSupplierAdapter {
           {
             destination: normalizedDestination,
             countryCode: normalizedCountryCode,
-            fullResponse: response.data,
+            rawResponse: JSON.stringify(response.data).substring(0, 500),
+            responseKeys: Object.keys(response.data || {}),
+            hasDestinations: 'Destinations' in (response.data || {}),
+            destinationsValue: response.data?.Destinations,
           },
         );
         return null;
