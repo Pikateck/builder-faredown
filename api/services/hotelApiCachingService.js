@@ -396,17 +396,23 @@ class HotelApiCachingService {
           normalizedRooms.push({
             adults: parseInt(searchParams.adults) || 2,
             children: parseInt(searchParams.children) || 0,
-            childAges: Array.isArray(searchParams.childAges) ? searchParams.childAges : [],
+            childAges: Array.isArray(searchParams.childAges)
+              ? searchParams.childAges
+              : [],
           });
         }
       } else if (Array.isArray(rooms)) {
         normalizedRooms = rooms;
       } else {
-        normalizedRooms = [{
-          adults: parseInt(searchParams.adults) || 2,
-          children: parseInt(searchParams.children) || 0,
-          childAges: Array.isArray(searchParams.childAges) ? searchParams.childAges : [],
-        }];
+        normalizedRooms = [
+          {
+            adults: parseInt(searchParams.adults) || 2,
+            children: parseInt(searchParams.children) || 0,
+            childAges: Array.isArray(searchParams.childAges)
+              ? searchParams.childAges
+              : [],
+          },
+        ];
       }
 
       const numRooms = normalizedRooms.length;

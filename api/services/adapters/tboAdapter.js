@@ -281,7 +281,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const { Data = [], ResponseStatus, Status, Error: ApiError } = response.data || {};
+      const {
+        Data = [],
+        ResponseStatus,
+        Status,
+        Error: ApiError,
+      } = response.data || {};
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 
