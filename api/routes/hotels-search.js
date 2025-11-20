@@ -23,6 +23,13 @@ router.post("/", async (req, res) => {
   const traceId = require("uuid").v4();
 
   try {
+    // Log incoming request for debugging
+    console.log(`🔍 POST /api/hotels/search [${traceId}]`, {
+      bodyKeys: Object.keys(req.body || {}),
+      contentType: req.headers['content-type'],
+      body: req.body
+    });
+
     // ============================================================
     // Step 1: Resolve guest nationality
     // ============================================================
