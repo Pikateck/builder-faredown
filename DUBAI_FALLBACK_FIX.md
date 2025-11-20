@@ -54,6 +54,23 @@ const KNOWN_CITIES = {
 
 ## Test Now
 
+### Primary Test: Delhi (Domestic)
+```powershell
+$body = @{
+    destination = "Delhi"
+    countryCode = "IN"
+    checkIn = "2025-07-01"
+    checkOut = "2025-07-05"
+    rooms = "1"
+    adults = "2"
+    currency = "INR"
+    guestNationality = "IN"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels/search" -Method POST -Body $body -ContentType "application/json"
+```
+
+### Secondary Test: Dubai (International)
 ```powershell
 $body = @{
     destination = "Dubai"
