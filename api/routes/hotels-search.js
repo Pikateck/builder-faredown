@@ -238,12 +238,19 @@ router.post("/search", async (req, res) => {
       traceId,
     });
   } catch (error) {
-    console.error(`❌ Hotel search error [${traceId}]:`, error.message);
+    console.error(`❌ Hotel search error [${traceId}]:`, {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
 
-    // Fallback: return empty results
-    res.status(error.statusCode || 500).json({
+    // Fallback: return error response
+    const statusCode = error.statusCode || 500;
+    const errorMessage = error.message || "Unknown error occurred";
+
+    res.status(statusCode).json({
       success: false,
-      error: error.message,
+      error: errorMessage,
       hotels: [],
       source: "error",
       duration: `${Date.now() - requestStart}ms`,
