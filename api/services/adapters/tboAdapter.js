@@ -390,14 +390,22 @@ class TBOAdapter extends BaseSupplierAdapter {
     try {
       cityId = await this.getCityId(destination, countryCode);
       if (!cityId) {
-        this.logger.warn("⚠️ CityId not found for destination", {
+        this.logger.error("❌ CityId not found - TBO Static Data returned no matches", {
           destination,
           countryCode,
+          suggestion: "Try exact TBO city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
+          returning: "empty array (tbo_empty)",
         });
         return [];
       }
     } catch (err) {
-      this.logger.error("Failed to get CityId:", err.message);
+      this.logger.error("❌ Failed to get CityId - Exception thrown", {
+        destination,
+        countryCode,
+        error: err.message,
+        stack: err.stack,
+        returning: "throwing error upstream",
+      });
       throw err;
     }
 
