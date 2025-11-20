@@ -312,7 +312,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       const {
-        Country = [],
+        Destinations,
         ResponseStatus,
         Status,
         Error: ApiError,
@@ -320,11 +320,13 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 
+      // ✅ Extract destinations array
+      const destinations = Array.isArray(Destinations) ? Destinations : [];
+
       this.logger.info("📥 TBO Static Data Response", {
-        statusOk,
-        ResponseStatus,
         Status,
-        countryCount: Country?.length || 0,
+        ResponseStatus,
+        destinationsCount: destinations.length,
         hasError: !!ApiError,
         errorMessage: ApiError?.ErrorMessage,
       });
@@ -334,14 +336,13 @@ class TBOAdapter extends BaseSupplierAdapter {
           fullResponse: response.data,
           ApiError,
         });
-        throw new Error(
-          `Static data failed: ${ApiError?.ErrorMessage || "Unknown error"}`,
-        );
+        // ✅ Return null instead of throwing to prevent Node crash
+        return null;
       }
 
-      if (!Country || Country.length === 0) {
+      if (destinations.length === 0) {
         this.logger.warn(
-          "⚠️  No countries found - TBO returned empty Country array",
+          "⚠️  No destinations found - TBO returned empty Destinations array",
           {
             destination: normalizedDestination,
             countryCode: normalizedCountryCode,
@@ -351,50 +352,38 @@ class TBOAdapter extends BaseSupplierAdapter {
         return null;
       }
 
-      // ✅ Client-side filtering: Find matching city
-      // TBO returns countries array - find the target country
-      const targetCountry = Country.find(
-        (c) => c.CountryCode === normalizedCountryCode,
+      // ✅ Normalize and match on City + Country
+      const requestedCity = normalizedDestination.trim().toLowerCase(); // "dubai"
+      const requestedCountry = normalizedCountryCode.trim().toUpperCase(); // "AE"
+
+      const match = destinations.find(
+        (d) =>
+          d.CityName?.trim().toLowerCase() === requestedCity &&
+          d.CountryCode?.trim().toUpperCase() === requestedCountry,
       );
 
-      if (!targetCountry || !targetCountry.City) {
-        this.logger.warn("⚠️  Country not found in static data", {
-          countryCode: normalizedCountryCode,
-          availableCountries: Country.map((c) => c.CountryCode),
-        });
-        return null;
-      }
-
-      // Find matching city (case-insensitive)
-      const matchingCity = targetCountry.City.find(
-        (city) =>
-          city.CityName.toLowerCase() === normalizedDestination.toLowerCase(),
-      );
-
-      if (!matchingCity) {
-        this.logger.warn("⚠️  City not found in static data", {
-          destination,
-          normalizedDestination,
-          countryCode: normalizedCountryCode,
-          availableCities: targetCountry.City.slice(0, 10).map(
-            (c) => c.CityName,
-          ),
+      if (!match) {
+        this.logger.warn("[TBO] ⚠️  No destination match", {
+          requestedCity,
+          requestedCountry,
+          destinationsCount: destinations.length,
+          sampleDestinations: destinations.slice(0, 5).map((d) => ({
+            city: d.CityName,
+            country: d.CountryCode,
+            id: d.DestinationId,
+          })),
           hint: "Try exact city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
         });
-        return null;
+        return null; // ✅ Let caller return tbo_empty without crashing
       }
 
-      const cityId = matchingCity.CityId;
-
-      this.logger.info("✅ CityId Retrieved", {
-        destination,
-        normalizedDestination,
-        cityId,
-        cityName: matchingCity.CityName,
-        countryCode: matchingCity.CountryCode,
+      this.logger.info("[TBO] ✅ CityId resolved", {
+        cityName: match.CityName,
+        countryCode: match.CountryCode,
+        destinationId: match.DestinationId,
       });
 
-      return cityId;
+      return match.DestinationId;
     } catch (error) {
       this.logger.error(
         "❌ Failed to get CityId - returning null to avoid crash",
@@ -684,7 +673,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     const year = date.getFullYear();
 
     const formatted = `${day}/${month}/${year}`;
-    this.logger.debug("📅 Formatted date for TBO", {
+    this.logger.debug("��� Formatted date for TBO", {
       input: dateString,
       output: formatted,
     });
