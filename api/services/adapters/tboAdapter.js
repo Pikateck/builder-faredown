@@ -281,13 +281,13 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const { Data = [], ResponseStatus, Status, Error } = response.data || {};
+      const { Data = [], ResponseStatus, Status, Error: ApiError } = response.data || {};
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 
       if (!statusOk) {
         throw new Error(
-          `Static data failed: ${Error?.ErrorMessage || "Unknown error"}`,
+          `Static data failed: ${ApiError?.ErrorMessage || "Unknown error"}`,
         );
       }
 
