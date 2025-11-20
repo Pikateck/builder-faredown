@@ -126,7 +126,11 @@ class TBOAdapter extends BaseSupplierAdapter {
 
     try {
       // Already an array of room objects - pass through
-      if (Array.isArray(rooms) && rooms.length > 0 && typeof rooms[0] === "object") {
+      if (
+        Array.isArray(rooms) &&
+        rooms.length > 0 &&
+        typeof rooms[0] === "object"
+      ) {
         const normalized = rooms.map((r) => ({
           adults: Number(r.adults) || Number(adults) || 2,
           children: Number(r.children) || Number(children) || 0,
@@ -277,12 +281,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const {
-        Data = [],
-        ResponseStatus,
-        Status,
-        Error,
-      } = response.data || {};
+      const { Data = [], ResponseStatus, Status, Error } = response.data || {};
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 

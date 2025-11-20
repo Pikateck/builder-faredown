@@ -9,6 +9,7 @@
 ## Problem Fixed
 
 ### Before
+
 ```javascript
 // Error in tboAdapter.js line 551
 const roomGuests = Array.isArray(rooms)
@@ -20,6 +21,7 @@ const roomGuests = Array.isArray(rooms)
 ```
 
 ### After
+
 ```javascript
 // New normalization method
 normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
@@ -36,6 +38,7 @@ normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
 ### 1. Updated File: `api/services/adapters/tboAdapter.js`
 
 **Changes**:
+
 - ✅ Added `normalizeRooms()` method (lines 155-205)
 - ✅ Converts simple URL params (`rooms=1`) to TBO array format
 - ✅ Supports single/multiple rooms
@@ -47,12 +50,14 @@ normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
 - ✅ Standardized with hotel caching infrastructure logging style
 
 **Key Lines**:
+
 - Line 155-205: `normalizeRooms()` method
 - Line 177-180: Already-array case handling
 - Line 189-201: String/number to array conversion
 - Line 531: Called in `searchHotels()`
 
 **Logging Added**:
+
 ```
 🔄 Normalizing rooms parameter          ← Input details
 ✅ Rooms normalized (from simple params) ← Conversion result
@@ -69,6 +74,7 @@ normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
 ### ✅ All existing code paths still work
 
 **Query Parameters** (GET):
+
 ```bash
 # Still works
 GET /api/hotels?rooms=1&adults=2&children=0
@@ -76,6 +82,7 @@ GET /api/hotels?rooms=1&adults=2&children=0
 ```
 
 **JSON Body** (POST):
+
 ```bash
 # Still works
 POST /api/hotels/search
@@ -84,6 +91,7 @@ POST /api/hotels/search
 ```
 
 **Array Format** (POST body):
+
 ```bash
 # Still works
 POST /api/hotels/search
@@ -98,11 +106,13 @@ POST /api/hotels/search
 ### Test Commands (Full Suite)
 
 **1. Simple query params** (most common):
+
 ```bash
 curl -X GET "http://localhost:3000/api/hotels?cityId=DXB&checkIn=2025-12-01&checkOut=2025-12-04&adults=2&children=0&rooms=1"
 ```
 
 **2. JSON body** (for frontend):
+
 ```bash
 curl -X POST "http://localhost:3000/api/hotels/search" \
   -H "Content-Type: application/json" \
@@ -110,6 +120,7 @@ curl -X POST "http://localhost:3000/api/hotels/search" \
 ```
 
 **3. Multiple rooms**:
+
 ```bash
 curl -X POST "http://localhost:3000/api/hotels/search" \
   -H "Content-Type: application/json" \
@@ -117,6 +128,7 @@ curl -X POST "http://localhost:3000/api/hotels/search" \
 ```
 
 **4. With children**:
+
 ```bash
 curl -X GET "http://localhost:3000/api/hotels?cityId=DXB&checkIn=2025-12-01&checkOut=2025-12-04&adults=2&children=1&rooms=1"
 ```
@@ -168,6 +180,7 @@ When you run a test, you should see this sequence in logs:
 ## Files Modified
 
 ### `api/services/adapters/tboAdapter.js`
+
 - **Lines changed**: ~610 total (full rewrite of class structure)
 - **Key additions**:
   - `normalizeRooms()` method (51 lines)
@@ -176,10 +189,12 @@ When you run a test, you should see this sequence in logs:
   - Consistent with hotel caching infrastructure logging
 
 ### `api/routes/hotels-canonical.js`
+
 - **No changes needed** ✅ (already compatible)
 - Existing code passes rooms as integer, which normalizeRooms() handles
 
 ### New Documentation Files
+
 - `HOTEL_SEARCH_TEST_COMMANDS.md` (500 lines) - Comprehensive test guide
 - `COMMIT_SUMMARY_ROOMS_NORMALIZATION.md` (this file) - What was changed
 
@@ -252,6 +267,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 ### Risk Level: **LOW** ✅
 
 **Why Low Risk**:
+
 - ✅ Only changes TBO adapter initialization
 - ✅ No database changes
 - ✅ No API contract changes
@@ -260,6 +276,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 - ✅ New method has defensive error handling
 
 **Fallback Plan** (if issues):
+
 1. Revert to previous tboAdapter.js version
 2. Logs will clearly show normalization failures
 3. No data loss or corruption possible
@@ -271,11 +288,13 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 ### Expected: **MINIMAL** ✅
 
 **Additions**:
+
 - `normalizeRooms()` method: ~5ms per call (string conversion + array creation)
 - Additional logging: ~2ms per call
 - Total overhead: **~7ms per search** (negligible)
 
 **Improvements**:
+
 - No more failed searches due to rooms parameter
 - Better debugging through comprehensive logging
 - Consistent error handling
@@ -327,6 +346,7 @@ git push origin main
 ## Contact & Support
 
 For questions or issues:
+
 1. Check `HOTEL_SEARCH_TEST_COMMANDS.md` for test procedures
 2. Review logs for `Normalizing rooms parameter` entries
 3. Verify TBO credentials in .env (TBO_HOTEL_USER_ID, etc)

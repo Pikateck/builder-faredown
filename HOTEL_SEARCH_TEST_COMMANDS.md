@@ -19,6 +19,7 @@ All hotel search endpoints now support **simple URL parameters** that are automa
 ## Test Scenario
 
 **Search Parameters**:
+
 - Destination: Dubai (city code: DXB)
 - Country: UAE (country code: AE)
 - Check-in: 2025-12-01
@@ -420,6 +421,7 @@ grep -n "normalizeRooms" api/services/adapters/tboAdapter.js
 ```
 
 Should return something like:
+
 ```
 155:  normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
 ```
@@ -438,11 +440,13 @@ Should return something like:
 ### Issue: TBO returns 0 hotels
 
 **Possible causes**:
+
 - CityId not found (check getCityId logs)
 - Date range has no availability
 - Nationality restriction (some cities restrict certain nationalities)
 
 **Debug**:
+
 ```bash
 grep "CityId Retrieved\|CityId not found" logs/*.log
 ```
@@ -463,6 +467,7 @@ grep "CityId Retrieved\|CityId not found" logs/*.log
 Once all tests pass:
 
 1. **Commit changes**:
+
 ```bash
 git add api/services/adapters/tboAdapter.js
 git commit -m "feat: normalize rooms parameter to TBO array format with full logging"
@@ -475,6 +480,7 @@ git push origin main
    - Monitor logs for any errors
 
 3. **Run smoke test**:
+
 ```bash
 curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
   -H "Content-Type: application/json" \
