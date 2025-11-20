@@ -415,8 +415,12 @@ class DatabaseConnection {
 
         if (checkColumn.rows.length === 0) {
           // Old schema exists, drop and recreate
-          console.log("🏨 Dropping old hotel_supplier_api_logs table due to schema mismatch...");
-          await this.query(`DROP TABLE IF EXISTS public.hotel_supplier_api_logs CASCADE`);
+          console.log(
+            "🏨 Dropping old hotel_supplier_api_logs table due to schema mismatch...",
+          );
+          await this.query(
+            `DROP TABLE IF EXISTS public.hotel_supplier_api_logs CASCADE`,
+          );
         }
       } catch (err) {
         // Table doesn't exist, that's fine
@@ -458,7 +462,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_supplier_timestamp ON public.hotel_supplier_api_logs(supplier_code, request_timestamp DESC)`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_supplier_timestamp:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_supplier_timestamp:",
+          err.message,
+        );
       }
 
       try {
@@ -466,7 +473,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_trace_id ON public.hotel_supplier_api_logs(trace_id)`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_trace_id:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_trace_id:",
+          err.message,
+        );
       }
 
       try {
@@ -474,7 +484,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_search_hash ON public.hotel_supplier_api_logs(search_hash)`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_search_hash:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_search_hash:",
+          err.message,
+        );
       }
 
       try {
@@ -482,7 +495,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_city_id ON public.hotel_supplier_api_logs(city_id)`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_city_id:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_city_id:",
+          err.message,
+        );
       }
 
       try {
@@ -490,7 +506,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_error ON public.hotel_supplier_api_logs(error_code, request_timestamp DESC) WHERE error_message IS NOT NULL`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_error:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_error:",
+          err.message,
+        );
       }
 
       try {
@@ -498,7 +517,10 @@ class DatabaseConnection {
           `CREATE INDEX IF NOT EXISTS idx_hotel_logs_cache_hit ON public.hotel_supplier_api_logs(cache_hit, request_timestamp DESC)`,
         );
       } catch (err) {
-        this.logger.warn("⚠️  Could not create idx_hotel_logs_cache_hit:", err.message);
+        this.logger.warn(
+          "⚠️  Could not create idx_hotel_logs_cache_hit:",
+          err.message,
+        );
       }
 
       // Create hotels_master_inventory table
