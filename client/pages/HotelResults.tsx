@@ -651,6 +651,8 @@ function HotelResultsContent() {
       const apiUrl = `${apiBaseUrl}/hotels/search`;
       const searchPayload = {
         cityId: destCode,
+        destination: destinationName || destCode || "Dubai",
+        cityName: destinationName || destCode || "Dubai",
         countryCode: countryCode,
         checkIn: checkInStr,
         checkOut: checkOutStr,
