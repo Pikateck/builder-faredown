@@ -149,7 +149,7 @@ router.post("/", async (req, res) => {
     }
 
     if (!Array.isArray(tboHotels)) {
-      console.warn(`⚠️ TBO returned non-array result [${traceId}]:`, typeof tboHotels);
+      console.warn(`���️ TBO returned non-array result [${traceId}]:`, typeof tboHotels);
       tboHotels = [];
     }
 
@@ -286,7 +286,7 @@ router.post("/", async (req, res) => {
  * Fetch room details + live prices for a hotel
  * (Called when user expands a hotel or goes to details)
  */
-router.post("/rooms/:hotelId", async (req, res) => {
+router.post("rooms/:hotelId", async (req, res) => {
   const traceId = require("uuid").v4();
 
   try {
