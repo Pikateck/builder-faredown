@@ -234,7 +234,15 @@ router.post("/", async (req, res) => {
     const sessionMetadata = tboResponse.sessionMetadata || {};
 
     if (tboHotels.length === 0) {
-      console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`);
+      console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`, {
+        searchParams: {
+          destination: tboSearchParams.destination,
+          countryCode: tboSearchParams.countryCode,
+          checkIn: tboSearchParams.checkIn,
+          checkOut: tboSearchParams.checkOut,
+        },
+        sessionMetadata,
+      });
       return res.json({
         success: true,
         source: "tbo_empty",
@@ -243,6 +251,15 @@ router.post("/", async (req, res) => {
         cacheHit: false,
         duration: `${Date.now() - requestStart}ms`,
         traceId,
+        debug: {
+          destination: tboSearchParams.destination,
+          countryCode: tboSearchParams.countryCode,
+          destinationId: sessionMetadata.destinationId,
+          traceIdFromTBO: sessionMetadata.traceId,
+          message: sessionMetadata.destinationId
+            ? "TBO search completed but returned 0 hotels"
+            : "City lookup failed - destinationId not found",
+        },
       });
     }
 
