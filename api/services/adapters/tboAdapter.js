@@ -302,72 +302,15 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    */
   async getCityId(destination, countryCode) {
-    // ✅ Hardcoded fallback for known cities (while debugging)
-    // PRIMARY TEST CITIES: Delhi (domestic), Dubai (international)
-    const KNOWN_CITIES = {
-      // Domestic India
-      "DELHI-IN": 130443, // ✅ PRIMARY DOMESTIC TEST CITY
-      "NEW DELHI-IN": 130443, // Same as Delhi
-      "MUMBAI-IN": 10449,
-      "BANGALORE-IN": 127394,
-      "KOLKATA-IN": 129880,
-
-      // International - Middle East
-      "DUBAI-AE": 115936, // ✅ PRIMARY INTERNATIONAL TEST CITY
-      "ABU DHABI-AE": 110394,
-
-      // International - Europe
-      "LONDON-GB": 100264,
-      "PARIS-FR": 121909,
-
-      // International - Americas
-      "NEW YORK-US": 113646,
-    };
-
-    // ✅ DETAILED DEBUGGING
-    this.logger.info("🔍 getCityId called with:", {
+    console.info("[TBO] getCityId called", {
       destination,
-      destinationType: typeof destination,
-      destinationLength: destination?.length,
       countryCode,
-      countryCodeType: typeof countryCode,
-      countryCodeLength: countryCode?.length,
     });
 
     const normalizedDestination = destination.replace(/,.*$/, "").trim();
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
-    const lookupKey = `${normalizedDestination.toUpperCase()}-${normalizedCountryCode}`;
 
-    this.logger.info("🔍 Lookup key generation:", {
-      normalizedDestination,
-      normalizedCountryCode,
-      lookupKey,
-      lookupKeyLength: lookupKey.length,
-      lookupKeyCharCodes: Array.from(lookupKey).map((c) => c.charCodeAt(0)),
-      hasKeyInMap: lookupKey in KNOWN_CITIES,
-      mapKeys: Object.keys(KNOWN_CITIES),
-      foundValue: KNOWN_CITIES[lookupKey],
-    });
-
-    if (KNOWN_CITIES[lookupKey]) {
-      this.logger.info("✅ Using hardcoded DestinationId for known city", {
-        destination: normalizedDestination,
-        countryCode: normalizedCountryCode,
-        lookupKey,
-        destinationId: KNOWN_CITIES[lookupKey],
-      });
-      return KNOWN_CITIES[lookupKey];
-    }
-
-    this.logger.warn(
-      "⚠️ Lookup key not found in KNOWN_CITIES, will try TBO API",
-      {
-        lookupKey,
-        availableKeys: Object.keys(KNOWN_CITIES),
-      },
-    );
-
-    // Otherwise, call TBO static data API
+    // Call TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
 
     // Ensure we have a valid token before calling static data
