@@ -271,10 +271,13 @@ class TBOAdapter extends BaseSupplierAdapter {
     // Normalize and validate countryCode
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
     if (!normalizedCountryCode) {
-      this.logger.error("❌ CountryCode is required for GetDestinationSearchStaticData", {
-        destination,
-        countryCode,
-      });
+      this.logger.error(
+        "❌ CountryCode is required for GetDestinationSearchStaticData",
+        {
+          destination,
+          countryCode,
+        },
+      );
       return null;
     }
 
@@ -350,7 +353,9 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // ✅ Client-side filtering: Find matching city
       // TBO returns countries array - find the target country
-      const targetCountry = Country.find((c) => c.CountryCode === normalizedCountryCode);
+      const targetCountry = Country.find(
+        (c) => c.CountryCode === normalizedCountryCode,
+      );
 
       if (!targetCountry || !targetCountry.City) {
         this.logger.warn("⚠️  Country not found in static data", {
@@ -391,13 +396,16 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return cityId;
     } catch (error) {
-      this.logger.error("❌ Failed to get CityId - returning null to avoid crash", {
-        destination,
-        countryCode,
-        error: error.message,
-        stack: error.stack,
-        note: "Returning null instead of throwing to prevent Node process restart",
-      });
+      this.logger.error(
+        "❌ Failed to get CityId - returning null to avoid crash",
+        {
+          destination,
+          countryCode,
+          error: error.message,
+          stack: error.stack,
+          note: "Returning null instead of throwing to prevent Node process restart",
+        },
+      );
 
       // ✅ Return null instead of throwing to prevent Node crash
       // The caller (searchHotels) will handle null cityId gracefully
@@ -458,14 +466,17 @@ class TBOAdapter extends BaseSupplierAdapter {
         return [];
       }
     } catch (err) {
-      this.logger.error("❌ Failed to get CityId - returning empty array to prevent crash", {
-        destination,
-        countryCode,
-        error: err.message,
-        stack: err.stack,
-        returning: "empty array instead of crashing",
-        note: "Node process will continue running",
-      });
+      this.logger.error(
+        "❌ Failed to get CityId - returning empty array to prevent crash",
+        {
+          destination,
+          countryCode,
+          error: err.message,
+          stack: err.stack,
+          returning: "empty array instead of crashing",
+          note: "Node process will continue running",
+        },
+      );
       // ✅ Return empty array instead of throwing to prevent Node crash
       return [];
     }

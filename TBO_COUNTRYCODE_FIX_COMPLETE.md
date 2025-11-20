@@ -3,6 +3,7 @@
 ## Problem Identified
 
 From Render logs, when calling `POST /api/hotels/search` with:
+
 ```json
 {
   "destination": "Dubai, United Arab Emirates",
@@ -17,6 +18,7 @@ From Render logs, when calling `POST /api/hotels/search` with:
 ```
 
 TBO rejected the request with:
+
 ```
 [TBO] 📥 TBO Static Data Response {"Status":2,"Error":{"ErrorMessage":"CountryCode can not be null"}}
 Error: Static data failed: CountryCode can not be null
@@ -29,6 +31,7 @@ Error: Static data failed: CountryCode can not be null
 ### 1. Added CountryCode to TBO Static Data Request (Lines 262-294)
 
 **Before:**
+
 ```javascript
 const staticRequest = {
   TokenId: this.tokenId,
@@ -38,11 +41,14 @@ const staticRequest = {
 ```
 
 **After:**
+
 ```javascript
 // Normalize and validate countryCode
 const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
 if (!normalizedCountryCode) {
-  this.logger.error("❌ CountryCode is required for GetDestinationSearchStaticData");
+  this.logger.error(
+    "❌ CountryCode is required for GetDestinationSearchStaticData",
+  );
   return null;
 }
 
@@ -56,6 +62,7 @@ const staticRequest = {
 ### 2. Improved Error Handling to Prevent Node Crashes (Lines 382-404, 443-469)
 
 **Changed `getCityId` catch block:**
+
 ```javascript
 // Before: throw error (crashes Node)
 throw error;
@@ -65,6 +72,7 @@ return null;
 ```
 
 **Changed `searchHotels` catch block:**
+
 ```javascript
 // Before: throw err (crashes Node)
 throw err;
@@ -82,6 +90,7 @@ return [];
 ## Expected Results
 
 ### Before Fix:
+
 ```
 POST /api/hotels/search
 → 500 Internal Server Error
@@ -90,6 +99,7 @@ POST /api/hotels/search
 ```
 
 ### After Fix:
+
 ```
 POST /api/hotels/search
 → 200 OK
@@ -100,6 +110,7 @@ POST /api/hotels/search
 ## Testing Instructions
 
 ### PowerShell Test:
+
 ```powershell
 $body = @{
     destination = "Dubai"
@@ -117,6 +128,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Expected Response:
+
 ```json
 {
   "success": true,
