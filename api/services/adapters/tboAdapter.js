@@ -271,12 +271,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       EndUserIp: this.config.endUserIp,
     };
 
-    this.logger.debug("🏙️  TBO Static Data Request", {
+    this.logger.info("🏙️  TBO Static Data Request", {
       destination,
       countryCode,
       endpoint: staticUrl,
-      tokenId: this.tokenId ? "present" : "missing",
+      tokenId: this.tokenId ? this.tokenId.substring(0, 8) + "..." : "missing",
       endUserIp: this.config.endUserIp,
+      fullPayload: staticRequest,
     });
 
     try {
@@ -300,14 +301,32 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 
+      this.logger.info("📥 TBO Static Data Response", {
+        statusOk,
+        ResponseStatus,
+        Status,
+        dataCount: Data?.length || 0,
+        hasError: !!ApiError,
+        errorMessage: ApiError?.ErrorMessage,
+        firstCity: Data?.[0]?.CityName,
+      });
+
       if (!statusOk) {
+        this.logger.error("❌ TBO Static Data Error Response", {
+          fullResponse: response.data,
+          ApiError,
+        });
         throw new Error(
           `Static data failed: ${ApiError?.ErrorMessage || "Unknown error"}`,
         );
       }
 
       if (!Data || Data.length === 0) {
-        this.logger.warn("⚠️  No cities found", { destination, countryCode });
+        this.logger.warn("⚠️  No cities found - TBO returned empty Data array", {
+          destination,
+          countryCode,
+          fullResponse: response.data,
+        });
         return null;
       }
 
@@ -504,7 +523,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         return [];
       }
 
-      this.logger.info(`✅ TBO Search SUCCESS - ${hotels.length} hotels found`);
+      this.logger.info(`�� TBO Search SUCCESS - ${hotels.length} hotels found`);
 
       // Transform to our format
       return this.transformHotelResults(hotels, searchParams);
