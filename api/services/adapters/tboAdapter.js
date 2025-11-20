@@ -254,6 +254,10 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    * 2. STATIC DATA - GET CITY ID
    * ========================================
+   * Per API_SPECIFICATION.md:
+   * - GetDestinationSearchStaticData returns ALL countries/cities
+   * - Request only needs TokenId + EndUserIp (no search parameters)
+   * - Client-side filtering required to find CityId
    */
   async getCityId(destination, countryCode) {
     const staticUrl = this.config.hotelStaticDataUrl;
@@ -264,20 +268,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       await this.getHotelToken();
     }
 
+    // ✅ CORRECT request format per API_SPECIFICATION.md
     const staticRequest = {
       TokenId: this.tokenId,
-      CountryCode: countryCode,
-      SearchQuery: destination,
       EndUserIp: this.config.endUserIp,
+      // NO CountryCode or SearchQuery - returns all countries/cities
     };
 
-    this.logger.info("🏙️  TBO Static Data Request", {
-      destination,
-      countryCode,
+    this.logger.info("🏙️  TBO Static Data Request (Per API_SPECIFICATION.md)", {
       endpoint: staticUrl,
       tokenId: this.tokenId ? this.tokenId.substring(0, 8) + "..." : "missing",
       endUserIp: this.config.endUserIp,
-      fullPayload: staticRequest,
+      note: "Fetching ALL countries/cities, will filter for: " + destination,
     });
 
     try {
