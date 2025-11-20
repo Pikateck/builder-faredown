@@ -387,6 +387,34 @@ class HotelApiCachingService {
     });
 
     try {
+      // Normalize rooms for logging purposes
+      let normalizedRooms = [];
+      const rooms = searchParams.rooms;
+      if (typeof rooms === "string") {
+        const numRooms = parseInt(rooms) || 1;
+        for (let i = 0; i < numRooms; i++) {
+          normalizedRooms.push({
+            adults: parseInt(searchParams.adults) || 2,
+            children: parseInt(searchParams.children) || 0,
+            childAges: Array.isArray(searchParams.childAges) ? searchParams.childAges : [],
+          });
+        }
+      } else if (Array.isArray(rooms)) {
+        normalizedRooms = rooms;
+      } else {
+        normalizedRooms = [{
+          adults: parseInt(searchParams.adults) || 2,
+          children: parseInt(searchParams.children) || 0,
+          childAges: Array.isArray(searchParams.childAges) ? searchParams.childAges : [],
+        }];
+      }
+
+      const numRooms = normalizedRooms.length;
+      const totalGuests = normalizedRooms.reduce(
+        (sum, r) => sum + (r.adults || 0) + (r.children || 0),
+        0,
+      );
+
       // Step 1: Try to get from cache
       const cached = await this.getCachedSearchResults(searchHash);
       if (cached) {
@@ -400,16 +428,13 @@ class HotelApiCachingService {
           cacheHit: true,
           traceId,
           searchHash,
-          checkInDate: searchParams.checkInDate,
-          checkOutDate: searchParams.checkOutDate,
+          checkInDate: searchParams.checkInDate || searchParams.checkIn,
+          checkOutDate: searchParams.checkOutDate || searchParams.checkOut,
           cityId: searchParams.cityId,
           countryCode: searchParams.countryCode,
           nationality: searchParams.nationality,
-          numRooms: searchParams.rooms?.length || 0,
-          totalGuests: searchParams.rooms?.reduce(
-            (sum, r) => sum + (r.adults || 0) + (r.children || 0),
-            0,
-          ),
+          numRooms,
+          totalGuests,
           success: true,
           httpStatusCode: 200,
         });
