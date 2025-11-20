@@ -245,9 +245,171 @@ class DatabaseConnection {
       await this.ensureSystemMonitorTable();
       await this.ensureRecentSearchesTable();
       await this.ensureThirdPartyApiLogsTable();
+      await this.ensureHotelCacheTables();
     } catch (error) {
       console.error("❌ Failed to initialize schema:", error);
       throw error;
+    }
+  }
+
+  async ensureHotelCacheTables() {
+    try {
+      console.log("🏨 Ensuring hotel cache tables...");
+
+      // Create hotel_search_cache table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.hotel_search_cache (
+          id BIGSERIAL PRIMARY KEY,
+          search_hash VARCHAR(64) NOT NULL UNIQUE,
+          city_id VARCHAR(50) NOT NULL,
+          country_code VARCHAR(10),
+          check_in_date DATE NOT NULL,
+          check_out_date DATE NOT NULL,
+          guest_nationality VARCHAR(10),
+          num_rooms INTEGER,
+          room_config JSONB,
+          hotel_count INTEGER,
+          cache_source VARCHAR(50),
+          is_fresh BOOLEAN DEFAULT true,
+          cached_at TIMESTAMPTZ DEFAULT NOW(),
+          ttl_expires_at TIMESTAMPTZ,
+          last_price_refresh_at TIMESTAMPTZ,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `);
+
+      // Create indexes for hotel_search_cache
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_hash ON public.hotel_search_cache(search_hash)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_city_date ON public.hotel_search_cache(city_id, check_in_date, check_out_date)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_freshness ON public.hotel_search_cache(is_fresh, cached_at DESC)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_nationality ON public.hotel_search_cache(guest_nationality)`
+      );
+
+      // Create tbo_hotels_normalized table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.tbo_hotels_normalized (
+          id BIGSERIAL PRIMARY KEY,
+          tbo_hotel_code VARCHAR(100) NOT NULL UNIQUE,
+          city_id VARCHAR(50) NOT NULL,
+          city_name VARCHAR(255),
+          country_code VARCHAR(10),
+          name VARCHAR(500) NOT NULL,
+          description TEXT,
+          address TEXT,
+          latitude NUMERIC(10, 8),
+          longitude NUMERIC(11, 8),
+          star_rating NUMERIC(3, 1),
+          check_in_time TIME,
+          check_out_time TIME,
+          amenities JSONB,
+          facilities JSONB,
+          images JSONB,
+          main_image_url TEXT,
+          phone VARCHAR(50),
+          email VARCHAR(100),
+          website VARCHAR(500),
+          total_rooms INTEGER,
+          popularity INTEGER DEFAULT 0,
+          last_synced_at TIMESTAMPTZ,
+          tbo_response_blob JSONB,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `);
+
+      // Create indexes for tbo_hotels_normalized
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_city ON public.tbo_hotels_normalized(city_id)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_code ON public.tbo_hotels_normalized(tbo_hotel_code)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_name ON public.tbo_hotels_normalized(name)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_rating ON public.tbo_hotels_normalized(star_rating DESC)`
+      );
+
+      // Create tbo_rooms_normalized table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.tbo_rooms_normalized (
+          id BIGSERIAL PRIMARY KEY,
+          tbo_hotel_code VARCHAR(100) NOT NULL,
+          room_type_id VARCHAR(100),
+          room_type_name VARCHAR(255),
+          room_description TEXT,
+          max_occupancy INTEGER,
+          adults_max INTEGER,
+          children_max INTEGER,
+          room_size_sqm NUMERIC(6, 2),
+          bed_types JSONB,
+          room_features JSONB,
+          amenities JSONB,
+          images JSONB,
+          base_price_per_night NUMERIC(12, 2),
+          currency VARCHAR(3),
+          cancellation_policy JSONB,
+          meal_plan TEXT,
+          breakfast_included BOOLEAN DEFAULT false,
+          tbo_response_blob JSONB,
+          last_synced_at TIMESTAMPTZ,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW(),
+          FOREIGN KEY (tbo_hotel_code) REFERENCES public.tbo_hotels_normalized(tbo_hotel_code) ON DELETE CASCADE
+        )
+      `);
+
+      // Create indexes for tbo_rooms_normalized
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_hotel ON public.tbo_rooms_normalized(tbo_hotel_code)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_room_type ON public.tbo_rooms_normalized(room_type_name)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_occupancy ON public.tbo_rooms_normalized(max_occupancy)`
+      );
+
+      // Create hotel_search_cache_results table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.hotel_search_cache_results (
+          id BIGSERIAL PRIMARY KEY,
+          search_hash VARCHAR(64) NOT NULL,
+          tbo_hotel_code VARCHAR(100) NOT NULL,
+          result_rank INTEGER,
+          price_offered_per_night NUMERIC(12, 2),
+          price_published_per_night NUMERIC(12, 2),
+          available_rooms INTEGER,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          FOREIGN KEY (search_hash) REFERENCES public.hotel_search_cache(search_hash) ON DELETE CASCADE,
+          FOREIGN KEY (tbo_hotel_code) REFERENCES public.tbo_hotels_normalized(tbo_hotel_code) ON DELETE CASCADE
+        )
+      `);
+
+      // Create indexes for hotel_search_cache_results
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_hash ON public.hotel_search_cache_results(search_hash)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_hotel ON public.hotel_search_cache_results(tbo_hotel_code)`
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_rank ON public.hotel_search_cache_results(search_hash, result_rank)`
+      );
+
+      console.log("✅ Hotel cache tables ensured successfully");
+    } catch (error) {
+      console.warn("⚠️  Failed to ensure hotel cache tables:", error.message);
+      // Don't throw - hotel cache tables are optional for some deployments
     }
   }
 
