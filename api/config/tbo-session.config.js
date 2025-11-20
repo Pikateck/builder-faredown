@@ -8,25 +8,34 @@
 module.exports = {
   /**
    * TBO Session Settings
-   * 
+   *
    * TraceId validity window - exact duration not documented in TBO specs
-   * Based on industry standards for hotel search sessions (~10-15 minutes)
-   * 
-   * Configurable via environment variable TBO_SESSION_TTL_MINUTES
+   * Based on industry standards for hotel search sessions (~10 minutes)
+   *
+   * Configurable via environment variable TBO_SESSION_TTL_SECONDS
    */
-  SESSION_TTL_MINUTES: parseInt(process.env.TBO_SESSION_TTL_MINUTES || "10", 10),
+  SESSION_TTL_SECONDS: parseInt(process.env.TBO_SESSION_TTL_SECONDS || "600", 10), // 10 minutes
 
   /**
    * Safety buffer before session expiry
    * Prevents booking attempts too close to expiry
-   * 
+   *
    * Example: If session expires at 12:10:00
-   * We stop accepting booking requests at 12:09:00 (1 min safety buffer)
+   * We stop accepting booking requests at 12:08:00 (2 min safety buffer)
    */
   SESSION_SAFETY_BUFFER_SECONDS: parseInt(
-    process.env.SESSION_SAFETY_BUFFER_SECONDS || "60",
+    process.env.TBO_SESSION_SAFETY_BUFFER_SECONDS || "120",
     10,
-  ),
+  ), // 2 minutes
+
+  /**
+   * Estimated checkout flow duration
+   * Used to prevent starting checkout too close to session expiry
+   */
+  ESTIMATED_CHECKOUT_FLOW_SECONDS: parseInt(
+    process.env.ESTIMATED_CHECKOUT_FLOW_SECONDS || "90",
+    10,
+  ), // 90 seconds
 
   /**
    * Token validity
@@ -93,8 +102,8 @@ module.exports = {
    */
   calculateSessionExpiry(startTime = new Date()) {
     const expiryTime = new Date(startTime);
-    expiryTime.setMinutes(
-      expiryTime.getMinutes() + this.SESSION_TTL_MINUTES,
+    expiryTime.setSeconds(
+      expiryTime.getSeconds() + this.SESSION_TTL_SECONDS,
     );
     return expiryTime;
   },
@@ -133,5 +142,41 @@ module.exports = {
     const deadline = this.calculateBookingDeadline(sessionExpiry);
     const remainingMs = deadline.getTime() - now.getTime();
     return Math.max(0, Math.floor(remainingMs / 1000));
+  },
+
+  /**
+   * Get session status based on expiry time
+   * @param {Date} sessionExpiry - When the session expires
+   * @returns {string} - 'active' | 'expiring_soon' | 'expired'
+   */
+  getSessionStatus(sessionExpiry) {
+    const now = new Date();
+    const expiryDate = new Date(sessionExpiry);
+
+    if (now >= expiryDate) {
+      return 'expired';
+    }
+
+    const remainingSeconds = Math.floor((expiryDate.getTime() - now.getTime()) / 1000);
+    const expiringThreshold = 180; // 3 minutes
+
+    if (remainingSeconds < expiringThreshold) {
+      return 'expiring_soon';
+    }
+
+    return 'active';
+  },
+
+  /**
+   * Check if safe to start checkout flow
+   * @param {Date} sessionExpiry - When the session expires
+   * @returns {boolean} - True if safe to proceed
+   */
+  isSafeToCheckout(sessionExpiry) {
+    const now = new Date();
+    const expiryDate = new Date(sessionExpiry);
+    const remainingSeconds = Math.floor((expiryDate.getTime() - now.getTime()) / 1000);
+
+    return remainingSeconds >= this.ESTIMATED_CHECKOUT_FLOW_SECONDS;
   },
 };
