@@ -182,7 +182,7 @@ router.post("/", async (req, res) => {
       rooms: tboSearchParams.rooms,
     });
 
-    let tboHotels = [];
+    let tboResponse = { hotels: [], sessionMetadata: {} };
     try {
       const searchPromise = adapter.searchHotels(tboSearchParams);
 
@@ -193,7 +193,7 @@ router.post("/", async (req, res) => {
         );
       });
 
-      tboHotels = await Promise.race([searchPromise, timeoutPromise]);
+      tboResponse = await Promise.race([searchPromise, timeoutPromise]);
     } catch (adapterError) {
       console.error(`❌ TBO adapter error [${traceId}]:`, {
         message: adapterError.message,
@@ -202,13 +202,11 @@ router.post("/", async (req, res) => {
       throw adapterError;
     }
 
-    if (!Array.isArray(tboHotels)) {
-      console.warn(
-        `⚠️ TBO returned non-array result [${traceId}]:`,
-        typeof tboHotels,
-      );
-      tboHotels = [];
-    }
+    // Extract hotels and session metadata from response
+    const tboHotels = Array.isArray(tboResponse)
+      ? tboResponse  // Backwards compatibility
+      : (tboResponse.hotels || []);
+    const sessionMetadata = tboResponse.sessionMetadata || {};
 
     if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`);
@@ -266,13 +264,14 @@ router.post("/", async (req, res) => {
     }
 
     // ============================================================
-    // Step 6: Cache the search
+    // Step 6: Cache the search with session metadata
     // ============================================================
     await hotelCacheService.cacheSearchResults(
       searchHash,
       searchParams,
       hotelIds,
       "tbo",
+      sessionMetadata,
     );
 
     // ============================================================
