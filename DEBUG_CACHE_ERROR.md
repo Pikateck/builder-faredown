@@ -1,6 +1,7 @@
 # Debugging Cache-Backed Search Error
 
 ## Error Summary
+
 ```
 ❌ TBO API returned error: [object Object]
 ⚠️ PRICE DISCREPANCY WARNING: Falling back to mock data with different prices!
@@ -18,6 +19,7 @@ node api/scripts/diagnose-cache-error.js
 ```
 
 This will check:
+
 - ✅ Environment variables (TBO credentials, database)
 - ✅ Database connection and cache tables
 - ✅ TBO adapter initialization
@@ -50,6 +52,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 ```
 
 **Expected Response**:
+
 ```json
 {
   "success": true,
@@ -88,6 +91,7 @@ render logs --name=api --tail=100
 **Symptom**: "Database error" in diagnostics
 
 **Fix**:
+
 ```bash
 # Verify DATABASE_URL is set
 echo $DATABASE_URL
@@ -108,6 +112,7 @@ psql $DATABASE_URL -c "SELECT 1"
 **Probable Cause**: TBO credentials are incorrect or TBO API is down
 
 **Fix**:
+
 ```bash
 # Verify TBO credentials are set
 echo "Client ID: $TBO_HOTEL_CLIENT_ID"
@@ -131,6 +136,7 @@ echo "URL: $TBO_HOTEL_SEARCH_URL"
 **Symptom**: Tables not found in diagnostics
 
 **Fix**:
+
 ```bash
 # Re-apply migration
 psql $DATABASE_URL < api/database/migrations/20250205_hotel_cache_layer.sql
@@ -146,6 +152,7 @@ psql $DATABASE_URL -c "\dt public.hotel_search_cache"
 **Symptom**: "TBO adapter not initialized" in logs
 
 **Fix**:
+
 ```bash
 # Check that TBO_HOTEL_USER_ID is set
 echo $TBO_HOTEL_USER_ID
@@ -162,9 +169,9 @@ If diagnostics pass but error still occurs, add more logging:
 Edit `api/routes/hotels-search.js` around line 110 and add:
 
 ```javascript
-console.log('🔍 DEBUG: About to call TBO adapter', {
+console.log("🔍 DEBUG: About to call TBO adapter", {
   hasAdapter: !!adapter,
-  params: tboSearchParams
+  params: tboSearchParams,
 });
 ```
 
@@ -194,13 +201,13 @@ In `api/routes/hotels-search.js`, replace the TBO call with:
 ```javascript
 const tboHotels = [
   {
-    hotelId: 'mock_1',
-    name: 'Test Hotel',
+    hotelId: "mock_1",
+    name: "Test Hotel",
     starRating: 5,
     price: 5000,
-    location: 'Dubai',
-    images: []
-  }
+    location: "Dubai",
+    images: [],
+  },
 ];
 ```
 
@@ -224,6 +231,7 @@ If this works, the issue is definitely with TBO, not the cache system.
 ## If Still Stuck
 
 Please provide:
+
 1. **Output of diagnostic script** (full output)
 2. **curl response** from the endpoint test
 3. **Last 50 lines from Render logs**
@@ -245,6 +253,7 @@ node api/scripts/diagnose-cache-error.js 2>&1 | grep -E "✅|❌"
 ## Next Steps
 
 Once diagnostic passes:
+
 1. Make a test search on the UI
 2. Check browser console for error details
 3. Check Render API logs for matching trace ID

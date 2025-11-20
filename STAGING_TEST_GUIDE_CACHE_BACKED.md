@@ -3,6 +3,7 @@
 ## ✅ Status: READY FOR TESTING
 
 All code changes deployed to staging:
+
 - ✅ Migration: `20250205_hotel_cache_layer.sql` (tables created)
 - ✅ Backend: `api/services/hotelCacheService.js` (cache service)
 - ✅ API Endpoint: `api/routes/hotels-search.js` (POST /api/hotels/search)
@@ -14,10 +15,12 @@ All code changes deployed to staging:
 ## 🧪 Test Plan
 
 ### Test 1: First Search (Cache Miss)
+
 **Scenario**: User searches for hotels first time
 **Expected**: TBO API called, results stored in cache, `source="tbo"`, `cacheHit=false`
 
 **Steps**:
+
 1. Go to: `https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/hotels`
 2. Search: Dubai, Nov 30 - Dec 3, 2 adults, 1 room
 3. Check browser console:
@@ -32,11 +35,12 @@ All code changes deployed to staging:
    - Prices
 
 **Backend Check**:
+
 ```bash
 # SSH into Render and check DB
 psql $DATABASE_URL << 'EOF'
-SELECT search_hash, is_fresh, hotel_count, cached_at, cache_source 
-FROM hotel_search_cache 
+SELECT search_hash, is_fresh, hotel_count, cached_at, cache_source
+FROM hotel_search_cache
 WHERE cached_at > NOW() - INTERVAL '5 minutes'
 ORDER BY cached_at DESC
 LIMIT 5;
@@ -48,10 +52,12 @@ Expected: One row with `is_fresh=true`, `cache_source='tbo'`, `hotel_count > 0`
 ---
 
 ### Test 2: Repeat Search (Cache Hit)
+
 **Scenario**: User makes identical search immediately after
 **Expected**: Results from cache, `source="cache"`, `cacheHit=true`, <200ms response
 
 **Steps**:
+
 1. Without clearing filters, click "Search" again (or refresh page)
 2. Check console:
    ```
@@ -64,15 +70,16 @@ Expected: One row with `is_fresh=true`, `cache_source='tbo'`, `hotel_count > 0`
    - Second search: ~100-200ms ✅
 
 **Backend Check**:
+
 ```bash
 psql $DATABASE_URL << 'EOF'
-SELECT 
+SELECT
   search_hash,
   COUNT(*) as attempts,
   SUM(CASE WHEN is_fresh THEN 1 ELSE 0 END) as cache_hits,
   hotel_count,
   ttl_expires_at
-FROM hotel_search_cache 
+FROM hotel_search_cache
 WHERE cached_at > NOW() - INTERVAL '5 minutes'
 GROUP BY search_hash, hotel_count, ttl_expires_at
 LIMIT 5;
@@ -84,20 +91,23 @@ Expected: Same search_hash appears, cache_hits=1
 ---
 
 ### Test 3: Different Search (Cache Miss)
+
 **Scenario**: User searches different city
 **Expected**: New TBO call, new cache entry created
 
 **Steps**:
+
 1. Change destination to Paris or London
 2. Search
 3. Console should show: `⚠️ CACHE MISS`
 4. New hotels should load (different from Dubai)
 
 **Backend Check**:
+
 ```bash
 psql $DATABASE_URL << 'EOF'
 SELECT COUNT(DISTINCT search_hash) as unique_searches
-FROM hotel_search_cache 
+FROM hotel_search_cache
 WHERE cached_at > NOW() - INTERVAL '5 minutes';
 EOF
 ```
@@ -107,10 +117,12 @@ Expected: 2+ unique search hashes
 ---
 
 ### Test 4: Hotel Details Page
+
 **Scenario**: User clicks "View Details" on a hotel
 **Expected**: Room details load from cache with pricing
 
 **Steps**:
+
 1. From search results, click "View Details" on any hotel
 2. Check console: Should see room details with:
    - Room type
@@ -120,9 +132,10 @@ Expected: 2+ unique search hashes
    - Price
 
 **Backend Check**:
+
 ```bash
 psql $DATABASE_URL << 'EOF'
-SELECT 
+SELECT
   h.name,
   COUNT(r.id) as room_types,
   h.last_synced_at
@@ -139,10 +152,12 @@ Expected: Hotels with room_types > 0
 ---
 
 ### Test 5: Cache Statistics
+
 **Scenario**: Monitor cache performance metrics
 **Expected**: Hit rate, hotel count, search patterns
 
 **Manual Test**:
+
 ```bash
 # Make multiple searches
 curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/cache/stats \
@@ -150,6 +165,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/cache/stat
 ```
 
 **Expected Response**:
+
 ```json
 {
   "success": true,
@@ -166,20 +182,21 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/cache/stat
 
 ## 📊 Performance Benchmarks
 
-| Metric | Expected | Actual | Status |
-|--------|----------|--------|--------|
-| **First search** | 2-5s | _____ | 🔄 |
-| **Repeat search** | <200ms | _____ | 🔄 |
-| **Speed improvement** | 25-30x | _____ | 🔄 |
-| **Cache hit rate** | >80% | _____ | 🔄 |
-| **Hotels per search** | 20-50 | _____ | 🔄 |
-| **Room details load** | <300ms | _____ | 🔄 |
+| Metric                | Expected | Actual | Status |
+| --------------------- | -------- | ------ | ------ |
+| **First search**      | 2-5s     | **\_** | 🔄     |
+| **Repeat search**     | <200ms   | **\_** | 🔄     |
+| **Speed improvement** | 25-30x   | **\_** | 🔄     |
+| **Cache hit rate**    | >80%     | **\_** | 🔄     |
+| **Hotels per search** | 20-50    | **\_** | 🔄     |
+| **Room details load** | <300ms   | **\_** | 🔄     |
 
 ---
 
 ## 🔍 Debugging Checks
 
 ### Issue: Hotels not loading
+
 ```bash
 # Check if endpoint is working
 curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
@@ -200,21 +217,24 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels/search \
 Expected: `"success": true`, `"hotels": [...]`
 
 ### Issue: Cache not hit after first search
+
 ```bash
 # Check cache table
 psql $DATABASE_URL << 'EOF'
-SELECT * FROM hotel_search_cache 
+SELECT * FROM hotel_search_cache
 WHERE cached_at > NOW() - INTERVAL '10 minutes'
 LIMIT 10;
 EOF
 ```
 
 Verify:
+
 - `is_fresh = true`
 - `ttl_expires_at > NOW()`
 - `hotel_count > 0`
 
 ### Issue: Slow responses even on cache hit
+
 ```bash
 # Check if indexes are being used
 psql $DATABASE_URL << 'EOF'
@@ -233,11 +253,13 @@ Look for "Index Scan" (good) not "Seq Scan" (bad)
 ## 🧮 Test Data Requirements
 
 To properly test the cache, we need:
+
 1. **Consistent search parameters** (to test cache hits)
 2. **Different destinations** (to test different cache entries)
 3. **Multiple searches** (to build hit rate statistics)
 
 ### Suggested Test Searches:
+
 ```
 1. Dubai, Nov 30 - Dec 3, 2 adults, 1 room
 2. Dubai, Nov 30 - Dec 3, 2 adults, 1 room (REPEAT - should hit cache)
@@ -338,15 +360,17 @@ ___________
 If tests fail or issues arise:
 
 1. **Check logs**:
+
    ```bash
    # Render logs
    render logs --name=api --tail=100
-   
+
    # Database logs
    psql $DATABASE_URL -c "SELECT * FROM public.hotel_supplier_api_logs WHERE request_timestamp > NOW() - INTERVAL '1 hour' ORDER BY request_timestamp DESC LIMIT 10;"
    ```
 
 2. **Verify migration applied**:
+
    ```bash
    psql $DATABASE_URL -c "\dt public.hotel_search_cache"
    ```

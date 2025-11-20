@@ -118,7 +118,7 @@ router.post("/", async (req, res) => {
       adults: searchParams.adults || "2",
       children: searchParams.children || "0",
       currency: searchParams.currency || "INR",
-      childAges: searchParams.childAges || []
+      childAges: searchParams.childAges || [],
     };
 
     console.log(`📤 Calling TBO search with params [${traceId}]:`, {
@@ -149,7 +149,10 @@ router.post("/", async (req, res) => {
     }
 
     if (!Array.isArray(tboHotels)) {
-      console.warn(`⚠️ TBO returned non-array result [${traceId}]:`, typeof tboHotels);
+      console.warn(
+        `⚠️ TBO returned non-array result [${traceId}]:`,
+        typeof tboHotels,
+      );
       tboHotels = [];
     }
 

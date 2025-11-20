@@ -52,11 +52,13 @@ All code for the TBO cache-backed hotel search architecture has been successfull
 ## 🔧 Key Fixes Applied
 
 ### Parameter Mapping Issue ✅
+
 - **Problem**: Frontend sending `cityId`, backend TBO adapter expecting `destination`
 - **Solution**: Map parameters in endpoint: `destination = searchParams.destination || searchParams.cityName`
 - **Status**: FIXED in both backend and frontend
 
 ### Frontend Integration ✅
+
 - **Added fields to search payload**:
   - `cityId` (for caching key)
   - `destination` (for TBO API)
@@ -114,6 +116,7 @@ Frontend renders hotels (same UI components)
 ## 🚀 Next Steps: Staging Tests
 
 ### Option 1: Quick Manual Test (5 minutes)
+
 1. Go to: https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/hotels
 2. Search: Dubai, Nov 30 - Dec 3, 2 adults
 3. Check browser console for: `✅ Results from TBO API (fresh)` or `✅ Results from CACHE (fast)`
@@ -121,6 +124,7 @@ Frontend renders hotels (same UI components)
 5. Expect console: `✅ Results from CACHE (fast)` with <200ms duration
 
 ### Option 2: Automated Test Script (10 minutes)
+
 ```bash
 # Run the test suite
 node api/scripts/test-cache-backed-search.js
@@ -129,6 +133,7 @@ node api/scripts/test-cache-backed-search.js
 ```
 
 ### Option 3: Full Verification (15 minutes)
+
 ```bash
 # Verify setup
 bash api/scripts/verify-staging-setup.sh
@@ -158,13 +163,13 @@ Cache implementation is **READY** when:
 
 ## 📊 Expected Performance
 
-| Scenario | Expected Time | Target |
-|----------|---------------|--------|
-| First search (TBO) | 2-5 seconds | ✅ |
-| Repeat search (Cache) | <200ms | ✅ |
-| Speed improvement | 25-30x | ✅ |
-| Cache hit rate (24h) | >80% | ✅ |
-| Room details load | <300ms | ✅ |
+| Scenario              | Expected Time | Target |
+| --------------------- | ------------- | ------ |
+| First search (TBO)    | 2-5 seconds   | ✅     |
+| Repeat search (Cache) | <200ms        | ✅     |
+| Speed improvement     | 25-30x        | ✅     |
+| Cache hit rate (24h)  | >80%          | ✅     |
+| Room details load     | <300ms        | ✅     |
 
 ---
 
@@ -196,14 +201,17 @@ Cache implementation is **READY** when:
 ## 🔍 Key Files to Monitor
 
 ### Backend
+
 - `api/services/hotelCacheService.js` - Cache logic
 - `api/routes/hotels-search.js` - API endpoint
 - `api/database/migrations/20250205_hotel_cache_layer.sql` - Schema
 
 ### Frontend
+
 - `client/pages/HotelResults.tsx` - Hotel search page
 
 ### Database (Staging)
+
 ```sql
 -- Check cache tables
 SELECT COUNT(*) FROM hotel_search_cache;
@@ -211,7 +219,7 @@ SELECT COUNT(*) FROM tbo_hotels_normalized;
 SELECT COUNT(*) FROM tbo_rooms_normalized;
 
 -- Monitor performance
-SELECT 
+SELECT
   DATE(cached_at) as date,
   SUM(CASE WHEN is_fresh THEN 1 ELSE 0 END) as hits,
   COUNT(*) as total,
@@ -227,6 +235,7 @@ GROUP BY DATE(cached_at);
 **Zubin**: Run staging tests and report results
 
 **What to test**:
+
 1. First search (should show "Results from TBO API")
 2. Repeat search (should show "Results from CACHE")
 3. Different destination (new cache entry)
@@ -249,12 +258,14 @@ GROUP BY DATE(cached_at);
 ## 🚀 Post-Testing Actions
 
 ### If Tests PASS:
+
 1. ✅ Monitor cache for 24 hours
 2. ✅ Run certification tests (full booking flow)
 3. ✅ Prepare production deployment plan
 4. ✅ Schedule production rollout
 
 ### If Tests FAIL:
+
 1. 🔍 Check error logs
 2. 🔍 Verify database tables are populated
 3. 🔍 Confirm endpoint is accessible
@@ -267,12 +278,12 @@ GROUP BY DATE(cached_at);
 
 All documentation is self-contained in this repo:
 
-| Document | Purpose |
-|----------|---------|
-| `TBO_CACHE_ARCHITECTURE_PROPOSAL.md` | Full architecture design |
-| `TBO_CACHE_DEPLOYMENT_GUIDE.md` | Deployment & monitoring |
-| `STAGING_TEST_GUIDE_CACHE_BACKED.md` | Detailed test procedures |
-| `CACHE_IMPLEMENTATION_COMPLETE.md` | This file - status summary |
+| Document                             | Purpose                    |
+| ------------------------------------ | -------------------------- |
+| `TBO_CACHE_ARCHITECTURE_PROPOSAL.md` | Full architecture design   |
+| `TBO_CACHE_DEPLOYMENT_GUIDE.md`      | Deployment & monitoring    |
+| `STAGING_TEST_GUIDE_CACHE_BACKED.md` | Detailed test procedures   |
+| `CACHE_IMPLEMENTATION_COMPLETE.md`   | This file - status summary |
 
 ---
 
@@ -281,6 +292,7 @@ All documentation is self-contained in this repo:
 ✅ **Implementation Status**: COMPLETE
 
 All code has been:
+
 - Written
 - Reviewed
 - Tested locally
@@ -290,7 +302,8 @@ All code has been:
 
 ✅ **Ready for**: Staging tests to verify cache behavior and performance
 
-✅ **Timeline**: 
+✅ **Timeline**:
+
 - Testing: Today (15-30 minutes)
 - Certification: Tomorrow (2-3 hours)
 - Production: This week
@@ -300,6 +313,7 @@ All code has been:
 ## Questions or Issues?
 
 Refer to:
+
 1. **Setup issues**: STAGING_TEST_GUIDE_CACHE_BACKED.md → "Debugging Checks"
 2. **Test procedures**: STAGING_TEST_GUIDE_CACHE_BACKED.md → "Test Plan"
 3. **Architecture**: TBO_CACHE_ARCHITECTURE_PROPOSAL.md → All sections
