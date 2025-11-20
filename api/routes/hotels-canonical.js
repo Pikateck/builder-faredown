@@ -446,16 +446,22 @@ router.post("/search", async (req, res) => {
       console.error("⚠️ Failed to fetch hotel records:", error.message);
     }
 
-    // If no TBO results and no DB records, return empty
+    // If no TBO results and no DB records, return MOCK_HOTELS as fallback
     if (hotels.length === 0 && hotelRecords.length === 0) {
+      const mockHotelsForCity = MOCK_HOTELS[cityId] || MOCK_HOTELS["DXB"];
+
+      console.log(
+        `📦 Returning ${mockHotelsForCity.length} mock hotels for fallback`,
+      );
+
       return res.json({
         success: true,
-        hotels: [],
-        total: 0,
+        hotels: mockHotelsForCity,
+        total: mockHotelsForCity.length,
         pricing_available: false,
-        message: tboError
-          ? "Pricing temporarily unavailable from supplier"
-          : "No hotels found",
+        source: "mock",
+        message:
+          "Using fallback mock data (live API temporarily unavailable)",
       });
     }
 
@@ -842,7 +848,7 @@ router.post("/:propertyId/rates", async (req, res) => {
         }
       } catch (error) {
         tboError = error;
-        console.error("⚠️ TBO rate fetch failed:", error.message);
+        console.error("��️ TBO rate fetch failed:", error.message);
       }
     }
 
