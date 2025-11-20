@@ -3,9 +3,11 @@
 ## 🎯 What Was Fixed
 
 ### Root Cause
+
 The backend was crashing because `rooms` parameter was coming in as a **string** (`"1"`) instead of an **array**, causing `.reduce()` to fail in the caching layer.
 
 ### Files Modified
+
 1. **api/routes/hotels-search.js** - Route-level normalization
 2. **api/services/hotelApiCachingService.js** - Defensive guards
 3. **api/database/connection.js** - Schema migration fixes
@@ -29,28 +31,33 @@ git push origin main
 ### Step 2: Deploy to Render 🚀
 
 **Option A: Manual Deploy**
+
 1. Go to [Render Dashboard](https://dashboard.render.com)
 2. Select your `builder-faredown-pricing` service
 3. Click **"Manual Deploy"** → **"Deploy latest commit"**
 4. Wait for build to complete (~2-3 minutes)
 
 **Option B: Auto-Deploy** (if configured)
+
 - Push to `main` branch will trigger automatic deployment
 - Check Render dashboard for deployment status
 
 ### Step 3: Run Postman Tests 🧪
 
 Import the test collection:
+
 ```bash
 # Use the file: test-rooms-normalization.json
 ```
 
 Or run the automated test script:
+
 ```bash
 node test-rooms-fix.js
 ```
 
 **Expected Results:**
+
 - ✅ All tests return **200** status (not 500/502)
 - ✅ No `rooms?.reduce is not a function` errors in Render logs
 - ✅ Hotels array returned (may be empty if TBO has no results, but shouldn't crash)
@@ -68,6 +75,7 @@ node test-rooms-fix.js
 4. Click Search
 
 **Expected Results:**
+
 - ✅ `POST /api/hotels/search` shows **200** status
 - ✅ No "CORS blocked" errors in console
 - ✅ No "Network Error" messages
@@ -80,12 +88,14 @@ node test-rooms-fix.js
 3. Look for these log entries:
 
 **Good Signs:**
+
 ```
 ✅ 🏨 Normalized rooms [uuid]: { original: "1", normalized: [{adults: 1, children: 0, childAges: []}] }
 ✅ POST /api/hotels/search [uuid] 200
 ```
 
 **Bad Signs (should NOT appear):**
+
 ```
 ❌ TypeError: searchParams.rooms?.reduce is not a function
 ❌ [POST]500 /api/hotels/search
@@ -97,6 +107,7 @@ node test-rooms-fix.js
 ## 🔍 What to Look For
 
 ### Success Criteria
+
 - [ ] No backend crashes on hotel search
 - [ ] `POST /api/hotels/search` returns 200 (even with 0 results)
 - [ ] Render logs show "Normalized rooms" messages
@@ -104,6 +115,7 @@ node test-rooms-fix.js
 - [ ] Hotel results display (or clean error message)
 
 ### Known Secondary Issue
+
 **"No cities found for Dubai"** - This is a separate TBO city mapping issue that will be addressed next. The fix applied here ensures the backend doesn't crash, even if TBO returns no results.
 
 ---
@@ -123,6 +135,7 @@ If deployment causes issues:
 ## 📞 Support
 
 If tests fail after deployment:
+
 - Check Render logs for new error messages
 - Share the full error trace from Render logs
 - Provide the request payload from the failing test

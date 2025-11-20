@@ -485,13 +485,16 @@ class HotelApiCachingService {
             cityId: searchParams.cityId,
             countryCode: searchParams.countryCode,
             nationality: searchParams.nationality,
-            numRooms: Array.isArray(searchParams.rooms) ? searchParams.rooms.length : 0,
+            numRooms: Array.isArray(searchParams.rooms)
+              ? searchParams.rooms.length
+              : 0,
             totalGuests: Array.isArray(searchParams.rooms)
               ? searchParams.rooms.reduce(
                   (sum, r) => sum + (r.adults || 0) + (r.children || 0),
                   0,
                 )
-              : Number(searchParams.adults || 1) + Number(searchParams.children || 0),
+              : Number(searchParams.adults || 1) +
+                Number(searchParams.children || 0),
             success: true,
             httpStatusCode: 200,
           });
