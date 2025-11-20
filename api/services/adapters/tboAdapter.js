@@ -458,14 +458,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         return [];
       }
     } catch (err) {
-      this.logger.error("❌ Failed to get CityId - Exception thrown", {
+      this.logger.error("❌ Failed to get CityId - returning empty array to prevent crash", {
         destination,
         countryCode,
         error: err.message,
         stack: err.stack,
-        returning: "throwing error upstream",
+        returning: "empty array instead of crashing",
+        note: "Node process will continue running",
       });
-      throw err;
+      // ✅ Return empty array instead of throwing to prevent Node crash
+      return [];
     }
 
     // ✅ Calculate NoOfNights (TBO requires this, NOT CheckOutDate)
