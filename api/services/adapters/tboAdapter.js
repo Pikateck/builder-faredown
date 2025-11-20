@@ -41,16 +41,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_AUTH_URL ||
         "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
 
-      // Static Data - GetDestinationSearchStaticData (Uses TokenId) - VERIFIED WORKING
+      // Static Data - GetDestinationSearchStaticData (Uses TokenId) - PER API_SPECIFICATION.md
       hotelStaticDataUrl:
         "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
-      // Hotel Search, PreBook - OFFICIAL TBO AFFILIATE URL (Uses TokenId)
+      // Hotel Search - GetHotelResult (Uses TokenId) - PER API_SPECIFICATION.md
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
-        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
+        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
 
-      // Booking, Voucher, Booking Details - Uses TokenId
+      // Booking, Voucher, Booking Details - Uses TokenId - PER API_SPECIFICATION.md
       hotelBookingBase:
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
@@ -460,10 +460,8 @@ class TBOAdapter extends BaseSupplierAdapter {
       MinRating: 0,
     };
 
-    // ✅ CORRECTED: Use OFFICIAL TBO affiliate URL for hotel search
-    const searchUrl =
-      process.env.TBO_HOTEL_SEARCH_URL ||
-      this.config.hotelSearchUrl + "GetHotelResult";
+    // ✅ Use official GetHotelResult endpoint from API_SPECIFICATION.md
+    const searchUrl = this.config.hotelSearchUrl;
 
     this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: searchUrl,
