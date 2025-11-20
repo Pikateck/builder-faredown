@@ -305,15 +305,28 @@ router.post("/", async (req, res) => {
     const duration = Date.now() - requestStart;
     console.log(`✅ Search completed in ${duration}ms [${traceId}]`);
 
+    // Build session metadata for response
+    const tboSessionConfig = require("../config/tbo-session.config");
+    const sessionStartedAt = new Date();
+    const sessionExpiresAt = tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+    const sessionStatus = tboSessionConfig.getSessionStatus(sessionExpiresAt);
+
     res.json({
       success: true,
-      source: "tbo",
+      source: "tbo_live",
       hotels: responseHotels,
       totalResults: responseHotels.length,
       cacheHit: false,
       timestamp: new Date().toISOString(),
       duration: `${duration}ms`,
       traceId,
+      session: {
+        sessionStartedAt: sessionStartedAt.toISOString(),
+        sessionExpiresAt: sessionExpiresAt.toISOString(),
+        sessionTtlSeconds: tboSessionConfig.SESSION_TTL_SECONDS,
+        sessionStatus: sessionStatus,
+        supplier: "TBO",
+      },
     });
   } catch (error) {
     console.error(`❌ Hotel search error [${traceId}]:`, {
