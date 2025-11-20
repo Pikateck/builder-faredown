@@ -26,8 +26,8 @@ router.post("/", async (req, res) => {
     // Log incoming request for debugging
     console.log(`🔍 POST /api/hotels/search [${traceId}]`, {
       bodyKeys: Object.keys(req.body || {}),
-      contentType: req.headers['content-type'],
-      body: req.body
+      contentType: req.headers["content-type"],
+      body: req.body,
     });
 
     // Validate required fields

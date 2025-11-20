@@ -281,16 +281,16 @@ class DatabaseConnection {
 
       // Create indexes for hotel_search_cache
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_search_cache_hash ON public.hotel_search_cache(search_hash)`
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_hash ON public.hotel_search_cache(search_hash)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_search_cache_city_date ON public.hotel_search_cache(city_id, check_in_date, check_out_date)`
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_city_date ON public.hotel_search_cache(city_id, check_in_date, check_out_date)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_search_cache_freshness ON public.hotel_search_cache(is_fresh, cached_at DESC)`
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_freshness ON public.hotel_search_cache(is_fresh, cached_at DESC)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_search_cache_nationality ON public.hotel_search_cache(guest_nationality)`
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_nationality ON public.hotel_search_cache(guest_nationality)`,
       );
 
       // Create tbo_hotels_normalized table
@@ -327,16 +327,16 @@ class DatabaseConnection {
 
       // Create indexes for tbo_hotels_normalized
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_city ON public.tbo_hotels_normalized(city_id)`
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_city ON public.tbo_hotels_normalized(city_id)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_code ON public.tbo_hotels_normalized(tbo_hotel_code)`
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_code ON public.tbo_hotels_normalized(tbo_hotel_code)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_name ON public.tbo_hotels_normalized(name)`
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_name ON public.tbo_hotels_normalized(name)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_rating ON public.tbo_hotels_normalized(star_rating DESC)`
+        `CREATE INDEX IF NOT EXISTS idx_hotels_normalized_rating ON public.tbo_hotels_normalized(star_rating DESC)`,
       );
 
       // Create tbo_rooms_normalized table
@@ -370,13 +370,13 @@ class DatabaseConnection {
 
       // Create indexes for tbo_rooms_normalized
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_hotel ON public.tbo_rooms_normalized(tbo_hotel_code)`
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_hotel ON public.tbo_rooms_normalized(tbo_hotel_code)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_room_type ON public.tbo_rooms_normalized(room_type_name)`
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_room_type ON public.tbo_rooms_normalized(room_type_name)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_occupancy ON public.tbo_rooms_normalized(max_occupancy)`
+        `CREATE INDEX IF NOT EXISTS idx_rooms_normalized_occupancy ON public.tbo_rooms_normalized(max_occupancy)`,
       );
 
       // Create hotel_search_cache_results table
@@ -397,13 +397,13 @@ class DatabaseConnection {
 
       // Create indexes for hotel_search_cache_results
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_cache_results_hash ON public.hotel_search_cache_results(search_hash)`
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_hash ON public.hotel_search_cache_results(search_hash)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_cache_results_hotel ON public.hotel_search_cache_results(tbo_hotel_code)`
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_hotel ON public.hotel_search_cache_results(tbo_hotel_code)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_cache_results_rank ON public.hotel_search_cache_results(search_hash, result_rank)`
+        `CREATE INDEX IF NOT EXISTS idx_cache_results_rank ON public.hotel_search_cache_results(search_hash, result_rank)`,
       );
 
       console.log("✅ Hotel cache tables ensured successfully");
