@@ -136,16 +136,28 @@ router.post("/", async (req, res) => {
       }));
 
       const duration = Date.now() - requestStart;
+
+      // Build session metadata from cached search
+      const tboSessionConfig = require("../config/tbo-session.config");
+      const sessionData = {
+        sessionStartedAt: cachedSearch.session_started_at,
+        sessionExpiresAt: cachedSearch.session_expires_at,
+        sessionTtlSeconds: cachedSearch.session_ttl_seconds || tboSessionConfig.SESSION_TTL_SECONDS,
+        sessionStatus: cachedSearch.session_status || 'active',
+        supplier: cachedSearch.supplier || "TBO",
+      };
+
       return res.json({
         success: true,
-        source: "cache",
+        source: "cache_tbo",
         hotels,
         totalResults: hotels.length,
         cacheHit: true,
         cachedAt: cachedSearch.cached_at,
         ttlExpiresAt: cachedSearch.ttl_expires_at,
         duration: `${duration}ms`,
-        traceId,
+        traceId: cachedSearch.tbo_trace_id || traceId,
+        session: sessionData,
       });
     }
 
