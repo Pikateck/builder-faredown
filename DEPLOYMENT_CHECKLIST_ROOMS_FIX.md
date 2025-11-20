@@ -21,6 +21,7 @@ The backend was crashing because `rooms` parameter was coming in as a **string**
 
 The code changes have been saved in Builder.io. You need to:
 
+**Environment: Git Bash / PowerShell / CMD (Windows) or Terminal (Mac/Linux)**
 ```bash
 # The system will auto-commit, or you can manually commit:
 git add api/routes/hotels-search.js api/services/hotelApiCachingService.js api/database/connection.js api/services/adapters/tboAdapter.js
@@ -64,6 +65,8 @@ node test-rooms-fix.js
 
 ### Step 4: Test Live Site 🌐
 
+**Environment: Web Browser (Chrome/Firefox/Edge) with DevTools**
+
 1. Open: https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/
 2. Search for: **Dubai, United Arab Emirates**
    - Check-in: Any future date
@@ -71,8 +74,8 @@ node test-rooms-fix.js
    - Rooms: 1
    - Adults: 1
    - Children: 0
-3. Open browser DevTools → Network tab
-4. Click Search
+3. Press **F12** to open DevTools → Go to **Network** tab
+4. Click Search button
 
 **Expected Results:**
 
@@ -83,7 +86,9 @@ node test-rooms-fix.js
 
 ### Step 5: Verify Render Logs 📊
 
-1. Go to Render Dashboard → Your Service → Logs
+**Environment: Render Dashboard (Web Browser)**
+
+1. Go to Render Dashboard → Your Service → **Logs** tab
 2. Search for recent hotel search requests
 3. Look for these log entries:
 
