@@ -56,11 +56,18 @@ class HotelCacheService {
 
   /**
    * Check if search exists in cache and is fresh
+   * Returns search metadata including session tracking
    */
   async getCachedSearch(searchHash) {
     try {
       const result = await db.query(
-        `SELECT * FROM public.hotel_search_cache
+        `SELECT *,
+          CASE
+            WHEN session_expires_at IS NULL THEN true
+            WHEN session_expires_at > NOW() THEN true
+            ELSE false
+          END as session_valid
+         FROM public.hotel_search_cache
          WHERE search_hash = $1
          AND is_fresh = true
          AND ttl_expires_at > NOW()`,
