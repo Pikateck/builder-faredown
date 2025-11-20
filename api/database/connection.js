@@ -406,7 +406,23 @@ class DatabaseConnection {
         `CREATE INDEX IF NOT EXISTS idx_cache_results_rank ON public.hotel_search_cache_results(search_hash, result_rank)`,
       );
 
-      // Create hotel_supplier_api_logs table
+      // Drop old hotel_supplier_api_logs if it exists with wrong schema
+      try {
+        const checkColumn = await this.query(`
+          SELECT column_name FROM information_schema.columns
+          WHERE table_name = 'hotel_supplier_api_logs' AND column_name = 'request_timestamp'
+        `);
+
+        if (checkColumn.rows.length === 0) {
+          // Old schema exists, drop and recreate
+          console.log("🏨 Dropping old hotel_supplier_api_logs table due to schema mismatch...");
+          await this.query(`DROP TABLE IF EXISTS public.hotel_supplier_api_logs CASCADE`);
+        }
+      } catch (err) {
+        // Table doesn't exist, that's fine
+      }
+
+      // Create hotel_supplier_api_logs table with complete schema
       await this.query(`
         CREATE TABLE IF NOT EXISTS public.hotel_supplier_api_logs (
           id BIGSERIAL PRIMARY KEY,
@@ -437,24 +453,53 @@ class DatabaseConnection {
       `);
 
       // Create indexes for hotel_supplier_api_logs
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_supplier_timestamp ON public.hotel_supplier_api_logs(supplier_code, request_timestamp DESC)`,
-      );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_trace_id ON public.hotel_supplier_api_logs(trace_id)`,
-      );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_search_hash ON public.hotel_supplier_api_logs(search_hash)`,
-      );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_city_id ON public.hotel_supplier_api_logs(city_id)`,
-      );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_error ON public.hotel_supplier_api_logs(error_code, request_timestamp DESC) WHERE error_message IS NOT NULL`,
-      );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_cache_hit ON public.hotel_supplier_api_logs(cache_hit, request_timestamp DESC)`,
-      );
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_supplier_timestamp ON public.hotel_supplier_api_logs(supplier_code, request_timestamp DESC)`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_supplier_timestamp:", err.message);
+      }
+
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_trace_id ON public.hotel_supplier_api_logs(trace_id)`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_trace_id:", err.message);
+      }
+
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_search_hash ON public.hotel_supplier_api_logs(search_hash)`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_search_hash:", err.message);
+      }
+
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_city_id ON public.hotel_supplier_api_logs(city_id)`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_city_id:", err.message);
+      }
+
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_error ON public.hotel_supplier_api_logs(error_code, request_timestamp DESC) WHERE error_message IS NOT NULL`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_error:", err.message);
+      }
+
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotel_logs_cache_hit ON public.hotel_supplier_api_logs(cache_hit, request_timestamp DESC)`,
+        );
+      } catch (err) {
+        this.logger.warn("⚠️  Could not create idx_hotel_logs_cache_hit:", err.message);
+      }
 
       // Create hotels_master_inventory table
       await this.query(`
