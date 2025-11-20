@@ -106,12 +106,21 @@ router.post("/search", async (req, res) => {
     }
 
     // Call TBO search with timeout
-    const searchPromise = adapter.searchHotels({
-      ...searchParams,
+    // Map parameters to TBO adapter format
+    const tboSearchParams = {
+      destination: searchParams.destination || searchParams.cityName || "Dubai",
+      checkIn: searchParams.checkIn,
+      checkOut: searchParams.checkOut,
+      countryCode: searchParams.countryCode || "AE",
+      guestNationality: searchParams.guestNationality || "IN",
       rooms: searchParams.rooms || "1",
       adults: searchParams.adults || "2",
       children: searchParams.children || "0",
-    });
+      currency: searchParams.currency || "INR",
+      childAges: searchParams.childAges || []
+    };
+
+    const searchPromise = adapter.searchHotels(tboSearchParams);
 
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(
