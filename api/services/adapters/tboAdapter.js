@@ -258,7 +258,14 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getCityId(destination, countryCode) {
     const staticUrl = this.config.hotelStaticDataUrl;
 
+    // Ensure we have a valid token before calling static data
+    if (!this.tokenId || (this.tokenExpiry && new Date() > this.tokenExpiry)) {
+      this.logger.info("🔑 Token expired or missing, obtaining new token...");
+      await this.getHotelToken();
+    }
+
     const staticRequest = {
+      TokenId: this.tokenId,
       CountryCode: countryCode,
       SearchQuery: destination,
     };
@@ -267,6 +274,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       destination,
       countryCode,
       endpoint: staticUrl,
+      tokenId: this.tokenId ? "present" : "missing",
     });
 
     try {
@@ -400,7 +408,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       ChildAge: Array.isArray(r.childAges) ? r.childAges : [],
     }));
 
-    this.logger.info("🎫 Built RoomGuests Array", {
+    this.logger.info("���� Built RoomGuests Array", {
       roomGuests,
       count: roomGuests.length,
     });
