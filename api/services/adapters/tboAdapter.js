@@ -289,10 +289,13 @@ class TBOAdapter extends BaseSupplierAdapter {
     }
 
     // Absolute last resort (should rarely hit)
-    console.error("[TBO] City lookup failed - no DestinationId match and no fallback", {
-      destination,
-      countryCode: requestedCountry,
-    });
+    console.error(
+      "[TBO] City lookup failed - no DestinationId match and no fallback",
+      {
+        destination,
+        countryCode: requestedCountry,
+      },
+    );
     return null;
   }
 
@@ -385,13 +388,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         });
       }
       // Format 2: Flat Destinations array (alternate response format)
-      else if (responseData.Destinations && Array.isArray(responseData.Destinations)) {
+      else if (
+        responseData.Destinations &&
+        Array.isArray(responseData.Destinations)
+      ) {
         console.info("[TBO] Response format: Flat Destinations array");
         allCities = responseData.Destinations;
       }
       // Format 3: Wrapped in GetDestinationSearchStaticDataResult
       else if (responseData.GetDestinationSearchStaticDataResult) {
-        console.info("[TBO] Response format: GetDestinationSearchStaticDataResult wrapper");
+        console.info(
+          "[TBO] Response format: GetDestinationSearchStaticDataResult wrapper",
+        );
         const wrapped = responseData.GetDestinationSearchStaticDataResult;
         if (Array.isArray(wrapped)) {
           allCities = wrapped;
@@ -424,7 +432,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       // ✅ NORMALIZE CITY DATA - Handle both CityId and DestinationId field names
-      const cities = allCities.map(city => ({
+      const cities = allCities.map((city) => ({
         CityName: city.CityName,
         CityId: city.CityId || city.DestinationId,
         DestinationId: city.DestinationId || city.CityId,
@@ -461,12 +469,18 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // ✅ HARD-CODED FALLBACK FOR DELHI & DUBAI
       if (!match) {
-        console.warn("[TBO] ⚠️  No destination match found in TBO response, applying fallback", {
-          requestedCity: requestedCityRaw,
+        console.warn(
+          "[TBO] ⚠️  No destination match found in TBO response, applying fallback",
+          {
+            requestedCity: requestedCityRaw,
+            requestedCountry,
+            totalCities: cities.length,
+          },
+        );
+        return this.applyDestinationFallback(
+          requestedCityRaw,
           requestedCountry,
-          totalCities: cities.length,
-        });
-        return this.applyDestinationFallback(requestedCityRaw, requestedCountry);
+        );
       }
 
       // ✅ SUCCESS - LOG RESOLVED CITY
