@@ -268,18 +268,32 @@ class TBOAdapter extends BaseSupplierAdapter {
       await this.getHotelToken();
     }
 
-    // ✅ CORRECT request format per API_SPECIFICATION.md
+    // Normalize and validate countryCode
+    const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
+    if (!normalizedCountryCode) {
+      this.logger.error("❌ CountryCode is required for GetDestinationSearchStaticData", {
+        destination,
+        countryCode,
+      });
+      return null;
+    }
+
+    // Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
+    const normalizedDestination = destination.replace(/,.*$/, "").trim();
+
+    // ✅ Request format - TBO requires CountryCode despite API_SPECIFICATION.md
     const staticRequest = {
       TokenId: this.tokenId,
       EndUserIp: this.config.endUserIp,
-      // NO CountryCode or SearchQuery - returns all countries/cities
+      CountryCode: normalizedCountryCode, // ✅ Required by TBO (returns cities for this country)
     };
 
-    this.logger.info("🏙️  TBO Static Data Request (Per API_SPECIFICATION.md)", {
+    this.logger.info("🏙️  TBO Static Data Request", {
       endpoint: staticUrl,
       tokenId: this.tokenId ? this.tokenId.substring(0, 8) + "..." : "missing",
       endUserIp: this.config.endUserIp,
-      note: "Fetching ALL countries/cities, will filter for: " + destination,
+      countryCode: normalizedCountryCode,
+      destination: normalizedDestination,
     });
 
     try {
