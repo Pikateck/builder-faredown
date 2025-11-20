@@ -3,18 +3,23 @@
 ## What Was Wrong
 
 ### 1. Wrong Search URL
+
 **Before:**
+
 ```javascript
-hotelSearchUrl: "https://affiliate.travelboutiqueonline.com/HotelAPI/"
+hotelSearchUrl: "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 ```
 
 **After (Per API_SPECIFICATION.md):**
+
 ```javascript
-hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult"
+hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 ```
 
 ### 2. Wrong Static Data Request Format
+
 **Before:**
+
 ```javascript
 {
   TokenId: "xxx",
@@ -25,6 +30,7 @@ hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/Hote
 ```
 
 **After (Per API_SPECIFICATION.md):**
+
 ```javascript
 {
   TokenId: "xxx",
@@ -34,6 +40,7 @@ hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/Hote
 ```
 
 ### 3. Wrong Response Parsing
+
 **Before:** Expected `Data` array directly
 **After:** Response has `Country` array, each with `City` array inside
 
@@ -53,12 +60,14 @@ hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/Hote
 ## How City Matching Works Now
 
 ### Input
+
 ```
 destination: "Dubai, United Arab Emirates"
 countryCode: "AE"
 ```
 
 ### Process
+
 1. Call GetDestinationSearchStaticData (returns ALL countries/cities)
 2. Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
 3. Find country: `Country.find(c => c.CountryCode === "AE")`
@@ -66,6 +75,7 @@ countryCode: "AE"
 5. Return `CityId: 130443`
 
 ### Logs Will Show
+
 ```
 🏙️ TBO Static Data Request (Per API_SPECIFICATION.md) {
   endpoint: "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
@@ -92,14 +102,17 @@ countryCode: "AE"
 ## Next Steps
 
 ### 1. Deploy to Render
+
 **Environment: Render Dashboard (Web Browser)**
 
 Go to https://dashboard.render.com
+
 - Select `builder-faredown-pricing`
 - Click **Manual Deploy** → **Deploy latest commit**
 - Wait for build (~2-3 minutes)
 
 ### 2. Test Dubai Search
+
 **Environment: PowerShell**
 
 ```powershell
@@ -120,6 +133,7 @@ $response | ConvertTo-Json -Depth 5
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -138,9 +152,11 @@ $response | ConvertTo-Json -Depth 5
 ```
 
 ### 3. Check Render Logs
+
 **Environment: Render Dashboard Logs (Web Browser)**
 
 Look for this sequence:
+
 1. ✅ `🏙️ TBO Static Data Request` - Shows it's calling GetDestinationSearchStaticData
 2. ✅ `📥 TBO Static Data Response` - Shows countryCount > 0
 3. ✅ `✅ CityId Retrieved` - Shows cityId found for Dubai
@@ -148,7 +164,8 @@ Look for this sequence:
 5. ✅ `✅ TBO Hotel Search Success` - Shows hotels returned
 
 If any step fails, the logs will show:
-- ⚠️  Warning messages with available options
+
+- ⚠️ Warning messages with available options
 - ❌ Error messages with detailed context
 
 ---
@@ -156,6 +173,7 @@ If any step fails, the logs will show:
 ## What Should Happen Now
 
 ### Before (Issue)
+
 ```
 POST /api/hotels/search
 → Call GetDestinationSearchStaticData with CountryCode/SearchQuery
@@ -165,6 +183,7 @@ POST /api/hotels/search
 ```
 
 ### After (Fixed)
+
 ```
 POST /api/hotels/search
 → Call GetDestinationSearchStaticData (get all cities)
@@ -179,6 +198,7 @@ POST /api/hotels/search
 ## Reference
 
 All fixes based on:
+
 - **File:** `api/tbo/API_SPECIFICATION.md`
 - **Section:** "Authentication & Static Data" → "Get Destination Search Static Data"
 - **TBO Official Documentation:** https://www.tboholidays.com/developer-api
@@ -192,6 +212,7 @@ All fixes based on:
 Check Render logs for:
 
 **Issue 1: City name mismatch**
+
 ```
 ⚠️ City not found in static data {
   destination: "Dubai, United Arab Emirates",
@@ -199,23 +220,28 @@ Check Render logs for:
   availableCities: ["Abu Dhabi", "Sharjah", ...]
 }
 ```
+
 → TBO uses different city name, try variations
 
 **Issue 2: Country not found**
+
 ```
 ⚠️ Country not found in static data {
   countryCode: "AE",
   availableCountries: ["IN", "US", "GB", ...]
 }
 ```
+
 → Check if TBO supports AE in static data
 
 **Issue 3: Token issue**
+
 ```
 ❌ TBO Static Data Error Response {
   ErrorMessage: "Invalid TokenId"
 }
 ```
+
 → Token expired, will auto-refresh on next request
 
 ---
@@ -226,6 +252,6 @@ Check Render logs for:
 ✅ **Fixed:** Static Data request format matches official spec  
 ✅ **Fixed:** Response parsing handles Country → City structure  
 ✅ **Fixed:** Client-side city filtering with normalization  
-✅ **Added:** Comprehensive logging for debugging  
+✅ **Added:** Comprehensive logging for debugging
 
 **Result:** Dubai hotel search should now return real TBO hotels instead of empty array.

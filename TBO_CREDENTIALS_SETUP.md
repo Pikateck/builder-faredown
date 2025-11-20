@@ -10,7 +10,9 @@ TBO_STATIC_PASSWORD=Tra@59334536
 ```
 
 ### Current Render Environment
+
 You currently have (different names):
+
 - ❌ `TBO_STATIC_DATA_CREDENTIALS_USERNAME` (not recognized)
 - ❌ `TBO_STATIC_DATA_CREDENTIALS_PASSWORD` (not recognized)
 
@@ -34,6 +36,7 @@ Value: Tra@59334536
 ```
 
 5. **Optional - Set explicit URL:**
+
 ```
 Variable Name: TBO_HOTEL_STATIC_DATA
 Value: https://apiwr.tboholidays.com/HotelAPI/
@@ -47,11 +50,13 @@ Value: https://apiwr.tboholidays.com/HotelAPI/
 ## Testing After Deploy
 
 ### Test 1: Check Logs for Static Data Call
+
 **Environment: Render Dashboard Logs (Web Browser)**
 
 After deploy, run the Dubai search again and look for these log entries:
 
 **Good Signs:**
+
 ```
 🏙️ TBO Static Data Request {
   destination: "Dubai, United Arab Emirates",
@@ -75,6 +80,7 @@ After deploy, run the Dubai search again and look for these log entries:
 ```
 
 **Bad Signs (Current Issue):**
+
 ```
 ⚠️ No cities found - TBO returned empty Data array {
   destination: "Dubai, United Arab Emirates",
@@ -159,6 +165,7 @@ Once credentials are set and city name is matched:
    - Returns HotelResults array with 100+ Dubai hotels
 
 3. **API Response:**
+
    ```json
    {
      "success": true,
@@ -193,6 +200,7 @@ Check Render logs for the **fullResponse** logged when no cities found:
 ```
 
 **Common Issues:**
+
 - `ErrorMessage: "Invalid credentials"` → Wrong username/password
 - `ErrorMessage: "Invalid TokenId"` → Token expired, need fresh auth
 - `ErrorMessage: "No destinations found"` → City name mismatch
@@ -201,12 +209,13 @@ Check Render logs for the **fullResponse** logged when no cities found:
 ### Dubai City Mapping Reference
 
 TBO may use different city identifiers:
+
 - Common CityId for Dubai: `130443` or `130442`
 - City Name variations: "Dubai", "DUBAI", "Dubai City"
 - If GetDestinationSearchStaticData fails, we need to add a hardcoded mapping:
   ```javascript
   const CITY_MAPPINGS = {
-    'DXB': { cityId: '130443', cityName: 'Dubai', countryCode: 'AE' },
+    DXB: { cityId: "130443", cityName: "Dubai", countryCode: "AE" },
     // ... other common cities
   };
   ```

@@ -22,6 +22,7 @@ The backend was crashing because `rooms` parameter was coming in as a **string**
 The code changes have been saved in Builder.io. You need to:
 
 **Environment: Git Bash / PowerShell / CMD (Windows) or Terminal (Mac/Linux)**
+
 ```bash
 # The system will auto-commit, or you can manually commit:
 git add api/routes/hotels-search.js api/services/hotelApiCachingService.js api/database/connection.js api/services/adapters/tboAdapter.js
@@ -49,6 +50,7 @@ git push origin main
 
 **Environment: Postman App (Desktop or Web)**
 Import the test collection:
+
 - File: `test-rooms-normalization.json`
 - Import into Postman and run all 3 tests
 

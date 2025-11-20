@@ -323,32 +323,36 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       if (!Country || Country.length === 0) {
-        this.logger.warn("⚠️  No countries found - TBO returned empty Country array", {
-          destination,
-          countryCode,
-          fullResponse: response.data,
-        });
+        this.logger.warn(
+          "⚠️  No countries found - TBO returned empty Country array",
+          {
+            destination,
+            countryCode,
+            fullResponse: response.data,
+          },
+        );
         return null;
       }
 
       // ✅ Client-side filtering: Find matching city
       // Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
-      const normalizedDestination = destination.replace(/,.*$/, '').trim();
+      const normalizedDestination = destination.replace(/,.*$/, "").trim();
 
       // Find target country
-      const targetCountry = Country.find(c => c.CountryCode === countryCode);
+      const targetCountry = Country.find((c) => c.CountryCode === countryCode);
 
       if (!targetCountry || !targetCountry.City) {
         this.logger.warn("⚠️  Country not found in static data", {
           countryCode,
-          availableCountries: Country.map(c => c.CountryCode),
+          availableCountries: Country.map((c) => c.CountryCode),
         });
         return null;
       }
 
       // Find matching city (case-insensitive)
-      const matchingCity = targetCountry.City.find(city =>
-        city.CityName.toLowerCase() === normalizedDestination.toLowerCase()
+      const matchingCity = targetCountry.City.find(
+        (city) =>
+          city.CityName.toLowerCase() === normalizedDestination.toLowerCase(),
       );
 
       if (!matchingCity) {
@@ -356,7 +360,9 @@ class TBOAdapter extends BaseSupplierAdapter {
           destination,
           normalizedDestination,
           countryCode,
-          availableCities: targetCountry.City.slice(0, 10).map(c => c.CityName),
+          availableCities: targetCountry.City.slice(0, 10).map(
+            (c) => c.CityName,
+          ),
           hint: "Try exact city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
         });
         return null;
@@ -424,12 +430,16 @@ class TBOAdapter extends BaseSupplierAdapter {
     try {
       cityId = await this.getCityId(destination, countryCode);
       if (!cityId) {
-        this.logger.error("❌ CityId not found - TBO Static Data returned no matches", {
-          destination,
-          countryCode,
-          suggestion: "Try exact TBO city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
-          returning: "empty array (tbo_empty)",
-        });
+        this.logger.error(
+          "❌ CityId not found - TBO Static Data returned no matches",
+          {
+            destination,
+            countryCode,
+            suggestion:
+              "Try exact TBO city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
+            returning: "empty array (tbo_empty)",
+          },
+        );
         return [];
       }
     } catch (err) {
