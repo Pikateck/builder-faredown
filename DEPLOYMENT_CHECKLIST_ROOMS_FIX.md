@@ -31,6 +31,8 @@ git push origin main
 
 ### Step 2: Deploy to Render 🚀
 
+**Environment: Render Dashboard (Web Browser)**
+
 **Option A: Manual Deploy**
 
 1. Go to [Render Dashboard](https://dashboard.render.com)
@@ -45,13 +47,15 @@ git push origin main
 
 ### Step 3: Run Postman Tests 🧪
 
+**Environment: Postman App (Desktop or Web)**
 Import the test collection:
+- File: `test-rooms-normalization.json`
+- Import into Postman and run all 3 tests
 
-```bash
-# Use the file: test-rooms-normalization.json
-```
+**OR**
 
-Or run the automated test script:
+**Environment: Node.js (Command Line - PowerShell/Bash/CMD)**
+Run the automated test script:
 
 ```bash
 node test-rooms-fix.js
