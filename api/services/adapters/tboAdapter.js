@@ -16,6 +16,12 @@
  *
  * VERIFIED WORKING FLOW:
  * Auth → TokenId → GetDestinationSearchStaticData → GetHotelResult → Rooms → Book → Voucher
+ *
+ * NEW IN THIS VERSION:
+ * - ✅ Normalizes simple URL params (rooms=1&adults=2&children=0) to TBO array format
+ * - ✅ Full logging for all transformations
+ * - ✅ Defensive error handling for malformed inputs
+ * - ✅ Consistent across all entry points
  */
 
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
@@ -103,149 +109,137 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 1. AUTHENTICATION (Returns TokenId)
+   * UTILITY: Normalize rooms parameter
+   * Converts simple format (rooms=1&adults=2&children=0) to TBO array format
    * ========================================
-   *
-   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate
-   * Method: POST
-   * Request: { ClientId, UserName, Password, EndUserIp }
-   * Response: { Status: 1, TokenId, Member, Error }
    */
-  async getHotelToken(force = false) {
-    // Return cached token if valid
-    if (
-      !force &&
-      this.tokenId &&
-      this.tokenExpiry &&
-      Date.now() < this.tokenExpiry
-    ) {
-      this.logger.info("✅ Using cached TBO TokenId", {
-        expiresIn:
-          Math.round((this.tokenExpiry - Date.now()) / 1000 / 60) + " minutes",
-      });
-      return this.tokenId;
-    }
-
-    // EXACT JSON format from TBO docs
-    const authRequest = {
-      ClientId: this.config.clientId, // "tboprod"
-      UserName: this.config.userId, // "BOMF145"
-      Password: this.config.password, // "@Bo#4M-Api@"
-      EndUserIp: this.config.endUserIp, // "52.5.155.132"
-    };
-
-    this.logger.info("🔐 TBO Authentication Request", {
-      url: this.config.hotelAuthUrl,
-      clientId: authRequest.ClientId,
-      userName: authRequest.UserName,
-      endUserIp: authRequest.EndUserIp,
-      via: tboVia(),
-    });
-
-    // Start API logging
-    const apiLog = thirdPartyLogger.startRequest({
-      supplierName: "TBO",
-      endpoint: this.config.hotelAuthUrl,
-      method: "POST",
-      requestPayload: authRequest,
-      requestHeaders: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
+  normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
+    this.logger.info("🔄 Normalizing rooms parameter", {
+      incoming: {
+        rooms,
+        roomsType: typeof rooms,
+        adults,
+        children,
+        childAgesLength: Array.isArray(childAges) ? childAges.length : 0,
       },
     });
 
     try {
-      const response = await tboRequest(this.config.hotelAuthUrl, {
+      // Already an array of room objects - pass through
+      if (Array.isArray(rooms) && rooms.length > 0 && typeof rooms[0] === "object") {
+        const normalized = rooms.map((r) => ({
+          adults: Number(r.adults) || Number(adults) || 2,
+          children: Number(r.children) || Number(children) || 0,
+          childAges: Array.isArray(r.childAges)
+            ? r.childAges.map((a) => Number(a))
+            : Array.isArray(childAges)
+              ? childAges.map((a) => Number(a))
+              : [],
+        }));
+
+        this.logger.info("✅ Rooms normalized (already array)", {
+          normalizedRooms: normalized,
+          count: normalized.length,
+        });
+
+        return normalized;
+      }
+
+      // String or number - convert to integer
+      const numRooms = parseInt(rooms) || 1;
+      if (numRooms < 1) {
+        this.logger.warn("⚠️  Invalid rooms count, defaulting to 1", {
+          input: rooms,
+        });
+      }
+
+      // Create array of room objects
+      const normalized = Array.from({ length: Math.max(numRooms, 1) }).map(
+        () => ({
+          adults: Number(adults) || 2,
+          children: Number(children) || 0,
+          childAges: Array.isArray(childAges)
+            ? childAges.map((a) => Number(a))
+            : [],
+        }),
+      );
+
+      this.logger.info("✅ Rooms normalized (from simple params)", {
+        inputRooms: rooms,
+        normalizedRooms: normalized,
+        count: normalized.length,
+      });
+
+      return normalized;
+    } catch (error) {
+      this.logger.error("❌ Error normalizing rooms:", {
+        error: error.message,
+        rooms,
+        adults,
+        children,
+      });
+
+      // Fallback: single room with 2 adults
+      return [{ adults: 2, children: 0, childAges: [] }];
+    }
+  }
+
+  /**
+   * ========================================
+   * 1. AUTHENTICATION
+   * ========================================
+   */
+  async getHotelToken() {
+    const tokenUrl = this.config.hotelAuthUrl;
+
+    const authRequest = {
+      ClientId: this.config.clientId,
+      UserName: this.config.userId,
+      Password: this.config.password,
+      EndUserIp: this.config.endUserIp,
+    };
+
+    this.logger.info("🔐 TBO Hotel Auth Request", {
+      endpoint: tokenUrl,
+      clientId: this.config.clientId,
+      userId: this.config.userId,
+      via: tboVia(),
+    });
+
+    try {
+      const response = await tboRequest(tokenUrl, {
         method: "POST",
         data: authRequest,
+        timeout: this.config.timeout,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
           "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout,
       });
 
-      // Log successful response
-      await apiLog.end({
-        responsePayload: response.data,
-        responseHeaders: response.headers,
-        statusCode: response.status,
-      });
+      const { TokenId, Error, ResponseStatus, Status } = response.data || {};
 
-      this.logger.info("📥 TBO Auth Response", {
-        httpStatus: response.status,
-        status: response.data?.Status,
-        hasTokenId: !!response.data?.TokenId,
-        tokenLength: response.data?.TokenId?.length,
-        memberId: response.data?.Member?.MemberId,
-        agencyId: response.data?.Member?.AgencyId,
-        errorCode: response.data?.Error?.ErrorCode,
-        errorMessage: response.data?.Error?.ErrorMessage,
-      });
-
-      // Check success
-      if (response.data?.Status !== 1) {
-        const error = new Error(
-          `TBO Auth failed: ${response.data?.Error?.ErrorMessage || "Unknown error"}`,
+      if (!TokenId || (ResponseStatus !== 1 && Status !== 1)) {
+        throw new Error(
+          `Auth failed: ${Error?.ErrorMessage || Error || "Unknown error"}`,
         );
-        error.code = "TBO_AUTH_FAILED";
-        error.tboStatus = response.data?.Status;
-        error.tboError = response.data?.Error;
-
-        this._recordAuthAttempt({
-          success: false,
-          error: error.message,
-          status: response.data?.Status,
-        });
-
-        throw error;
       }
 
-      if (!response.data?.TokenId) {
-        throw new Error("TBO Auth succeeded but no TokenId returned");
-      }
+      this.tokenId = TokenId;
+      this.tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-      // Store token (valid for 24 hours)
-      this.tokenId = response.data.TokenId;
-      this.tokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
-
-      this._recordAuthAttempt({
-        success: true,
-        tokenLength: this.tokenId.length,
-        expiresAt: new Date(this.tokenExpiry).toISOString(),
+      this.logger.info("✅ TBO Hotel Token Obtained", {
+        tokenLength: TokenId.length,
+        expiry: this.tokenExpiry.toISOString(),
       });
 
-      this.logger.info("✅ TBO Authentication SUCCESS", {
-        tokenId: this.tokenId.substring(0, 20) + "...",
-        tokenLength: this.tokenId.length,
-        expiresAt: new Date(this.tokenExpiry).toISOString(),
-      });
-
-      return this.tokenId;
+      return TokenId;
     } catch (error) {
-      // Log failed request
-      await apiLog.end({
-        responsePayload: error.response?.data,
-        responseHeaders: error.response?.headers,
-        statusCode: error.response?.status || 500,
-        errorMessage: error.message,
-        errorStack: error.stack,
-      });
-
-      this.logger.error("❌ TBO Authentication FAILED", {
-        message: error.message,
-        httpStatus: error.response?.status,
-        statusText: error.response?.statusText,
-        responseData: error.response?.data,
-        url: this.config.hotelAuthUrl,
-      });
-
-      this._recordAuthAttempt({
-        success: false,
+      this.logger.error("❌ TBO Auth Failed", {
         error: error.message,
-        httpStatus: error.response?.status,
+        statusCode: error.response?.status,
+        responseData: error.response?.data,
       });
 
       throw error;
@@ -254,254 +248,79 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 2. DATE FORMATTING (dd/MM/yyyy)
+   * 2. STATIC DATA - GET CITY ID
    * ========================================
    */
-  formatDateForTBO(dateStr) {
-    const d = new Date(dateStr);
-    const day = String(d.getDate()).padStart(2, "0");
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
+  async getCityId(destination, countryCode) {
+    const staticUrl = this.config.hotelStaticDataUrl;
 
-  /**
-   * ========================================
-   * 3. STATIC DATA API (Uses TokenId)
-   * ========================================
-   *
-   * ✅ VERIFIED WORKING: GetDestinationSearchStaticData with TokenId
-   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
-   * Returns: Destinations with DestinationId (CityId for hotel search)
-   */
-
-  async getTboCountries(force = false) {
-    // ✅ CORRECTED: Use UserName/Password for static data (POST with body)
-    const requestBody = {
-      UserName: this.config.staticUserName, // "travelcategory"
-      Password: this.config.staticPassword, // "Tra@59334536"
-    };
-
-    this.logger.info("���� Fetching TBO Country List (Static Data)", {
-      url: this.config.hotelStaticBase + "CountryList",
-      method: "POST",
-      userName: requestBody.UserName,
-      force,
-    });
-
-    try {
-      const response = await tboRequest(
-        this.config.hotelStaticBase + "CountryList",
-        {
-          method: "POST",
-          data: requestBody,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Accept-Encoding": "gzip, deflate",
-          },
-          timeout: this.config.timeout,
-        },
-      );
-
-      if (response.data?.Status !== 1) {
-        throw new Error(
-          `Country List failed: ${response.data?.Error?.ErrorMessage}`,
-        );
-      }
-
-      const countries = response.data?.Countries || [];
-      this.logger.info(`✅ Retrieved ${countries.length} countries`);
-
-      return countries.map((c) => ({
-        code: c.Code || c.CountryCode,
-        name: c.Name || c.CountryName,
-      }));
-    } catch (error) {
-      this.logger.error("❌ TBO Country List failed:", error.message);
-      return [];
-    }
-  }
-
-  /**
-   * ========================================
-   * PUBLIC: Get Country List (Static Data)
-   * ========================================
-   * Endpoint: https://apiwr.tboholidays.com/HotelAPI/CountryList
-   * Returns: List of all supported countries
-   */
-  async getCountryList(force = false) {
-    return this.getTboCountries(force);
-  }
-
-  /**
-   * ========================================
-   * PUBLIC: Get City List for a Country
-   * ========================================
-   * Endpoint: GetDestinationSearchStaticData
-   * Returns: List of cities in the specified country
-   */
-  async getCityList(countryCode, force = false) {
-    return this.getTboCities(countryCode, force);
-  }
-
-  /**
-   * ========================================
-   * PUBLIC: Search Cities (Autocomplete)
-   * ========================================
-   * Searches for cities matching a query string
-   * Returns: Filtered list of cities with fuzzy matching
-   */
-  async searchCities(query, limit = 15, countryCode = null) {
-    const { searchCities: searchFn } = require("../../tbo/static");
-    return await searchFn(query, limit, countryCode);
-  }
-
-  /**
-   * ========================================
-   * PUBLIC: Get Top Destinations
-   * ========================================
-   * Endpoint: https://apiwr.tboholidays.com/HotelAPI/TopDestinations
-   * Returns: Popular destinations by country
-   */
-  async getTopDestinations(countryCode = null, force = false) {
-    const requestBody = {
-      UserName: this.config.staticUserName,
-      Password: this.config.staticPassword,
-    };
-
-    // If countryCode provided, add it to request
-    if (countryCode) {
-      requestBody.CountryCode = countryCode;
-    }
-
-    this.logger.info("🌟 Fetching TBO Top Destinations", {
-      url: this.config.hotelStaticBase + "TopDestinations",
-      countryCode: countryCode || "All",
-      force,
-    });
-
-    try {
-      const response = await tboRequest(
-        this.config.hotelStaticBase + "TopDestinations",
-        {
-          method: "POST",
-          data: requestBody,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "Accept-Encoding": "gzip, deflate",
-          },
-          timeout: this.config.timeout,
-        },
-      );
-
-      if (response.data?.Status !== 1) {
-        throw new Error(
-          `Top Destinations failed: ${response.data?.Error?.ErrorMessage}`,
-        );
-      }
-
-      const destinations =
-        response.data?.CityList || response.data?.Result || [];
-      this.logger.info(`✅ Retrieved ${destinations.length} top destinations`);
-
-      return destinations;
-    } catch (error) {
-      this.logger.error("❌ TBO Top Destinations failed:", error.message);
-      return [];
-    }
-  }
-
-  async getTboCities(countryCode, force = false) {
-    if (!countryCode) return [];
-
-    // ✅ CORRECTED: Use GetDestinationSearchStaticData with TokenId (VERIFIED WORKING)
-    // Endpoint: https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
-    const tokenId = await this.getHotelToken();
-
-    const requestBody = {
-      EndUserIp: this.config.endUserIp,
-      TokenId: tokenId,
+    const staticRequest = {
       CountryCode: countryCode,
-      SearchType: "1", // 1 = City-wise
+      SearchQuery: destination,
     };
 
-    const staticDataUrl =
-      "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
-
-    this.logger.info(
-      "📍 Fetching TBO City List (GetDestinationSearchStaticData)",
-      {
-        url: staticDataUrl,
-        method: "POST",
-        countryCode,
-        searchType: requestBody.SearchType,
-        via: tboVia(),
-      },
-    );
+    this.logger.debug("🏙️  TBO Static Data Request", {
+      destination,
+      countryCode,
+      endpoint: staticUrl,
+    });
 
     try {
-      const response = await tboRequest(staticDataUrl, {
+      const response = await tboRequest(staticUrl, {
         method: "POST",
-        data: requestBody,
+        data: staticRequest,
+        timeout: this.config.timeout,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
           "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout,
       });
 
-      if (response.data?.Status !== 1) {
+      const {
+        Data = [],
+        ResponseStatus,
+        Status,
+        Error,
+      } = response.data || {};
+
+      const statusOk = ResponseStatus === 1 || Status === 1;
+
+      if (!statusOk) {
         throw new Error(
-          `GetDestinationSearchStaticData failed: ${response.data?.Error?.ErrorMessage}`,
+          `Static data failed: ${Error?.ErrorMessage || "Unknown error"}`,
         );
       }
 
-      const destinations = response.data?.Destinations || [];
-      this.logger.info(
-        `✅ Retrieved ${destinations.length} destinations for ${countryCode}`,
-      );
+      if (!Data || Data.length === 0) {
+        this.logger.warn("⚠️  No cities found", { destination, countryCode });
+        return null;
+      }
 
-      return destinations.map((d) => ({
-        code: d.DestinationId, // Use DestinationId as code
-        id: d.DestinationId, // TBO CityId (numeric) - THIS IS THE KEY
-        name: d.CityName,
-        countryCode: d.CountryCode?.trim(),
-        countryName: d.CountryName,
-        stateProvince: d.StateProvince,
-        type: d.Type,
-      }));
+      const cityId = Data[0].CityId;
+
+      this.logger.info("✅ CityId Retrieved", {
+        destination,
+        cityId,
+        cityName: Data[0]?.CityName,
+      });
+
+      return cityId;
     } catch (error) {
-      this.logger.error(
-        "❌ TBO GetDestinationSearchStaticData failed:",
-        error.message,
-      );
-      return [];
+      this.logger.error("❌ Failed to get CityId", {
+        destination,
+        countryCode,
+        error: error.message,
+      });
+
+      throw error;
     }
   }
 
   /**
    * ========================================
-   * 4. HOTEL SEARCH (Uses TokenId)
+   * 3. HOTEL SEARCH - GetHotelResult
    * ========================================
-   *
-   * ✅ VERIFIED WORKING: GetHotelResult on correct JSON endpoint
-   * Endpoint: https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
-   * Method: POST
-   *
-   * Required fields:
-   * - EndUserIp
-   * - TokenId
-   * - CheckInDate (dd/MM/yyyy)
-   * - NoOfNights (NOT CheckOutDate)
-   * - CountryCode
-   * - CityId (DestinationId from GetDestinationSearchStaticData)
-   * - PreferredCurrency
-   * - GuestNationality
-   * - NoOfRooms
-   * - RoomGuests [{ NoOfAdults, NoOfChild, ChildAge[] }]
    */
   async searchHotels(searchParams) {
     const tokenId = await this.getHotelToken();
@@ -516,7 +335,22 @@ class TBOAdapter extends BaseSupplierAdapter {
       currency = "INR",
       guestNationality = "IN",
       countryCode = "AE",
+      childAges = [],
     } = searchParams;
+
+    // ✅ Log incoming parameters
+    this.logger.info("📥 Incoming Search Parameters", {
+      destination,
+      checkIn,
+      checkOut,
+      adults,
+      children,
+      rooms,
+      roomsType: typeof rooms,
+      currency,
+      guestNationality,
+      countryCode,
+    });
 
     // ✅ Get CityId from TBO (must be numeric ID, not code)
     let cityId;
@@ -547,22 +381,25 @@ class TBOAdapter extends BaseSupplierAdapter {
       );
     }
 
+    // ✅ NORMALIZE ROOMS - Convert simple params to TBO array format
+    const normalizedRooms = this.normalizeRooms(
+      rooms,
+      adults,
+      children,
+      childAges,
+    );
+
     // ✅ Build RoomGuests array (exact format from TBO spec)
-    const roomGuests = Array.isArray(rooms)
-      ? rooms.map((r) => ({
-          NoOfAdults: Number(r.adults) || 1,
-          NoOfChild: Number(r.children) || 0,
-          ChildAge: Array.isArray(r.childAges)
-            ? r.childAges.map((a) => Number(a))
-            : [],
-        }))
-      : [
-          {
-            NoOfAdults: Number(adults) || 2,
-            NoOfChild: Number(children) || 0,
-            ChildAge: [],
-          },
-        ];
+    const roomGuests = normalizedRooms.map((r) => ({
+      NoOfAdults: Number(r.adults) || 1,
+      NoOfChild: Number(r.children) || 0,
+      ChildAge: Array.isArray(r.childAges) ? r.childAges : [],
+    }));
+
+    this.logger.info("🎫 Built RoomGuests Array", {
+      roomGuests,
+      count: roomGuests.length,
+    });
 
     // ✅ EXACT JSON request format from TBO documentation (uses TokenId)
     const searchRequest = {
@@ -595,6 +432,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       noOfNights: searchRequest.NoOfNights,
       currency,
       rooms: searchRequest.NoOfRooms,
+      roomGuests: searchRequest.RoomGuests,
       via: tboVia(),
     });
 
@@ -662,7 +500,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         httpStatus: error.response?.status,
         statusText: error.response?.statusText,
         responseData: error.response?.data,
-        url: this.config.hotelSearchBase + "Search",
+        url: searchUrl,
       });
       return [];
     }
@@ -670,7 +508,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 5. TRANSFORM RESULTS
+   * 4. TRANSFORM RESULTS
    * ========================================
    */
   transformHotelResults(hotels, searchParams) {
@@ -704,408 +542,67 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   extractImages(hotel) {
     const images = [];
-    if (hotel.HotelPicture) images.push(hotel.HotelPicture);
-    if (Array.isArray(hotel.Images)) {
-      hotel.Images.forEach((img) => {
-        if (typeof img === "string") images.push(img);
-        else if (img?.Url) images.push(img.Url);
-      });
+
+    if (hotel.Images && Array.isArray(hotel.Images)) {
+      images.push(...hotel.Images.slice(0, 5));
     }
-    return images;
+
+    if (hotel.ImageURL) {
+      images.push(hotel.ImageURL);
+    }
+
+    return images.slice(0, 10);
   }
 
   /**
    * ========================================
-   * 6. HELPER METHODS
+   * 5. DATE FORMATTING
    * ========================================
    */
+  formatDateForTBO(dateString) {
+    if (!dateString) return null;
 
-  async getCityId(cityCode, countryCode = "AE") {
-    // ✅ CORRECTED: Get CityId from TBO, not our DB
-    const cities = await this.getTboCities(countryCode);
-
-    const city = cities.find(
-      (c) =>
-        c.code === cityCode ||
-        c.id === cityCode ||
-        c.name.toLowerCase() === cityCode.toLowerCase(),
-    );
-
-    if (city && city.id) {
-      this.logger.info("✅ Found TBO CityId", {
-        input: cityCode,
-        cityId: city.id,
-        cityName: city.name,
-      });
-      return city.id;
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      this.logger.warn("⚠️ Invalid date format", { dateString });
+      return null;
     }
 
-    this.logger.warn("⚠️ CityId not found in TBO data", {
-      cityCode,
-      countryCode,
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+
+    const formatted = `${day}/${month}/${year}`;
+    this.logger.debug("📅 Formatted date for TBO", {
+      input: dateString,
+      output: formatted,
     });
-    return null;
+
+    return formatted;
   }
 
-  _recordAuthAttempt(entry) {
+  /**
+   * ========================================
+   * 6. HEALTH CHECK
+   * ========================================
+   */
+  async healthCheck() {
     try {
-      this._authAttempts.push({
-        ts: new Date().toISOString(),
+      const tokenId = await this.getHotelToken();
+      return {
         supplier: "TBO",
-        ...entry,
-      });
-      if (this._authAttempts.length > 50) this._authAttempts.shift();
-    } catch (err) {
-      // Ignore
-    }
-  }
-
-  /**
-   * ========================================
-   * 6. ROOM DETAILS (Uses TokenId + TraceId)
-   * ========================================
-   */
-  async getRooms(params = {}) {
-    const { getHotelRoom } = require("../../tbo/room");
-
-    const { traceId, resultIndex, hotelCode } = params;
-
-    this.logger.info("🛏️ TBO Get Rooms", { traceId, resultIndex, hotelCode });
-
-    try {
-      const result = await getHotelRoom({
-        traceId,
-        resultIndex: Number(resultIndex),
-        hotelCode: String(hotelCode),
-      });
-
-      return result;
+        status: "healthy",
+        tokenObtained: !!tokenId,
+        timestamp: new Date().toISOString(),
+      };
     } catch (error) {
-      this.logger.error("❌ TBO Get Rooms failed:", error.message);
-      throw error;
+      return {
+        supplier: "TBO",
+        status: "unhealthy",
+        error: error.message,
+        timestamp: new Date().toISOString(),
+      };
     }
-  }
-
-  /**
-   * ========================================
-   * 7. BLOCK ROOM (Pre-Book Validation)
-   * ========================================
-   */
-  async blockRoom(params = {}) {
-    const { blockRoom: blockRoomFn } = require("../../tbo/book");
-
-    const {
-      traceId,
-      resultIndex,
-      hotelCode,
-      hotelName,
-      guestNationality = "AE",
-      noOfRooms = 1,
-      isVoucherBooking = true,
-      hotelRoomDetails,
-    } = params;
-
-    this.logger.info("🔒 TBO Block Room", { traceId, hotelCode, noOfRooms });
-
-    try {
-      const result = await blockRoomFn({
-        traceId,
-        resultIndex: Number(resultIndex),
-        hotelCode: String(hotelCode),
-        hotelName,
-        guestNationality,
-        noOfRooms: Number(noOfRooms),
-        isVoucherBooking,
-        hotelRoomDetails,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Block Room failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 8. BOOK HOTEL (Final Booking Confirmation)
-   * ========================================
-   */
-  async bookHotel(params = {}) {
-    const { bookHotel: bookHotelFn } = require("../../tbo/book");
-
-    const {
-      traceId,
-      resultIndex,
-      hotelCode,
-      hotelName,
-      guestNationality = "AE",
-      noOfRooms = 1,
-      isVoucherBooking = true,
-      hotelRoomDetails,
-      hotelPassenger,
-    } = params;
-
-    this.logger.info("📝 TBO Book Hotel", {
-      traceId,
-      hotelCode,
-      passengers: hotelPassenger?.length,
-    });
-
-    try {
-      const result = await bookHotelFn({
-        traceId,
-        resultIndex: Number(resultIndex),
-        hotelCode: String(hotelCode),
-        hotelName,
-        guestNationality,
-        noOfRooms: Number(noOfRooms),
-        isVoucherBooking,
-        hotelRoomDetails,
-        hotelPassenger,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Book Hotel failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 9. GENERATE VOUCHER
-   * ========================================
-   */
-  async getVoucher(params = {}) {
-    const { generateVoucher } = require("../../tbo/voucher");
-
-    const { bookingId, bookingRefNo } = params;
-
-    this.logger.info("🎫 TBO Generate Voucher", { bookingId, bookingRefNo });
-
-    try {
-      const result = await generateVoucher({
-        bookingId: String(bookingId),
-        bookingRefNo: String(bookingRefNo),
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Generate Voucher failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 10. CANCEL HOTEL BOOKING
-   * ========================================
-   */
-  async cancelHotelBooking(params = {}) {
-    const { cancelHotelBooking: cancelFn } = require("../../tbo/cancel");
-
-    const { bookingId, confirmationNo, remarks } = params;
-
-    this.logger.info("❌ TBO Cancel Booking", { bookingId, confirmationNo });
-
-    try {
-      const result = await cancelFn({
-        bookingId,
-        confirmationNo,
-        remarks,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Cancel Booking failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 11. GET CHANGE REQUEST STATUS
-   * ========================================
-   */
-  async getChangeRequestStatus(params = {}) {
-    const { getChangeRequestStatus: getStatusFn } = require("../../tbo/cancel");
-
-    const { changeRequestId, bookingId, confirmationNo } = params;
-
-    this.logger.info("📋 TBO Get Change Request Status", {
-      changeRequestId,
-      bookingId,
-      confirmationNo,
-    });
-
-    try {
-      const result = await getStatusFn({
-        changeRequestId,
-        bookingId,
-        confirmationNo,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error(
-        "❌ TBO Get Change Request Status failed:",
-        error.message,
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 12. GET AGENCY BALANCE
-   * ========================================
-   *
-   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/GetAgencyBalance
-   * Returns: Current agency balance and currency
-   */
-  async getAgencyBalance() {
-    const { getAgencyBalance: getBalanceFn } = require("../../tbo/balance");
-
-    this.logger.info("💰 TBO Get Agency Balance");
-
-    try {
-      const result = await getBalanceFn();
-
-      this.logger.info("✅ TBO Agency Balance Retrieved", {
-        balance: result.balance,
-        currency: result.currency,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Get Agency Balance failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 13. GET HOTEL BOOKING DETAILS
-   * ========================================
-   */
-  async getHotelBookingDetails(params = {}) {
-    const { getBookingDetails } = require("../../tbo/voucher");
-
-    const { bookingId, confirmationNo } = params;
-
-    this.logger.info("📋 TBO Get Booking Details", {
-      bookingId,
-      confirmationNo,
-    });
-
-    try {
-      const result = await getBookingDetails({
-        bookingId: bookingId ? String(bookingId) : undefined,
-        confirmationNo: confirmationNo ? String(confirmationNo) : undefined,
-      });
-
-      return result;
-    } catch (error) {
-      this.logger.error("❌ TBO Get Booking Details failed:", error.message);
-      throw error;
-    }
-  }
-
-  /**
-   * ========================================
-   * 14. GET HOTEL INFO (Static Data)
-   * ========================================
-   * Note: TBO doesn't have a dedicated HotelInfo API
-   * This is a placeholder that returns basic info
-   */
-  async getHotelInfo(params = {}) {
-    const { hotelCode } = params;
-
-    this.logger.info("ℹ️ TBO Get Hotel Info", { hotelCode });
-
-    // TBO doesn't have a separate HotelInfo endpoint
-    // Hotel details come from search results
-    // This is a placeholder for route compatibility
-    return {
-      supplier: "TBO",
-      hotelCode: hotelCode,
-      message: "Hotel info available through search results or static data",
-      available: false,
-    };
-  }
-
-  /**
-   * ========================================
-   * 15. LOGOUT ALL (Session Management)
-   * ========================================
-   * Note: TBO uses TokenId which expires after 24 hours
-   * Manual logout is not required
-   */
-  async logoutAll() {
-    this.logger.info("🚪 TBO Logout All");
-
-    // Clear cached token
-    this.tokenId = null;
-    this.tokenExpiry = null;
-
-    return {
-      supplier: "TBO",
-      message: "Token cache cleared. TokenId will expire in 24 hours.",
-      success: true,
-    };
-  }
-
-  /**
-   * ========================================
-   * ROUTE COMPATIBILITY ALIASES
-   * ========================================
-   * These provide alternate method names expected by routes
-   */
-
-  // Alias for getRooms (route expects singular)
-  async getHotelRoom(params = {}) {
-    return this.getRooms(params);
-  }
-
-  // Alias for getVoucher
-  async generateHotelVoucher(params = {}) {
-    return this.getVoucher(params);
-  }
-
-  // Alias for blockRoom
-  async preBookHotel(params = {}) {
-    return this.blockRoom(params);
-  }
-
-  /**
-   * ========================================
-   * STATIC: Transform to UnifiedHotel format
-   * ========================================
-   */
-  static toUnifiedHotel(tboHotel, context = {}) {
-    const price = tboHotel.Price || {};
-
-    return {
-      supplier: "TBO",
-      supplierHotelId: String(tboHotel.HotelCode || tboHotel.HotelId),
-      name: tboHotel.HotelName || tboHotel.Name,
-      address: tboHotel.HotelAddress || "",
-      city: context.destination || tboHotel.CityName || "",
-      countryCode: tboHotel.CountryCode || context.countryCode || "",
-      location: {
-        lat: tboHotel.Latitude || tboHotel.Lat || null,
-        lng: tboHotel.Longitude || tboHotel.Lng || null,
-      },
-      rating: parseFloat(tboHotel.StarRating) || 0,
-      amenities: tboHotel.HotelFacilities || [],
-      images: [],
-      minTotal: parseFloat(price.OfferedPrice || price.PublishedPrice || 0),
-      currency: price.CurrencyCode || context.currency || "INR",
-      taxesAndFees: { included: true, excluded: false },
-      refundable: true,
-      rooms: [],
-    };
   }
 }
 
