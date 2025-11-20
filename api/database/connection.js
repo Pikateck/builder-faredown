@@ -556,10 +556,18 @@ class DatabaseConnection {
 
       // Try to add check constraint (ignore error if it already exists)
       try {
-        await this.query(
-          `ALTER TABLE public.recent_searches ADD CONSTRAINT chk_recent_searches_identity
-           CHECK (user_id IS NOT NULL OR device_id IS NOT NULL)`,
-        );
+        // First check if constraint exists
+        const constraintCheck = await this.query(`
+          SELECT constraint_name FROM information_schema.table_constraints
+          WHERE table_name = 'recent_searches' AND constraint_name = 'chk_recent_searches_identity'
+        `);
+
+        if (constraintCheck.rows.length === 0) {
+          await this.query(
+            `ALTER TABLE public.recent_searches ADD CONSTRAINT chk_recent_searches_identity
+             CHECK (user_id IS NOT NULL OR device_id IS NOT NULL)`,
+          );
+        }
       } catch (e) {
         // Ignore "already exists" errors (code 42710)
         if (e.code !== "42710" && !e.message.includes("already exists")) {
