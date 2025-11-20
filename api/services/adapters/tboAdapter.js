@@ -13,6 +13,7 @@
  * 6. Date format: dd/MM/yyyy (strict)
  * 7. CityId (DestinationId) from GetDestinationSearchStaticData (real-time)
  * 8. Compression headers included (gzip, deflate)
+ * 9. Returns session metadata for caching (TraceId, TokenId, etc.)
  *
  * VERIFIED WORKING FLOW:
  * Auth → TokenId → GetDestinationSearchStaticData → GetHotelResult → Rooms → Book → Voucher
@@ -21,6 +22,7 @@
  * - ✅ Normalizes simple URL params (rooms=1&adults=2&children=0) to TBO array format
  * - ✅ Full logging for all transformations
  * - ✅ Defensive error handling for malformed inputs
+ * - ✅ Returns session metadata for caching
  * - ✅ Consistent across all entry points
  */
 
@@ -41,21 +43,21 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_AUTH_URL ||
         "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
 
-      // Static Data - GetDestinationSearchStaticData (Uses TokenId) - PER API_SPECIFICATION.md
+      // Static Data - GetDestinationSearchStaticData (Uses TokenId) - VERIFIED WORKING
       hotelStaticDataUrl:
         "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
-      // Hotel Search - GetHotelResult (Uses TokenId) - PER API_SPECIFICATION.md
+      // Hotel Search - GetHotelResult (PRODUCTION ENDPOINT - Uses TokenId)
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
 
-      // Booking, Voucher, Booking Details - Uses TokenId - PER API_SPECIFICATION.md
+      // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase:
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
 
-      // Static Data Base (UserName/Password auth) - CountryList, CityList, Hotel Codes
+      // Static Data Base (UserName/Password auth)
       hotelStaticBase:
         process.env.TBO_HOTEL_STATIC_DATA ||
         "https://apiwr.tboholidays.com/HotelAPI/",
@@ -254,10 +256,6 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    * 2. STATIC DATA - GET CITY ID
    * ========================================
-   * Per API_SPECIFICATION.md:
-   * - GetDestinationSearchStaticData returns ALL countries/cities
-   * - Request only needs TokenId + EndUserIp (no search parameters)
-   * - Client-side filtering required to find CityId
    */
   async getCityId(destination, countryCode) {
     const staticUrl = this.config.hotelStaticDataUrl;
@@ -271,13 +269,10 @@ class TBOAdapter extends BaseSupplierAdapter {
     // Normalize and validate countryCode
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
     if (!normalizedCountryCode) {
-      this.logger.error(
-        "❌ CountryCode is required for GetDestinationSearchStaticData",
-        {
-          destination,
-          countryCode,
-        },
-      );
+      this.logger.error("❌ CountryCode is required for GetDestinationSearchStaticData", {
+        destination,
+        countryCode,
+      });
       return null;
     }
 
@@ -385,16 +380,13 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return match.DestinationId;
     } catch (error) {
-      this.logger.error(
-        "❌ Failed to get CityId - returning null to avoid crash",
-        {
-          destination,
-          countryCode,
-          error: error.message,
-          stack: error.stack,
-          note: "Returning null instead of throwing to prevent Node process restart",
-        },
-      );
+      this.logger.error("❌ Failed to get CityId - returning null to avoid crash", {
+        destination,
+        countryCode,
+        error: error.message,
+        stack: error.stack,
+        note: "Returning null instead of throwing to prevent Node process restart",
+      });
 
       // ✅ Return null instead of throwing to prevent Node crash
       // The caller (searchHotels) will handle null cityId gracefully
@@ -452,22 +444,35 @@ class TBOAdapter extends BaseSupplierAdapter {
             returning: "empty array (tbo_empty)",
           },
         );
-        return [];
+        return {
+          hotels: [],
+          sessionMetadata: {
+            traceId: null,
+            tokenId: tokenId,
+            destinationId: null,
+            supplierResponseFull: null,
+          },
+        };
       }
     } catch (err) {
-      this.logger.error(
-        "❌ Failed to get CityId - returning empty array to prevent crash",
-        {
-          destination,
-          countryCode,
-          error: err.message,
-          stack: err.stack,
-          returning: "empty array instead of crashing",
-          note: "Node process will continue running",
-        },
-      );
+      this.logger.error("❌ Failed to get CityId - returning empty array to prevent crash", {
+        destination,
+        countryCode,
+        error: err.message,
+        stack: err.stack,
+        returning: "empty array instead of crashing",
+        note: "Node process will continue running",
+      });
       // ✅ Return empty array instead of throwing to prevent Node crash
-      return [];
+      return {
+        hotels: [],
+        sessionMetadata: {
+          traceId: null,
+          tokenId: tokenId,
+          destinationId: null,
+          supplierResponseFull: null,
+        },
+      };
     }
 
     // ✅ Calculate NoOfNights (TBO requires this, NOT CheckOutDate)
@@ -498,7 +503,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       ChildAge: Array.isArray(r.childAges) ? r.childAges : [],
     }));
 
-    this.logger.info("���� Built RoomGuests Array", {
+    this.logger.info("🎫 Built RoomGuests Array", {
       roomGuests,
       count: roomGuests.length,
     });
@@ -521,8 +526,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       MinRating: 0,
     };
 
-    // ✅ Use official GetHotelResult endpoint from API_SPECIFICATION.md
-    const searchUrl = this.config.hotelSearchUrl;
+    // ✅ CORRECTED: Use production GetHotelResult endpoint (NOT affiliate)
+    const searchUrl =
+      process.env.TBO_HOTEL_SEARCH_URL ||
+      "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 
     this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: searchUrl,
@@ -580,21 +587,53 @@ class TBOAdapter extends BaseSupplierAdapter {
           status: searchResult?.Status,
           error: searchResult?.Error,
         });
-        return [];
+        return {
+          hotels: [],
+          sessionMetadata: {
+            traceId: searchResult?.TraceId || null,
+            tokenId: tokenId,
+            destinationId: cityId,
+            supplierResponseFull: searchResult,
+          },
+        };
       }
 
       const hotels = searchResult?.HotelResults || [];
 
+      // ✅ CASE 1: Empty results
       if (hotels.length === 0) {
         this.logger.info("ℹ️ TBO returned 0 hotels for this search");
-        return [];
+        return {
+          hotels: [],
+          sessionMetadata: {
+            traceId: searchResult?.TraceId || null,
+            tokenId: tokenId,
+            destinationId: cityId,
+            supplierResponseFull: searchResult,
+          },
+        };
       }
 
-      this.logger.info(`�� TBO Search SUCCESS - ${hotels.length} hotels found`);
+      // ✅ CASE 2: Success - Hotels found
+      this.logger.info(`✅ TBO Search SUCCESS - ${hotels.length} hotels found`, {
+        traceId: searchResult?.TraceId,
+      });
 
       // Transform to our format
-      return this.transformHotelResults(hotels, searchParams);
+      const transformedHotels = this.transformHotelResults(hotels, searchParams);
+
+      // Return hotels with session metadata
+      return {
+        hotels: transformedHotels,
+        sessionMetadata: {
+          traceId: searchResult?.TraceId || null,
+          tokenId: tokenId,
+          destinationId: cityId,
+          supplierResponseFull: searchResult,
+        },
+      };
     } catch (error) {
+      // ✅ CASE 3: Error
       this.logger.error("❌ TBO Hotel Search FAILED", {
         message: error.message,
         httpStatus: error.response?.status,
@@ -602,7 +641,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         responseData: error.response?.data,
         url: searchUrl,
       });
-      return [];
+      return {
+        hotels: [],
+        sessionMetadata: {
+          traceId: null,
+          tokenId: tokenId,
+          destinationId: cityId,
+          supplierResponseFull: null,
+        },
+      };
     }
   }
 
@@ -673,7 +720,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     const year = date.getFullYear();
 
     const formatted = `${day}/${month}/${year}`;
-    this.logger.debug("��� Formatted date for TBO", {
+    this.logger.debug("📅 Formatted date for TBO", {
       input: dateString,
       output: formatted,
     });
