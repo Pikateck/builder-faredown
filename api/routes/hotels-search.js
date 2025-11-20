@@ -148,7 +148,12 @@ router.post("/search", async (req, res) => {
       throw adapterError;
     }
 
-    if (!Array.isArray(tboHotels) || tboHotels.length === 0) {
+    if (!Array.isArray(tboHotels)) {
+      console.warn(`⚠️ TBO returned non-array result [${traceId}]:`, typeof tboHotels);
+      tboHotels = [];
+    }
+
+    if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`);
       return res.json({
         success: true,
