@@ -123,11 +123,19 @@ router.get("/", async (req, res) => {
   try {
     const cityId = req.query.cityId || req.query.city || "DXB";
     const countryCode = req.query.countryCode || req.query.country || "AE";
-    const checkIn = req.query.checkIn || req.query.checkin;
-    const checkOut = req.query.checkOut || req.query.checkout;
+    let checkIn = req.query.checkIn || req.query.checkin;
+    let checkOut = req.query.checkOut || req.query.checkout;
     const adults = parseInt(req.query.adults || "2");
     const children = parseInt(req.query.children || "0");
     const rooms = parseInt(req.query.rooms || "1");
+
+    // Handle ISO date format (convert to YYYY-MM-DD)
+    if (checkIn && checkIn.includes("T")) {
+      checkIn = checkIn.split("T")[0];
+    }
+    if (checkOut && checkOut.includes("T")) {
+      checkOut = checkOut.split("T")[0];
+    }
 
     console.log(`\n🏨 === GET /api/hotels (Query Params) ===`);
     console.log(`   City: ${cityId} | Country: ${countryCode}`);
@@ -135,6 +143,11 @@ router.get("/", async (req, res) => {
     console.log(
       `   Guests: ${adults} adults, ${children} children, ${rooms} rooms`,
     );
+
+    // If dates are missing or invalid, return mock hotels immediately (fallback)
+    if (!checkIn || !checkOut) {
+      console.warn("⚠️ Missing dates - returning mock hotels fallback");
+    }
 
     // Mock hotels fallback data (when TBO unavailable)
     // Format matches transformTBOData expectations in HotelResults.tsx
