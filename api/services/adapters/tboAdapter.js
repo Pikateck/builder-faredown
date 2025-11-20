@@ -45,17 +45,17 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelStaticDataUrl:
         "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
-      // Hotel Search - GetHotelResult (PRODUCTION ENDPOINT - Uses TokenId)
+      // Hotel Search, PreBook - OFFICIAL TBO AFFILIATE URL (Uses TokenId)
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
-        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
 
       // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase:
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
 
-      // Static Data Base (UserName/Password auth)
+      // Static Data Base (UserName/Password auth) - CountryList, CityList, Hotel Codes
       hotelStaticBase:
         process.env.TBO_HOTEL_STATIC_DATA ||
         "https://apiwr.tboholidays.com/HotelAPI/",
