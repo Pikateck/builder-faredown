@@ -259,11 +259,24 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   async getCityId(destination, countryCode) {
     // ✅ Hardcoded fallback for known cities (while debugging)
+    // PRIMARY TEST CITIES: Delhi (domestic), Dubai (international)
     const KNOWN_CITIES = {
-      "DUBAI-AE": 115936,
+      // Domestic India
+      "DELHI-IN": 130443,           // ✅ PRIMARY DOMESTIC TEST CITY
+      "NEW DELHI-IN": 130443,       // Same as Delhi
+      "MUMBAI-IN": 10449,
+      "BANGALORE-IN": 127394,
+      "KOLKATA-IN": 129880,
+
+      // International - Middle East
+      "DUBAI-AE": 115936,           // ✅ PRIMARY INTERNATIONAL TEST CITY
       "ABU DHABI-AE": 110394,
+
+      // International - Europe
       "LONDON-GB": 100264,
       "PARIS-FR": 121909,
+
+      // International - Americas
       "NEW YORK-US": 113646,
     };
 
