@@ -485,7 +485,8 @@ app.use("/api/tbo/voucher", tboVoucherRoutes);
 app.use("/api/tbo/balance", tboBalanceRoutes);
 app.use("/api/tbo/bookings", tboBookingsRoutes);
 
-app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints (PRIORITY)
+app.use("/api/hotels/search", hotelsSearchRoutes); // Cache-backed hotel search (PRIORITY)
+app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints
 app.use("/api/hotels-metadata", require("./routes/hotels-metadata")); // Legacy: Hybrid metadata + async pricing (TBO first) - DEPRECATED
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes); // New module-specific bargain engine
