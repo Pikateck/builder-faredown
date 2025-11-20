@@ -406,6 +406,111 @@ class DatabaseConnection {
         `CREATE INDEX IF NOT EXISTS idx_cache_results_rank ON public.hotel_search_cache_results(search_hash, result_rank)`,
       );
 
+      // Create hotel_supplier_api_logs table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.hotel_supplier_api_logs (
+          id BIGSERIAL PRIMARY KEY,
+          supplier_code VARCHAR(50) NOT NULL,
+          endpoint VARCHAR(255) NOT NULL,
+          request_payload JSONB,
+          request_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          response_payload JSONB,
+          response_timestamp TIMESTAMPTZ,
+          response_time_ms INTEGER,
+          trace_id UUID,
+          search_hash VARCHAR(64),
+          cache_hit BOOLEAN DEFAULT FALSE,
+          check_in_date DATE,
+          check_out_date DATE,
+          city_id VARCHAR(50),
+          country_code VARCHAR(10),
+          nationality VARCHAR(10),
+          num_rooms INTEGER,
+          total_guests INTEGER,
+          error_message TEXT,
+          error_code VARCHAR(50),
+          success BOOLEAN,
+          http_status_code INTEGER,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `);
+
+      // Create indexes for hotel_supplier_api_logs
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_supplier_timestamp ON public.hotel_supplier_api_logs(supplier_code, request_timestamp DESC)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_trace_id ON public.hotel_supplier_api_logs(trace_id)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_search_hash ON public.hotel_supplier_api_logs(search_hash)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_city_id ON public.hotel_supplier_api_logs(city_id)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_error ON public.hotel_supplier_api_logs(error_code, request_timestamp DESC) WHERE error_message IS NOT NULL`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotel_logs_cache_hit ON public.hotel_supplier_api_logs(cache_hit, request_timestamp DESC)`,
+      );
+
+      // Create hotels_master_inventory table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.hotels_master_inventory (
+          id BIGSERIAL PRIMARY KEY,
+          supplier_code VARCHAR(50) NOT NULL,
+          supplier_hotel_code VARCHAR(100) NOT NULL,
+          unified_hotel_code VARCHAR(100),
+          name VARCHAR(255) NOT NULL,
+          description TEXT,
+          city_id VARCHAR(50),
+          city_name VARCHAR(100),
+          country_code VARCHAR(10),
+          country_name VARCHAR(100),
+          region_code VARCHAR(50),
+          region_name VARCHAR(100),
+          latitude NUMERIC(10, 8),
+          longitude NUMERIC(11, 8),
+          star_rating NUMERIC(3, 1),
+          phone VARCHAR(50),
+          email VARCHAR(100),
+          website VARCHAR(255),
+          address_line_1 VARCHAR(255),
+          address_line_2 VARCHAR(255),
+          postal_code VARCHAR(20),
+          amenities JSONB,
+          supplier_metadata JSONB,
+          last_synced_at TIMESTAMPTZ,
+          sync_status VARCHAR(20),
+          sync_error TEXT,
+          is_active BOOLEAN DEFAULT TRUE,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `);
+
+      // Create indexes for hotels_master_inventory
+      await this.query(
+        `CREATE UNIQUE INDEX IF NOT EXISTS idx_hotels_supplier_code_unique ON public.hotels_master_inventory(supplier_code, supplier_hotel_code)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_city_id ON public.hotels_master_inventory(city_id, is_active)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_country_code ON public.hotels_master_inventory(country_code, is_active)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_coordinates ON public.hotels_master_inventory(latitude, longitude) WHERE is_active = TRUE`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_sync_status ON public.hotels_master_inventory(sync_status, last_synced_at DESC)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_hotels_name_search ON public.hotels_master_inventory USING GIN(to_tsvector('english', name))`,
+      );
+
       console.log("✅ Hotel cache tables ensured successfully");
     } catch (error) {
       console.warn("⚠️  Failed to ensure hotel cache tables:", error.message);
