@@ -404,7 +404,7 @@ router.get("/cache/stats", async (req, res) => {
  * POST /api/hotels/cache/invalidate
  * Invalidate a specific search (admin only)
  */
-router.post("/cache/invalidate", async (req, res) => {
+router.post("/invalidate", async (req, res) => {
   try {
     const { searchHash } = req.body;
 
