@@ -60,6 +60,8 @@ class HotelCacheService {
    */
   async getCachedSearch(searchHash) {
     try {
+      const tboSessionConfig = require("../config/tbo-session.config");
+
       const result = await db.query(
         `SELECT *,
           CASE
@@ -73,7 +75,25 @@ class HotelCacheService {
          AND ttl_expires_at > NOW()`,
         [searchHash],
       );
-      return result.rows[0] || null;
+
+      const cachedSearch = result.rows[0];
+
+      if (!cachedSearch) {
+        return null;
+      }
+
+      // Calculate session status
+      if (cachedSearch.session_expires_at) {
+        cachedSearch.session_status = tboSessionConfig.getSessionStatus(
+          cachedSearch.session_expires_at
+        );
+        cachedSearch.session_ttl_seconds = tboSessionConfig.SESSION_TTL_SECONDS;
+      } else {
+        cachedSearch.session_status = 'active';
+        cachedSearch.session_ttl_seconds = null;
+      }
+
+      return cachedSearch;
     } catch (error) {
       console.error("❌ Error checking cache:", error.message);
       return null;
@@ -100,8 +120,8 @@ class HotelCacheService {
       );
 
       const sessionStartedAt = new Date();
-      const sessionExpiresAt =
-        tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+      const sessionExpiresAt = tboSessionConfig.calculateSessionExpiry(sessionStartedAt);
+      const sessionTtlSeconds = tboSessionConfig.SESSION_TTL_SECONDS;
 
       // Extract TBO session metadata
       const {
