@@ -347,70 +347,72 @@ router.get("/", async (req, res) => {
 
     // Fallback: Always return mock hotels, never fail
     const cityId = req.query.cityId || req.query.city || "DXB";
-    const mockHotels = {
-      DXB: [
-        {
-          supplierHotelId: "mock_city_center_inn",
-          name: "City Center Inn Dubai Downtown",
-          rating: 4,
-          reviewCount: 890,
-          minTotal: 4500,
-          maxTotal: 5500,
-          address: "Downtown",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
-          description:
-            "City Center Inn Dubai Downtown - Budget friendly hotel in downtown",
-          rooms: [
-            {
-              roomId: "standard-twin",
-              roomName: "Standard Twin",
-              roomDescription: "Twin beds with city view",
-              price: { total: 4500, base: 3900, taxes: 600 },
-              board: "Room Only",
-              amenities: ["AC", "TV", "WiFi"],
-              cancellation: [],
-            },
-          ],
-        },
-      ],
-    }[cityId] || {
-      DXB: [
-        {
-          supplierHotelId: "mock_taj_beachfront",
-          name: "Taj Beachfront Dubai",
-          rating: 5,
-          reviewCount: 1250,
-          minTotal: 12500,
-          maxTotal: 15000,
-          address: "Beachfront",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar"],
-          description: "Luxury beachfront resort with world-class amenities",
-          rooms: [
-            {
-              roomId: "ocean-suite",
-              roomName: "Ocean Suite",
-              roomDescription:
-                "Spacious suite with ocean view and private balcony",
-              price: { total: 12500, base: 10500, taxes: 2000 },
-              board: "Breakfast Included",
-              amenities: ["AC", "TV", "WiFi", "Bath", "Balcony"],
-              cancellation: [{ from: "now", to: "2024-11-01" }],
-            },
-          ],
-        },
-      ],
-    }["DXB"];
+    const mockHotels =
+      {
+        DXB: [
+          {
+            supplierHotelId: "mock_city_center_inn",
+            name: "City Center Inn Dubai Downtown",
+            rating: 4,
+            reviewCount: 890,
+            minTotal: 4500,
+            maxTotal: 5500,
+            address: "Downtown",
+            city: "Dubai",
+            countryCode: "AE",
+            images: [
+              "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+              "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+            ],
+            amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
+            description:
+              "City Center Inn Dubai Downtown - Budget friendly hotel in downtown",
+            rooms: [
+              {
+                roomId: "standard-twin",
+                roomName: "Standard Twin",
+                roomDescription: "Twin beds with city view",
+                price: { total: 4500, base: 3900, taxes: 600 },
+                board: "Room Only",
+                amenities: ["AC", "TV", "WiFi"],
+                cancellation: [],
+              },
+            ],
+          },
+        ],
+      }[cityId] ||
+      {
+        DXB: [
+          {
+            supplierHotelId: "mock_taj_beachfront",
+            name: "Taj Beachfront Dubai",
+            rating: 5,
+            reviewCount: 1250,
+            minTotal: 12500,
+            maxTotal: 15000,
+            address: "Beachfront",
+            city: "Dubai",
+            countryCode: "AE",
+            images: [
+              "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
+            ],
+            amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar"],
+            description: "Luxury beachfront resort with world-class amenities",
+            rooms: [
+              {
+                roomId: "ocean-suite",
+                roomName: "Ocean Suite",
+                roomDescription:
+                  "Spacious suite with ocean view and private balcony",
+                price: { total: 12500, base: 10500, taxes: 2000 },
+                board: "Breakfast Included",
+                amenities: ["AC", "TV", "WiFi", "Bath", "Balcony"],
+                cancellation: [{ from: "now", to: "2024-11-01" }],
+              },
+            ],
+          },
+        ],
+      }["DXB"];
 
     return res.json({
       success: true,
@@ -542,8 +544,7 @@ router.post("/search", async (req, res) => {
         total: mockHotelsForCity.length,
         pricing_available: false,
         source: "mock",
-        message:
-          "Using fallback mock data (live API temporarily unavailable)",
+        message: "Using fallback mock data (live API temporarily unavailable)",
       });
     }
 

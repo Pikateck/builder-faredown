@@ -457,7 +457,7 @@ class DatabaseConnection {
         );
       } catch (e) {
         // Ignore "already exists" errors (code 42710)
-        if (e.code !== '42710' && !e.message.includes("already exists")) {
+        if (e.code !== "42710" && !e.message.includes("already exists")) {
           console.warn("⚠️  Could not add constraint:", e.message);
         }
       }
