@@ -4,7 +4,7 @@
  * Flow:
  * 1. Check cache for matching search hash
  * 2. If cache hit & fresh → return from DB
- * 3. If cache miss → call TBO, normalize, store, return
+ * 3. If cache miss ��� call TBO, normalize, store, return
  */
 
 const express = require("express");
@@ -18,7 +18,7 @@ const db = require("../database/connection");
  * POST /api/hotels/search
  * Cache-first hotel search
  */
-router.post("/search", async (req, res) => {
+router.post("/", async (req, res) => {
   const requestStart = Date.now();
   const traceId = require("uuid").v4();
 
@@ -102,27 +102,61 @@ router.post("/search", async (req, res) => {
     // ============================================================
     const adapter = supplierAdapterManager.getAdapter("TBO");
     if (!adapter) {
+      console.error("❌ TBO adapter not initialized [${traceId}]");
       throw new Error("TBO adapter not initialized");
     }
 
     // Call TBO search with timeout
-    const searchPromise = adapter.searchHotels({
-      ...searchParams,
+    // Map parameters to TBO adapter format
+    const tboSearchParams = {
+      destination: searchParams.destination || searchParams.cityName || "Dubai",
+      checkIn: searchParams.checkIn,
+      checkOut: searchParams.checkOut,
+      countryCode: searchParams.countryCode || "AE",
+      guestNationality: searchParams.guestNationality || "IN",
       rooms: searchParams.rooms || "1",
       adults: searchParams.adults || "2",
       children: searchParams.children || "0",
+      currency: searchParams.currency || "INR",
+      childAges: searchParams.childAges || [],
+    };
+
+    console.log(`📤 Calling TBO search with params [${traceId}]:`, {
+      destination: tboSearchParams.destination,
+      checkIn: tboSearchParams.checkIn,
+      checkOut: tboSearchParams.checkOut,
+      rooms: tboSearchParams.rooms,
     });
 
-    const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(
-        () => reject(new Error("TBO search timeout after 90 seconds")),
-        90000,
+    let tboHotels = [];
+    try {
+      const searchPromise = adapter.searchHotels(tboSearchParams);
+
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error("TBO search timeout after 90 seconds")),
+          90000,
+        );
+      });
+
+      tboHotels = await Promise.race([searchPromise, timeoutPromise]);
+    } catch (adapterError) {
+      console.error(`❌ TBO adapter error [${traceId}]:`, {
+        message: adapterError.message,
+        stack: adapterError.stack,
+      });
+      throw adapterError;
+    }
+
+    if (!Array.isArray(tboHotels)) {
+      console.warn(
+        `⚠️ TBO returned non-array result [${traceId}]:`,
+        typeof tboHotels,
       );
-    });
+      tboHotels = [];
+    }
 
-    const tboHotels = await Promise.race([searchPromise, timeoutPromise]);
-
-    if (!Array.isArray(tboHotels) || tboHotels.length === 0) {
+    if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`);
       return res.json({
         success: true,
@@ -229,12 +263,19 @@ router.post("/search", async (req, res) => {
       traceId,
     });
   } catch (error) {
-    console.error(`❌ Hotel search error [${traceId}]:`, error.message);
+    console.error(`❌ Hotel search error [${traceId}]:`, {
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+    });
 
-    // Fallback: return empty results
-    res.status(error.statusCode || 500).json({
+    // Fallback: return error response
+    const statusCode = error.statusCode || 500;
+    const errorMessage = error.message || "Unknown error occurred";
+
+    res.status(statusCode).json({
       success: false,
-      error: error.message,
+      error: errorMessage,
       hotels: [],
       source: "error",
       duration: `${Date.now() - requestStart}ms`,
@@ -366,7 +407,7 @@ router.get("/cache/stats", async (req, res) => {
  * POST /api/hotels/cache/invalidate
  * Invalidate a specific search (admin only)
  */
-router.post("/cache/invalidate", async (req, res) => {
+router.post("/invalidate", async (req, res) => {
   try {
     const { searchHash } = req.body;
 
