@@ -262,14 +262,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     // PRIMARY TEST CITIES: Delhi (domestic), Dubai (international)
     const KNOWN_CITIES = {
       // Domestic India
-      "DELHI-IN": 130443,           // ✅ PRIMARY DOMESTIC TEST CITY
-      "NEW DELHI-IN": 130443,       // Same as Delhi
+      "DELHI-IN": 130443, // ✅ PRIMARY DOMESTIC TEST CITY
+      "NEW DELHI-IN": 130443, // Same as Delhi
       "MUMBAI-IN": 10449,
       "BANGALORE-IN": 127394,
       "KOLKATA-IN": 129880,
 
       // International - Middle East
-      "DUBAI-AE": 115936,           // ✅ PRIMARY INTERNATIONAL TEST CITY
+      "DUBAI-AE": 115936, // ✅ PRIMARY INTERNATIONAL TEST CITY
       "ABU DHABI-AE": 110394,
 
       // International - Europe

@@ -3,12 +3,14 @@
 ## Standard Test Cities
 
 ### 🇮🇳 Domestic Testing: DELHI
+
 - **City:** Delhi (or New Delhi)
 - **Country Code:** IN
 - **DestinationId:** 130443
 - **Use for:** All domestic India testing
 
 ### 🇦🇪 International Testing: DUBAI
+
 - **City:** Dubai
 - **Country Code:** AE
 - **DestinationId:** 115936
@@ -19,6 +21,7 @@
 ## PowerShell Test Commands
 
 ### Test 1: Domestic (Delhi)
+
 ```powershell
 $body = @{
     destination = "Delhi"
@@ -35,6 +38,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Test 2: International (Dubai)
+
 ```powershell
 $body = @{
     destination = "Dubai"
@@ -55,30 +59,34 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ## All Supported Cities (Hardcoded)
 
 ### India (Domestic)
-| City | Code | DestinationId |
-|------|------|---------------|
-| **Delhi** ⭐ | IN | 130443 |
-| New Delhi | IN | 130443 |
-| Mumbai | IN | 10449 |
-| Bangalore | IN | 127394 |
-| Kolkata | IN | 129880 |
+
+| City         | Code | DestinationId |
+| ------------ | ---- | ------------- |
+| **Delhi** ⭐ | IN   | 130443        |
+| New Delhi    | IN   | 130443        |
+| Mumbai       | IN   | 10449         |
+| Bangalore    | IN   | 127394        |
+| Kolkata      | IN   | 129880        |
 
 ### Middle East
-| City | Code | DestinationId |
-|------|------|---------------|
-| **Dubai** ⭐ | AE | 115936 |
-| Abu Dhabi | AE | 110394 |
+
+| City         | Code | DestinationId |
+| ------------ | ---- | ------------- |
+| **Dubai** ⭐ | AE   | 115936        |
+| Abu Dhabi    | AE   | 110394        |
 
 ### Europe
-| City | Code | DestinationId |
-|------|------|---------------|
-| London | GB | 100264 |
-| Paris | FR | 121909 |
+
+| City   | Code | DestinationId |
+| ------ | ---- | ------------- |
+| London | GB   | 100264        |
+| Paris  | FR   | 121909        |
 
 ### Americas
-| City | Code | DestinationId |
-|------|------|---------------|
-| New York | US | 113646 |
+
+| City     | Code | DestinationId |
+| -------- | ---- | ------------- |
+| New York | US   | 113646        |
 
 ⭐ = Primary test city
 
@@ -87,6 +95,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ## Expected Test Results
 
 ### First Call (Live TBO)
+
 ```json
 {
   "success": true,
@@ -107,6 +116,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Second Call (Cache Hit)
+
 ```json
 {
   "success": true,
@@ -149,6 +159,7 @@ If you need to test a city not in the list:
 ## Logs to Check on Render
 
 ### Success Pattern
+
 ```
 🏙️  TBO Static Data Request { destination: "Delhi", countryCode: "IN" }
 ✅ Using hardcoded DestinationId for known city { destinationId: 130443 }
@@ -158,6 +169,7 @@ If you need to test a city not in the list:
 ```
 
 ### Cache Hit Pattern
+
 ```
 🔍 Hotel search [uuid] - Hash: a1b2c3...
 ✅ CACHE HIT [uuid] - 150 hotels cached

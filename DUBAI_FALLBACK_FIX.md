@@ -55,6 +55,7 @@ const KNOWN_CITIES = {
 ## Test Now
 
 ### Primary Test: Delhi (Domestic)
+
 ```powershell
 $body = @{
     destination = "Delhi"
@@ -71,6 +72,7 @@ Invoke-RestMethod -Uri "https://builder-faredown-pricing.onrender.com/api/hotels
 ```
 
 ### Secondary Test: Dubai (International)
+
 ```powershell
 $body = @{
     destination = "Dubai"
