@@ -50,9 +50,41 @@ router.post("/", async (req, res) => {
     // ============================================================
     const guestNationality = await resolveGuestNationality(req, req.user);
 
+    // ============================================================
+    // Step 1.5: Normalize rooms parameter
+    // ============================================================
+    let roomArray;
+    const { rooms, adults, children } = req.body;
+
+    if (Array.isArray(rooms) && rooms.length > 0) {
+      // Frontend already sent detailed rooms array
+      roomArray = rooms;
+    } else {
+      // Convert string/number to array of room objects
+      const roomCount = Number(rooms || 1);
+      const totalAdults = Number(adults || 1);
+      const totalChildren = Number(children || 0);
+
+      // Simple split: distribute adults/children evenly across rooms
+      const adultsPerRoom = Math.floor(totalAdults / roomCount);
+      const childrenPerRoom = Math.floor(totalChildren / roomCount);
+
+      roomArray = Array.from({ length: roomCount }, (_, i) => ({
+        adults: adultsPerRoom + (i === 0 ? totalAdults % roomCount : 0),
+        children: childrenPerRoom + (i === 0 ? totalChildren % roomCount : 0),
+        childAges: [],
+      }));
+    }
+
+    console.log(`🏨 Normalized rooms [${traceId}]:`, {
+      original: rooms,
+      normalized: roomArray,
+    });
+
     // Merge into request
     const searchParams = {
       ...req.body,
+      rooms: roomArray, // ✅ Always an array now
       guestNationality: req.body.guestNationality || guestNationality,
       traceId,
     };
