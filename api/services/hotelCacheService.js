@@ -154,7 +154,7 @@ class HotelCacheService {
            supplier_metadata = $17`,
         [
           searchHash,
-          params.cityId || destinationId,
+          params.cityId || destinationId || params.destination || params.cityName,
           params.countryCode || "AE",
           params.checkIn || params.checkInDate,
           params.checkOut || params.checkOutDate,
