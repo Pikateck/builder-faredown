@@ -18,8 +18,11 @@ class HotelCacheService {
    * Ensures consistent hashing for identical searches
    */
   generateSearchHash(params) {
+    // Use destination or cityId for hash generation
+    const cityIdentifier = params.cityId || params.destination || params.cityName || "unknown";
+
     const hashKey = JSON.stringify({
-      cityId: params.cityId,
+      cityId: cityIdentifier,
       countryCode: params.countryCode || "AE",
       guestNationality: params.guestNationality || "IN",
       checkInDate: params.checkIn || params.checkInDate,
