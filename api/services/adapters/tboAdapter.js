@@ -340,8 +340,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         this.logger.warn(
           "⚠️  No countries found - TBO returned empty Country array",
           {
-            destination,
-            countryCode,
+            destination: normalizedDestination,
+            countryCode: normalizedCountryCode,
             fullResponse: response.data,
           },
         );
@@ -349,15 +349,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       // ✅ Client-side filtering: Find matching city
-      // Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
-      const normalizedDestination = destination.replace(/,.*$/, "").trim();
-
-      // Find target country
-      const targetCountry = Country.find((c) => c.CountryCode === countryCode);
+      // TBO returns countries array - find the target country
+      const targetCountry = Country.find((c) => c.CountryCode === normalizedCountryCode);
 
       if (!targetCountry || !targetCountry.City) {
         this.logger.warn("⚠️  Country not found in static data", {
-          countryCode,
+          countryCode: normalizedCountryCode,
           availableCountries: Country.map((c) => c.CountryCode),
         });
         return null;
@@ -373,7 +370,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         this.logger.warn("⚠️  City not found in static data", {
           destination,
           normalizedDestination,
-          countryCode,
+          countryCode: normalizedCountryCode,
           availableCities: targetCountry.City.slice(0, 10).map(
             (c) => c.CityName,
           ),
@@ -394,13 +391,17 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return cityId;
     } catch (error) {
-      this.logger.error("❌ Failed to get CityId", {
+      this.logger.error("❌ Failed to get CityId - returning null to avoid crash", {
         destination,
         countryCode,
         error: error.message,
+        stack: error.stack,
+        note: "Returning null instead of throwing to prevent Node process restart",
       });
 
-      throw error;
+      // ✅ Return null instead of throwing to prevent Node crash
+      // The caller (searchHotels) will handle null cityId gracefully
+      return null;
     }
   }
 
