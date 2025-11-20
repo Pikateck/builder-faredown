@@ -2,6 +2,10 @@
 /**
  * Test Script: Rooms Normalization Fix
  *
+ * HOW TO RUN:
+ * Environment: Node.js (PowerShell/Bash/CMD - any command line)
+ * Command: node test-rooms-fix.js
+ *
  * This script tests that POST /api/hotels/search properly handles
  * rooms parameter as both string and array without crashing.
  */
