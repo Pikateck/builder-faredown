@@ -645,23 +645,24 @@ function HotelResultsContent() {
         ? convertComprehensiveFiltersToTbo(selectedFilters, priceRange)
         : undefined;
 
-      // Build API URL with filter parameters (simple approach first)
-      const baseUrl = `${apiBaseUrl}/hotels`;
-      const params = new URLSearchParams({
+      // Build API call to cache-backed search endpoint
+      const apiUrl = `${apiBaseUrl}/hotels/search`;
+      const searchPayload = {
         cityId: destCode,
         countryCode: countryCode,
         checkIn: checkInStr,
         checkOut: checkOutStr,
+        rooms: '1',
         adults: adultsCount.toString(),
         children: childrenCount.toString(),
-      });
-      const apiUrl = `${baseUrl}?${params.toString()}`;
+        currency: selectedCurrency?.code || 'INR'
+      };
 
-      console.log(`📡 API Call: ${apiUrl}`);
+      console.log(`📡 API Call: ${apiUrl}`, searchPayload);
 
       let metadataResponse;
       try {
-        console.log("📡 Attempting fetch with config:", {
+        console.log("📡 Attempting cache-backed search with config:", {
           url: apiUrl,
           apiBaseUrl,
           currentOrigin:
@@ -671,15 +672,16 @@ function HotelResultsContent() {
 
         // Attempt fetch with timeout
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout (TBO can be slow)
 
         try {
           metadataResponse = await fetch(apiUrl, {
-            method: "GET",
+            method: "POST",
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
+            body: JSON.stringify(searchPayload),
             credentials: "include",
             signal: controller.signal,
           });
