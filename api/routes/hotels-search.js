@@ -385,7 +385,7 @@ router.post("/rooms/:hotelId", async (req, res) => {
  * GET /api/hotels/cache/stats
  * Cache statistics (for monitoring)
  */
-router.get("/cache/stats", async (req, res) => {
+router.get("/cache/stats/", async (req, res) => {
   try {
     const stats = await hotelCacheService.getCacheStats();
     res.json({
