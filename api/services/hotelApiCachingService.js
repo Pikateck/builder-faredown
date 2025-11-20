@@ -74,11 +74,13 @@ class HotelApiCachingService {
       normalizedRooms = rooms;
     } else {
       // Fallback: create default room
-      normalizedRooms = [{
-        adults: parseInt(adults) || 2,
-        children: parseInt(children) || 0,
-        childAges: Array.isArray(childAges) ? childAges : [],
-      }];
+      normalizedRooms = [
+        {
+          adults: parseInt(adults) || 2,
+          children: parseInt(children) || 0,
+          childAges: Array.isArray(childAges) ? childAges : [],
+        },
+      ];
     }
 
     // Create a normalized string representation
