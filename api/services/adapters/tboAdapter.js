@@ -295,7 +295,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       const {
-        Data = [],
+        Country = [],
         ResponseStatus,
         Status,
         Error: ApiError,
@@ -307,10 +307,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         statusOk,
         ResponseStatus,
         Status,
-        dataCount: Data?.length || 0,
+        countryCount: Country?.length || 0,
         hasError: !!ApiError,
         errorMessage: ApiError?.ErrorMessage,
-        firstCity: Data?.[0]?.CityName,
       });
 
       if (!statusOk) {
@@ -323,8 +322,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         );
       }
 
-      if (!Data || Data.length === 0) {
-        this.logger.warn("⚠️  No cities found - TBO returned empty Data array", {
+      if (!Country || Country.length === 0) {
+        this.logger.warn("⚠️  No countries found - TBO returned empty Country array", {
           destination,
           countryCode,
           fullResponse: response.data,
@@ -332,12 +331,45 @@ class TBOAdapter extends BaseSupplierAdapter {
         return null;
       }
 
-      const cityId = Data[0].CityId;
+      // ✅ Client-side filtering: Find matching city
+      // Normalize destination: "Dubai, United Arab Emirates" → "Dubai"
+      const normalizedDestination = destination.replace(/,.*$/, '').trim();
+
+      // Find target country
+      const targetCountry = Country.find(c => c.CountryCode === countryCode);
+
+      if (!targetCountry || !targetCountry.City) {
+        this.logger.warn("⚠️  Country not found in static data", {
+          countryCode,
+          availableCountries: Country.map(c => c.CountryCode),
+        });
+        return null;
+      }
+
+      // Find matching city (case-insensitive)
+      const matchingCity = targetCountry.City.find(city =>
+        city.CityName.toLowerCase() === normalizedDestination.toLowerCase()
+      );
+
+      if (!matchingCity) {
+        this.logger.warn("⚠️  City not found in static data", {
+          destination,
+          normalizedDestination,
+          countryCode,
+          availableCities: targetCountry.City.slice(0, 10).map(c => c.CityName),
+          hint: "Try exact city name like 'Dubai' instead of 'Dubai, United Arab Emirates'",
+        });
+        return null;
+      }
+
+      const cityId = matchingCity.CityId;
 
       this.logger.info("✅ CityId Retrieved", {
         destination,
+        normalizedDestination,
         cityId,
-        cityName: Data[0]?.CityName,
+        cityName: matchingCity.CityName,
+        countryCode: matchingCity.CountryCode,
       });
 
       return cityId;
