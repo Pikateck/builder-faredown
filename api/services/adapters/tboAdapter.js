@@ -280,25 +280,52 @@ class TBOAdapter extends BaseSupplierAdapter {
       "NEW YORK-US": 113646,
     };
 
+    // ✅ DETAILED DEBUGGING
+    this.logger.info("🔍 getCityId called with:", {
+      destination,
+      destinationType: typeof destination,
+      destinationLength: destination?.length,
+      countryCode,
+      countryCodeType: typeof countryCode,
+      countryCodeLength: countryCode?.length,
+    });
+
     const normalizedDestination = destination.replace(/,.*$/, "").trim();
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
     const lookupKey = `${normalizedDestination.toUpperCase()}-${normalizedCountryCode}`;
+
+    this.logger.info("🔍 Lookup key generation:", {
+      normalizedDestination,
+      normalizedCountryCode,
+      lookupKey,
+      lookupKeyLength: lookupKey.length,
+      lookupKeyCharCodes: Array.from(lookupKey).map(c => c.charCodeAt(0)),
+      hasKeyInMap: lookupKey in KNOWN_CITIES,
+      mapKeys: Object.keys(KNOWN_CITIES),
+      foundValue: KNOWN_CITIES[lookupKey],
+    });
 
     if (KNOWN_CITIES[lookupKey]) {
       this.logger.info("✅ Using hardcoded DestinationId for known city", {
         destination: normalizedDestination,
         countryCode: normalizedCountryCode,
+        lookupKey,
         destinationId: KNOWN_CITIES[lookupKey],
       });
       return KNOWN_CITIES[lookupKey];
     }
+
+    this.logger.warn("⚠️ Lookup key not found in KNOWN_CITIES, will try TBO API", {
+      lookupKey,
+      availableKeys: Object.keys(KNOWN_CITIES),
+    });
 
     // Otherwise, call TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
 
     // Ensure we have a valid token before calling static data
     if (!this.tokenId || (this.tokenExpiry && new Date() > this.tokenExpiry)) {
-      this.logger.info("🔑 Token expired or missing, obtaining new token...");
+      this.logger.info("��� Token expired or missing, obtaining new token...");
       await this.getHotelToken();
     }
 
