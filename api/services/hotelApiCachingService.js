@@ -48,23 +48,56 @@ class HotelApiCachingService {
       countryCode,
       checkInDate,
       checkOutDate,
+      checkIn,
+      checkOut,
       nationality,
       rooms = [],
+      adults = 2,
+      children = 0,
+      childAges = [],
     } = params;
 
+    // Normalize rooms - can be string "1" or array of room objects
+    let normalizedRooms = [];
+    if (typeof rooms === "string") {
+      // Single string like "1" or "2" - create room objects for each
+      const numRooms = parseInt(rooms) || 1;
+      for (let i = 0; i < numRooms; i++) {
+        normalizedRooms.push({
+          adults: parseInt(adults) || 2,
+          children: parseInt(children) || 0,
+          childAges: Array.isArray(childAges) ? childAges : [],
+        });
+      }
+    } else if (Array.isArray(rooms)) {
+      // Already an array of room objects
+      normalizedRooms = rooms;
+    } else {
+      // Fallback: create default room
+      normalizedRooms = [{
+        adults: parseInt(adults) || 2,
+        children: parseInt(children) || 0,
+        childAges: Array.isArray(childAges) ? childAges : [],
+      }];
+    }
+
     // Create a normalized string representation
-    const roomsStr = rooms
+    const roomsStr = normalizedRooms
       .map(
         (r) =>
           `${r.adults || 0}-${r.children || 0}-${(r.childAges || []).join(",")}`,
       )
       .join("|");
 
+    // Use checkIn/checkOut if provided, otherwise fall back to checkInDate/checkOutDate
+    const checkInDate_ = checkInDate || checkIn;
+    const checkOutDate_ = checkOutDate || checkOut;
+
     const searchString = JSON.stringify({
       cityId: cityId?.toString() || "",
       countryCode: (countryCode || "").toUpperCase(),
-      checkInDate: checkInDate?.toString() || "",
-      checkOutDate: checkOutDate?.toString() || "",
+      checkInDate: checkInDate_?.toString() || "",
+      checkOutDate: checkOutDate_?.toString() || "",
       nationality: (nationality || "").toUpperCase(),
       rooms: roomsStr,
     });
