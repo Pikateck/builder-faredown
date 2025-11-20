@@ -80,6 +80,7 @@ const adminPromoRoutes = require("./routes/admin-promo.js");
 const pricingEngineRoutes = require("./routes/pricing-engine.js");
 const adminUsersVerifyRoutes = require("./routes/admin-users-verify.js");
 const adminUsersPublic = require("./routes/admin-users-public.js");
+const hotelsSearchRoutes = require("./routes/hotels-search.js");
 const adminSystemStatusRoutes = require("./routes/admin-system-status.js");
 const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history.js");
 const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
@@ -113,7 +114,9 @@ const { auditLogger } = require("./middleware/audit.cjs");
 
 // DB
 const db = require("./database/connection.js");
-const { initializeRetentionSchedule } = require("./services/systemMonitorService.js");
+const {
+  initializeRetentionSchedule,
+} = require("./services/systemMonitorService.js");
 
 // Initialize Express
 const app = express();
@@ -135,7 +138,11 @@ app.use(
           "https://accounts.google.com",
           "https://ssl.gstatic.com",
         ],
-        fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ssl.gstatic.com"],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "https://ssl.gstatic.com",
+        ],
         imgSrc: [
           "'self'",
           "data:",
@@ -164,7 +171,11 @@ app.use(
           "https://accounts.google.com",
           "https://content.googleapis.com",
         ],
-        frameAncestors: ["'self'", "https://builder.io", "https://*.builder.io"],
+        frameAncestors: [
+          "'self'",
+          "https://builder.io",
+          "https://*.builder.io",
+        ],
       },
     },
     frameguard: false,
@@ -275,7 +286,7 @@ const corsOptionsDelegate = (req, callback) => {
     return callback(null, { ...baseCorsOptions, origin });
   }
 
-  console.warn("⚠️ CORS fallback allowing unlisted origin:", origin);
+  console.warn("��️ CORS fallback allowing unlisted origin:", origin);
   return callback(null, { ...baseCorsOptions, origin, credentials: false });
 };
 
@@ -426,20 +437,31 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/oauth", oauthStatusRoutes);
 
-// SHIMS so older frontends keep working
+// 🔙 SHIMS so older frontends keep working
+// 307 redirect preserves method & signals clearly in DevTools
 app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
   res.redirect(307, "/api/oauth/google/url");
 });
 
 // Other product routes
-app.use("/api/admin/system-status", adminKeyMiddleware, adminSystemStatusRoutes);
+app.use(
+  "/api/admin/system-status",
+  adminKeyMiddleware,
+  adminSystemStatusRoutes,
+);
 app.use(
   "/api/admin/system-monitor/history",
   adminKeyMiddleware,
   adminSystemMonitorHistoryRoutes,
 );
 app.use("/api/admin/users", adminKeyMiddleware, adminUsersPublic);
-app.use("/api/admin", authenticateToken, requireAdmin, auditLogger, adminRoutes);
+app.use(
+  "/api/admin",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminRoutes,
+);
 app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
@@ -463,9 +485,8 @@ app.use("/api/tbo/voucher", tboVoucherRoutes);
 app.use("/api/tbo/balance", tboBalanceRoutes);
 app.use("/api/tbo/bookings", tboBookingsRoutes);
 
-// Canonical hotel API (TBO-first, DB-backed)
-app.use("/api/hotels", hotelCanonicalRoutes);
-
+app.use("/api/hotels/search", hotelsSearchRoutes); // Cache-backed hotel search (PRIORITY)
+app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints
 app.use("/api/hotels-metadata", require("./routes/hotels-metadata")); // Legacy: Hybrid metadata + async pricing (TBO first) - DEPRECATED
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes); // New module-specific bargain engine
@@ -527,7 +548,10 @@ app.use("/api/suppliers", require("./routes/suppliers-master"));
 // Legacy mock suppliers kept on separate path for backward compatibility
 app.use("/api/suppliers-legacy", authenticateToken, suppliersRoutes);
 app.use("/api/admin/markups", require("./routes/admin-module-markups"));
-app.use("/api/admin/suppliers", adminSuppliersRoutes);
+app.use(
+  "/api/admin/suppliers",
+  adminSuppliersRoutes, // New multi-supplier management
+);
 app.use("/api/vouchers", voucherRoutes);
 app.use("/api/profile", profileRoutes);
 app.use(reviewsRoutes);
@@ -715,9 +739,7 @@ async function startServer() {
         const { tboRequest } = require("./lib/tboRequest");
         console.log("\n🔍 Verifying Fixie Proxy Configuration...");
         console.log(
-          `   FIXIE_URL: ${
-            fixieUrl.includes("@") ? fixieUrl.substring(0, 20) + "***@***" : fixieUrl
-          }`,
+          `   FIXIE_URL: ${fixieUrl.includes("@") ? fixieUrl.substring(0, 20) + "***@***" : fixieUrl}`,
         );
         console.log(
           `   HTTP_PROXY: ${process.env.HTTP_PROXY ? "SET" : "NOT SET"}`,
@@ -726,9 +748,7 @@ async function startServer() {
           `   HTTPS_PROXY: ${process.env.HTTPS_PROXY ? "SET" : "NOT SET"}`,
         );
         console.log(
-          `   USE_SUPPLIER_PROXY: ${
-            process.env.USE_SUPPLIER_PROXY === "true" ? "ENABLED" : "DISABLED"
-          }`,
+          `   USE_SUPPLIER_PROXY: ${process.env.USE_SUPPLIER_PROXY === "true" ? "ENABLED" : "DISABLED"}`,
         );
 
         // Detect outbound IP
@@ -743,6 +763,7 @@ async function startServer() {
           const outboundIP = ipResponse.data.ip;
           console.log(`   🌐 Detected Outbound IP: ${outboundIP}`);
 
+          // Check if IP matches expected Fixie IPs
           const expectedFixieIPs = ["52.5.155.132", "52.87.82.133"];
           if (expectedFixieIPs.includes(outboundIP)) {
             console.log(`   ✅ Outbound IP is whitelisted Fixie IP`);
@@ -761,8 +782,6 @@ async function startServer() {
       }
     };
 
-    console.log("ADMIN_API_KEY (server startup):", process.env.ADMIN_API_KEY);
-
     server = app.listen(PORT, async () => {
       console.log("\n🚀 Faredown API Server Started");
       console.log("================================");
@@ -770,6 +789,7 @@ async function startServer() {
       console.log(`🥊 Health Check: http://localhost:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
 
+      // Verify proxy setup
       await verifyFixieIP();
 
       console.log("================================\n");
