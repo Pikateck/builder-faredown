@@ -357,50 +357,79 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const {
-        Destinations,
-        ResponseStatus,
-        Status,
-        Error: ApiError,
-      } = response.data || {};
+      const responseData = response.data || {};
+      const { ResponseStatus, Status, Error: ApiError } = responseData;
 
       const statusOk = ResponseStatus === 1 || Status === 1;
 
-      // ✅ Extract destinations array
-      const destinations = Array.isArray(Destinations) ? Destinations : [];
-
       if (!statusOk) {
         console.error("[TBO] ❌ Static Data Error Response", {
-          fullResponse: response.data,
+          Status,
+          ResponseStatus,
           ApiError,
         });
         // Apply fallback
         return this.applyDestinationFallback(destination, countryCode);
       }
 
-      if (destinations.length === 0) {
-        console.warn("[TBO] ⚠️  No destinations found - TBO returned empty Destinations array", {
+      // ✅ PARSE RESPONSE - Handle both nested Country->City and flat Destinations formats
+      let allCities = [];
+
+      // Format 1: Nested Country -> City structure (official API spec)
+      if (responseData.Country && Array.isArray(responseData.Country)) {
+        console.info("[TBO] Response format: Nested Country->City structure");
+        responseData.Country.forEach((country) => {
+          if (country.City && Array.isArray(country.City)) {
+            allCities.push(...country.City);
+          }
+        });
+      }
+      // Format 2: Flat Destinations array (alternate response format)
+      else if (responseData.Destinations && Array.isArray(responseData.Destinations)) {
+        console.info("[TBO] Response format: Flat Destinations array");
+        allCities = responseData.Destinations;
+      }
+      // Format 3: Wrapped in GetDestinationSearchStaticDataResult
+      else if (responseData.GetDestinationSearchStaticDataResult) {
+        console.info("[TBO] Response format: GetDestinationSearchStaticDataResult wrapper");
+        const wrapped = responseData.GetDestinationSearchStaticDataResult;
+        if (Array.isArray(wrapped)) {
+          allCities = wrapped;
+        }
+      }
+
+      if (allCities.length === 0) {
+        console.warn("[TBO] ⚠️  No cities found in response", {
           destination: normalizedDestination,
           countryCode: normalizedCountryCode,
+          responseKeys: Object.keys(responseData),
         });
         // Apply fallback
         return this.applyDestinationFallback(destination, countryCode);
       }
 
-      // ✅ LOG SAMPLE DESTINATIONS
+      // ✅ LOG SAMPLE CITIES
       const requestedCityRaw = (destination || "").trim();
       const requestedCountry = (countryCode || "").trim().toUpperCase();
 
-      console.info("[TBO] Static Destinations sample", {
+      console.info("[TBO] Static Data cities received", {
         requestedCity: requestedCityRaw,
         requestedCountry,
-        returnedCount: destinations.length,
-        firstFew: destinations.slice(0, 5).map((d) => ({
+        totalCities: allCities.length,
+        sampleCities: allCities.slice(0, 5).map((d) => ({
           CityName: d.CityName,
+          CityId: d.CityId || d.DestinationId,
           CountryCode: d.CountryCode,
-          DestinationId: d.DestinationId,
         })),
       });
+
+      // ✅ NORMALIZE CITY DATA - Handle both CityId and DestinationId field names
+      const cities = allCities.map(city => ({
+        CityName: city.CityName,
+        CityId: city.CityId || city.DestinationId,
+        DestinationId: city.DestinationId || city.CityId,
+        CountryCode: city.CountryCode,
+      }));
 
       // ✅ BUILD CANDIDATE CITY STRINGS
       const cityCandidates = [
@@ -411,7 +440,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         .filter(Boolean);
 
       // ✅ EXACT MATCH FIRST
-      let match = destinations.find((d) => {
+      let match = cities.find((d) => {
         const city = (d.CityName || "").trim().toLowerCase();
         const country = (d.CountryCode || "").trim().toUpperCase();
         return cityCandidates.includes(city) && country === requestedCountry;
@@ -420,7 +449,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       // ✅ FALLBACK: LOOSE CONTAINS MATCH
       // Helps with "New Delhi" / "Delhi", "Dubai Marina" / "Dubai"
       if (!match) {
-        match = destinations.find((d) => {
+        match = cities.find((d) => {
           const city = (d.CityName || "").trim().toLowerCase();
           const country = (d.CountryCode || "").trim().toUpperCase();
           return (
@@ -435,21 +464,22 @@ class TBOAdapter extends BaseSupplierAdapter {
         console.warn("[TBO] ⚠️  No destination match found in TBO response, applying fallback", {
           requestedCity: requestedCityRaw,
           requestedCountry,
-          destinationsCount: destinations.length,
+          totalCities: cities.length,
         });
         return this.applyDestinationFallback(requestedCityRaw, requestedCountry);
       }
 
       // ✅ SUCCESS - LOG RESOLVED CITY
+      const resolvedId = match.DestinationId || match.CityId;
       console.info("[TBO] ✅ CityId resolved", {
         requestedCity: requestedCityRaw,
         requestedCountry,
-        destinationId: match.DestinationId,
+        destinationId: resolvedId,
         matchedCity: match.CityName,
         matchedCountry: match.CountryCode,
       });
 
-      return match.DestinationId;
+      return resolvedId;
     } catch (error) {
       this.logger.error(
         "❌ Failed to get CityId - returning null to avoid crash",
