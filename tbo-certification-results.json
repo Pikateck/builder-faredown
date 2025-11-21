@@ -1,287 +1,87 @@
 {
   "agency": "BOMF145",
-  "executionTime": "2025-11-21T05:51:53.672Z",
+  "executionTime": "2025-11-21T05:52:11.626Z",
   "totalCases": 8,
   "results": [
     {
       "caseId": 1,
       "name": "Domestic Booking - Room 1: Adult 1",
       "description": "Single room, single adult in India",
-      "timestamp": "2025-11-21T05:51:53.674Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Mumbai",
-            "countryCode": "IN",
-            "checkIn": "2025-12-20",
-            "checkOut": "2025-12-22",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "INR",
-            "guestNationality": "IN"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:11.628Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 2,
       "name": "Domestic Booking - Room 1: Adult 2, Child 2",
       "description": "Single room with 2 adults and 2 children",
-      "timestamp": "2025-11-21T05:51:53.955Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Delhi",
-            "countryCode": "IN",
-            "checkIn": "2025-12-21",
-            "checkOut": "2025-12-24",
-            "rooms": [
-              {
-                "adults": 2,
-                "children": 2,
-                "childAges": [
-                  8,
-                  12
-                ]
-              }
-            ],
-            "currency": "INR",
-            "guestNationality": "IN"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:11.861Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 3,
       "name": "Domestic Booking - Room 1: Adult 1, Room 2: Adult 1",
       "description": "Two rooms, one adult each",
-      "timestamp": "2025-11-21T05:51:54.048Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Bangalore",
-            "countryCode": "IN",
-            "checkIn": "2025-12-22",
-            "checkOut": "2025-12-25",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              },
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "INR",
-            "guestNationality": "IN"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:11.945Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 4,
       "name": "Domestic Booking - Room 1: Adult 1+Child 2, Room 2: Adult 2",
       "description": "Multiple rooms with mixed occupancy",
-      "timestamp": "2025-11-21T05:51:54.141Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Hyderabad",
-            "countryCode": "IN",
-            "checkIn": "2025-12-23",
-            "checkOut": "2025-12-26",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 2,
-                "childAges": [
-                  6,
-                  10
-                ]
-              },
-              {
-                "adults": 2,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "INR",
-            "guestNationality": "IN"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:12.027Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 5,
       "name": "International Booking - Room 1: Adult 1",
       "description": "International guest in Dubai",
-      "timestamp": "2025-11-21T05:51:54.235Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Dubai",
-            "countryCode": "AE",
-            "checkIn": "2025-12-25",
-            "checkOut": "2025-12-28",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "USD",
-            "guestNationality": "US"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:12.107Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 6,
       "name": "International Booking - Room 1: Adult 2, Child 2",
       "description": "International family in Dubai",
-      "timestamp": "2025-11-21T05:51:54.334Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Dubai",
-            "countryCode": "AE",
-            "checkIn": "2025-12-26",
-            "checkOut": "2025-12-29",
-            "rooms": [
-              {
-                "adults": 2,
-                "children": 2,
-                "childAges": [
-                  7,
-                  11
-                ]
-              }
-            ],
-            "currency": "USD",
-            "guestNationality": "GB"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:12.189Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 7,
       "name": "International Booking - Room 1: Adult 1, Room 2: Adult 1",
       "description": "Two international guests in different rooms",
-      "timestamp": "2025-11-21T05:51:54.431Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Dubai",
-            "countryCode": "AE",
-            "checkIn": "2025-12-27",
-            "checkOut": "2025-12-30",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              },
-              {
-                "adults": 1,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "USD",
-            "guestNationality": "AU"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:12.273Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     },
     {
       "caseId": 8,
       "name": "International Booking - Room 1: Adult 1+Child 2, Room 2: Adult 2",
       "description": "International family with multiple rooms",
-      "timestamp": "2025-11-21T05:51:54.526Z",
-      "steps": [
-        {
-          "step": "search",
-          "request": {
-            "destination": "Dubai",
-            "countryCode": "AE",
-            "checkIn": "2025-12-28",
-            "checkOut": "2025-12-31",
-            "rooms": [
-              {
-                "adults": 1,
-                "children": 2,
-                "childAges": [
-                  5,
-                  9
-                ]
-              },
-              {
-                "adults": 2,
-                "children": 0,
-                "childAges": []
-              }
-            ],
-            "currency": "USD",
-            "guestNationality": "CA"
-          },
-          "response": "Health check OK",
-          "status": 200
-        }
-      ],
+      "timestamp": "2025-11-21T05:52:12.354Z",
+      "steps": [],
       "success": false,
       "confirmationNumber": null,
-      "error": "Search returned no hotels"
+      "error": "Request failed with status code 500"
     }
   ],
   "summary": {
@@ -290,35 +90,35 @@
     "errors": [
       {
         "caseId": 1,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 2,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 3,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 4,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 5,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 6,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 7,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       },
       {
         "caseId": 8,
-        "error": "Search returned no hotels"
+        "error": "Request failed with status code 500"
       }
     ]
   }
