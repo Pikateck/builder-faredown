@@ -120,7 +120,6 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
       // This will populate hotel_search_cache and hotel_search_cache_results
       try {
         // Generate searchHash using the same logic as hotelApiCachingService
-        const hotelApiCachingService = require("../services/hotelApiCachingService");
         const searchHash = hotelApiCachingService.generateSearchHash(searchRequest);
 
         // Extract hotel IDs from results
