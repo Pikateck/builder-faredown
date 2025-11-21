@@ -25,6 +25,7 @@
 const db = require("../lib/db");
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 const hotelCacheService = require("../services/hotelCacheService");
+const hotelApiCachingService = require("../services/hotelApiCachingService");
 
 // List of top cities to precache (ordered by volume)
 const TOP_CITIES_TO_PRECACHE = [
