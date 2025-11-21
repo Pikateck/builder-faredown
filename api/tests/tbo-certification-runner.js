@@ -458,17 +458,22 @@ async function executeTestCase(testCase) {
     }
 
     const traceId = searchResponse.data.traceId;
-    const selectedHotel = searchResponse.data.hotels[0];
-    console.log(`✓ Found ${searchResponse.data.hotels.length} hotels`);
-    console.log(`  First hotel keys: ${Object.keys(selectedHotel).slice(0, 10).join(", ")}`);
-    console.log(`  hotelName: ${selectedHotel?.hotelName}`);
-    console.log(`  HotelName: ${selectedHotel?.HotelName}`);
-    console.log(`✓ Selected hotel: ${selectedHotel.hotelName || selectedHotel.HotelName || "Unknown"}`);
+    let selectedHotel = searchResponse.data.hotels[0];
 
-    if (!selectedHotel.hotelCode) {
-      console.log(`  ERROR: No hotelCode found in response!`);
-      console.log(`  Available code fields: hotelCode=${selectedHotel?.hotelCode}, HotelCode=${selectedHotel?.HotelCode}`);
+    // Normalize hotel properties (handle both camelCase and PascalCase)
+    if (selectedHotel) {
+      selectedHotel = {
+        resultIndex: selectedHotel.resultIndex !== undefined ? selectedHotel.resultIndex : selectedHotel.ResultIndex || 0,
+        hotelCode: selectedHotel.hotelCode || selectedHotel.HotelCode,
+        hotelName: selectedHotel.hotelName || selectedHotel.HotelName || "Unknown Hotel",
+        ...selectedHotel
+      };
     }
+
+    console.log(`✓ Found ${searchResponse.data.hotels.length} hotels`);
+    console.log(`✓ Selected hotel: ${selectedHotel?.hotelName || "Unknown"}`);
+    console.log(`  Code: ${selectedHotel?.hotelCode}`);
+    console.log(`  Index: ${selectedHotel?.resultIndex}`);
 
     // Step 2: Get Hotel Room Details
     console.log(`\n[Step 2] Getting room details...`);
