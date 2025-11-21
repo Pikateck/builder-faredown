@@ -79,14 +79,18 @@ async function verifyHealthCheck() {
   logSection("STEP 1: API Health & Database Verification");
 
   try {
-    const response = await axios.get(
-      `${API_BASE.replace("/api", "")}/health`,
-      { timeout: 5000 },
-    );
+    const response = await axios.get(`${API_BASE.replace("/api", "")}/health`, {
+      timeout: 5000,
+    });
 
-    if (response.data.status === "healthy" || response.data.status === "degraded") {
+    if (
+      response.data.status === "healthy" ||
+      response.data.status === "degraded"
+    ) {
       logSuccess(`API is ${response.data.status}`);
-      logInfo(`Database: ${response.data.database?.healthy ? "✅ Connected" : "❌ Offline"}`);
+      logInfo(
+        `Database: ${response.data.database?.healthy ? "✅ Connected" : "❌ Offline"}`,
+      );
 
       testMetrics.stepResults.healthCheck = {
         status: "passed",
@@ -103,7 +107,10 @@ async function verifyHealthCheck() {
     return false;
   } catch (err) {
     logError(`Health check failed: ${err.message}`);
-    testMetrics.stepResults.healthCheck = { status: "failed", error: err.message };
+    testMetrics.stepResults.healthCheck = {
+      status: "failed",
+      error: err.message,
+    };
     testMetrics.errors.push(`Health check: ${err.message}`);
     return false;
   }
@@ -227,7 +234,10 @@ async function testPrebookEndpoint(searchData) {
     logError(`PreBook failed: ${err.message}`);
     if (err.response?.status === 404 || err.response?.status === 400) {
       logWarn("Cache miss (expected on first run) - continuing with mock data");
-      testMetrics.stepResults.prebook = { status: "skipped", reason: "cache_miss" };
+      testMetrics.stepResults.prebook = {
+        status: "skipped",
+        reason: "cache_miss",
+      };
       return null;
     }
     testMetrics.stepResults.prebook = { status: "failed", error: err.message };
@@ -266,12 +276,8 @@ async function testBlockEndpoint(searchData, prebookData) {
 
     logSuccess("Room blocked successfully");
     if (VERBOSE) {
-      logInfo(
-        `Price changed: ${isPriceChanged ? "⚠️ YES" : "✅ NO"}`,
-      );
-      logInfo(
-        `Policy changed: ${isPolicyChanged ? "⚠️ YES" : "✅ NO"}`,
-      );
+      logInfo(`Price changed: ${isPriceChanged ? "⚠️ YES" : "✅ NO"}`);
+      logInfo(`Policy changed: ${isPolicyChanged ? "⚠️ YES" : "✅ NO"}`);
     }
 
     testMetrics.stepResults.block = {
@@ -291,7 +297,10 @@ async function testBlockEndpoint(searchData, prebookData) {
     logError(`Block failed: ${err.message}`);
     if (err.response?.status === 404 || err.response?.status === 400) {
       logWarn("Cache miss - skipping book test");
-      testMetrics.stepResults.block = { status: "skipped", reason: "cache_miss" };
+      testMetrics.stepResults.block = {
+        status: "skipped",
+        reason: "cache_miss",
+      };
       return null;
     }
     testMetrics.stepResults.block = { status: "failed", error: err.message };
@@ -325,7 +334,8 @@ async function testBookEndpoint(searchData, prebookData, blockData) {
         AddressLine1: "123 Test Street",
         City: DESTINATION,
         CountryCode: DESTINATION === "Mumbai" ? "IN" : "AE",
-        CountryName: DESTINATION === "Mumbai" ? "India" : "United Arab Emirates",
+        CountryName:
+          DESTINATION === "Mumbai" ? "India" : "United Arab Emirates",
         Nationality: "IN",
       },
     ];
@@ -346,8 +356,12 @@ async function testBookEndpoint(searchData, prebookData, blockData) {
       timeout: 30000,
     });
 
-    const { bookingReference, hotelConfirmationNo, bookingStatus, bookingDetails } =
-      response.data;
+    const {
+      bookingReference,
+      hotelConfirmationNo,
+      bookingStatus,
+      bookingDetails,
+    } = response.data;
 
     logSuccess(`Booking confirmed: ${bookingReference}`);
     if (VERBOSE) {
@@ -372,7 +386,10 @@ async function testBookEndpoint(searchData, prebookData, blockData) {
     logError(`Book failed: ${err.message}`);
     if (err.response?.status === 404 || err.response?.status === 400) {
       logWarn("Cache miss - booking test skipped");
-      testMetrics.stepResults.book = { status: "skipped", reason: "cache_miss" };
+      testMetrics.stepResults.book = {
+        status: "skipped",
+        reason: "cache_miss",
+      };
       return null;
     }
     testMetrics.stepResults.book = { status: "failed", error: err.message };
@@ -395,15 +412,20 @@ async function verifyDatabaseTables() {
       "bookings",
     ];
 
-    const result = await db.query(`
+    const result = await db.query(
+      `
       SELECT table_name 
       FROM information_schema.tables 
       WHERE table_schema = 'public' 
       AND table_name = ANY($1)
-    `, [requiredTables]);
+    `,
+      [requiredTables],
+    );
 
     const foundTables = result.rows.map((r) => r.table_name);
-    const missingTables = requiredTables.filter((t) => !foundTables.includes(t));
+    const missingTables = requiredTables.filter(
+      (t) => !foundTables.includes(t),
+    );
 
     if (missingTables.length === 0) {
       logSuccess("All required tables exist");
@@ -421,8 +443,7 @@ async function verifyDatabaseTables() {
           const countResult = await db.query(
             `SELECT COUNT(*) as count FROM ${table}`,
           );
-          const key =
-            table === "bookings" ? "tbo_bookings" : table;
+          const key = table === "bookings" ? "tbo_bookings" : table;
           counts[key] = parseInt(countResult.rows[0].count, 10);
         } catch (err) {
           // Table might not have data yet
@@ -439,7 +460,10 @@ async function verifyDatabaseTables() {
       return true;
     } else {
       logError(`Missing tables: ${missingTables.join(", ")}`);
-      testMetrics.stepResults.database = { status: "failed", missing: missingTables };
+      testMetrics.stepResults.database = {
+        status: "failed",
+        missing: missingTables,
+      };
       testMetrics.errors.push(`Missing DB tables: ${missingTables.join(", ")}`);
       return false;
     }
@@ -501,12 +525,20 @@ function generateReport() {
 
   Object.entries(testMetrics.stepResults).forEach(([step, result]) => {
     const symbol =
-      result.status === "passed" ? "✅" : result.status === "skipped" ? "⊘" : "❌";
+      result.status === "passed"
+        ? "✅"
+        : result.status === "skipped"
+          ? "⊘"
+          : "❌";
     log(
       `${symbol} ${step}: ${result.status}${
         result.reason ? ` (${result.reason})` : ""
       }`,
-      result.status === "passed" ? "green" : result.status === "skipped" ? "gray" : "red",
+      result.status === "passed"
+        ? "green"
+        : result.status === "skipped"
+          ? "gray"
+          : "red",
     );
   });
 

@@ -224,7 +224,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const { TokenId, Error: ErrorResponse, ResponseStatus, Status } = response.data || {};
+      const {
+        TokenId,
+        Error: ErrorResponse,
+        ResponseStatus,
+        Status,
+      } = response.data || {};
 
       if (!TokenId || (ResponseStatus !== 1 && Status !== 1)) {
         throw new Error(

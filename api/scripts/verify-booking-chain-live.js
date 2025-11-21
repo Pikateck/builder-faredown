@@ -34,7 +34,9 @@ async function verify() {
         timeout: 5000,
       });
       console.log(`   ✅ API Healthy: ${health.data.status}`);
-      console.log(`   Database: ${health.data.database?.healthy ? "✅" : "❌"}`);
+      console.log(
+        `   Database: ${health.data.database?.healthy ? "✅" : "❌"}`,
+      );
       checks.apiHealth = true;
     } catch (err) {
       console.log(`   ❌ API Health Check Failed: ${err.message}`);
@@ -69,7 +71,9 @@ async function verify() {
         console.log(`   ⚠️ Search returned unexpected format`);
       }
     } catch (err) {
-      console.log(`   ❌ Search Failed: ${err.response?.status || err.message}`);
+      console.log(
+        `   ❌ Search Failed: ${err.response?.status || err.message}`,
+      );
       if (err.response?.data?.error) {
         console.log(`      Error: ${err.response.data.error}`);
       }
@@ -102,7 +106,9 @@ async function verify() {
       }
     } catch (err) {
       if (err.response?.status === 404 || err.response?.status === 400) {
-        console.log(`   ⚠️ PreBook endpoint exists (cache miss: ${err.response.status})`);
+        console.log(
+          `   ⚠️ PreBook endpoint exists (cache miss: ${err.response.status})`,
+        );
         checks.prebookEndpoint = true;
       } else {
         console.log(`   ❌ PreBook Failed: ${err.message}`);
@@ -134,7 +140,9 @@ async function verify() {
       }
     } catch (err) {
       if (err.response?.status === 404 || err.response?.status === 400) {
-        console.log(`   ⚠️ Block endpoint exists (cache miss: ${err.response.status})`);
+        console.log(
+          `   ⚠️ Block endpoint exists (cache miss: ${err.response.status})`,
+        );
         checks.blockEndpoint = true;
       } else {
         console.log(`   ❌ Block Failed: ${err.message}`);
@@ -154,11 +162,9 @@ async function verify() {
         contactPhone: "+971501234567",
       };
 
-      const bookRes = await axios.post(
-        `${API_BASE}/hotels/book`,
-        bookPayload,
-        { timeout: 10000 },
-      );
+      const bookRes = await axios.post(`${API_BASE}/hotels/book`, bookPayload, {
+        timeout: 10000,
+      });
 
       if (bookRes.status === 400 || bookRes.status === 404) {
         console.log(`   ⚠️ Book endpoint exists (cache miss expected)`);
@@ -169,7 +175,9 @@ async function verify() {
       }
     } catch (err) {
       if (err.response?.status === 404 || err.response?.status === 400) {
-        console.log(`   ⚠️ Book endpoint exists (cache miss: ${err.response.status})`);
+        console.log(
+          `   ⚠️ Book endpoint exists (cache miss: ${err.response.status})`,
+        );
         checks.bookEndpoint = true;
       } else {
         console.log(`   ❌ Book Failed: ${err.message}`);
@@ -205,14 +213,18 @@ async function verify() {
           db.query("SELECT COUNT(*) as count FROM tbo_trace_logs"),
           db.query("SELECT COUNT(*) as count FROM tbo_booking_sessions"),
           db.query("SELECT COUNT(*) as count FROM hotel_search_cache"),
-          db.query("SELECT COUNT(*) as count FROM bookings WHERE supplier='TBO'"),
+          db.query(
+            "SELECT COUNT(*) as count FROM bookings WHERE supplier='TBO'",
+          ),
         ]);
 
         console.log(`      tbo_trace_logs: ${counts[0].rows[0].count} records`);
         console.log(
           `      tbo_booking_sessions: ${counts[1].rows[0].count} records`,
         );
-        console.log(`      hotel_search_cache: ${counts[2].rows[0].count} records`);
+        console.log(
+          `      hotel_search_cache: ${counts[2].rows[0].count} records`,
+        );
         console.log(`      TBO bookings: ${counts[3].rows[0].count} records`);
       } else {
         console.log(`   ❌ Missing tables: ${missing.join(", ")}`);
