@@ -228,7 +228,7 @@ router.post("/", async (req, res) => {
     }
 
     // Extract hotels and session metadata from response
-    console.log('[ROUTE] TBO Response received', {
+    console.log("[ROUTE] TBO Response received", {
       isArray: Array.isArray(tboResponse),
       hasHotels: !!tboResponse.hotels,
       hotelsLength: tboResponse.hotels?.length,
@@ -241,7 +241,7 @@ router.post("/", async (req, res) => {
       : tboResponse.hotels || [];
     const sessionMetadata = tboResponse.sessionMetadata || {};
 
-    console.log('[ROUTE] Extracted hotels', { count: tboHotels.length });
+    console.log("[ROUTE] Extracted hotels", { count: tboHotels.length });
 
     if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`, {
