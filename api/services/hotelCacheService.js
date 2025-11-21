@@ -175,14 +175,14 @@ class HotelCacheService {
         ],
       );
 
-      // Insert individual result mappings
+      // Insert individual result mappings with price snapshots
       for (const [rank, hotelId] of hotelIds.entries()) {
         await db.query(
           `INSERT INTO public.hotel_search_cache_results
-           (search_hash, tbo_hotel_code, result_rank)
-           VALUES ($1, $2, $3)
+           (search_hash, tbo_hotel_code, result_rank, price_offered_per_night, price_published_per_night)
+           VALUES ($1, $2, $3, $4, $5)
            ON CONFLICT DO NOTHING`,
-          [searchHash, hotelId, rank + 1],
+          [searchHash, hotelId, rank + 1, null, null],
         );
       }
 
@@ -288,7 +288,7 @@ class HotelCacheService {
 
       return true;
     } catch (error) {
-      console.error("❌ Error storing normalized hotel:", error.message);
+      console.error("��� Error storing normalized hotel:", error.message);
       return false;
     }
   }
