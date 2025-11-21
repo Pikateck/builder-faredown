@@ -30,16 +30,22 @@
 - **DB Tables**: `hotel_search_cache`, `hotel_search_cache_results`
 
 ### Step 2: Session Tracking for Live Searches
-- **Status**: ⏳ Pending
+- **Status**: 🔄 NEEDS VERIFICATION
 - **Description**: Write session fields for every live search (same fields as precache)
+- **Current Implementation**:
+  - ✅ Session metadata extracted from TBO response (line 244-257 in hotels-search.js)
+  - ✅ Passed to cacheSearchResults (line 353-359)
+  - ⚠️ NEEDS VERIFICATION: Check if all session fields are being written to DB
+  - ⚠️ MISSING: Session validation on room/prebook requests
+  - ⚠️ MISSING: Stale session rejection before PreBook
 - **Deliverables**:
-  - [ ] Write `tbo_trace_id`, `tbo_token_id`, `session_creation_time`, etc. for each search
-  - [ ] Validate session on room/prebook requests
-  - [ ] Reject stale sessions before PreBook
-  - [ ] Test session reuse across Room → PreBook → BlockRoom → Book
+  - [ ] Verify `tbo_trace_id`, `tbo_token_id`, `session_created_at`, `session_expires_at` written to DB
+  - [ ] Add session validation on `/api/hotels/rooms/:hotelId` endpoint
+  - [ ] Add session reuse tracking across Room → PreBook → BlockRoom → Book
+  - [ ] Test session lifetime (24hr TTL per TBO rules)
 - **Files to modify**:
-  - `api/services/adapters/tboAdapter.js`
-  - `api/routes/hotels.js`
+  - `api/services/hotelCacheService.js` (verify cacheSearchResults saves session fields)
+  - `api/routes/hotels-search.js` (add session validation for rooms)
 - **DB Tables**: `hotel_search_cache` (session fields)
 
 ### Step 2.5: UI Wiring (Part of Phase 1)
