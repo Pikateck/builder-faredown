@@ -254,7 +254,7 @@ router.post("/search", async (req, res) => {
     // Merge nationality into search request
     const searchRequest = {
       ...req.body,
-      guestNationality: req.body.guestNationality || guestNationality
+      guestNationality: req.body.guestNationality || guestNationality,
     };
 
     // Execute raw search with 90-second timeout (large result sets via proxy)
@@ -284,19 +284,19 @@ router.post("/search", async (req, res) => {
       .map((h) => TBOAdapter.toUnifiedHotel(h, searchContext))
       .filter(Boolean);
 
-      // Cache search results
-try {
-  const hotelCacheService = require("../services/hotelCacheService");
-  await hotelCacheService.cacheSearchResults(
-    unifiedResults,
-    searchRequest,
-    "tbo_search",
-    {} // sessionMetadata (if available from adapter)
-  );
-  console.log(`✅ Cached ${unifiedResults.length} hotels for TBO search`);
-} catch (cacheErr) {
-  console.warn("⚠️ Failed to cache TBO search results:", cacheErr.message);
-}
+    // Cache search results
+    try {
+      const hotelCacheService = require("../services/hotelCacheService");
+      await hotelCacheService.cacheSearchResults(
+        unifiedResults,
+        searchRequest,
+        "tbo_search",
+        {}, // sessionMetadata (if available from adapter)
+      );
+      console.log(`✅ Cached ${unifiedResults.length} hotels for TBO search`);
+    } catch (cacheErr) {
+      console.warn("⚠️ Failed to cache TBO search results:", cacheErr.message);
+    }
     // Generate searchId for tracking
     const searchId = uuidv4();
 

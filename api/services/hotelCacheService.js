@@ -176,21 +176,21 @@ class HotelCacheService {
       );
 
       // Insert individual result mappings with prices
-for (const [rank, hotelId] of hotelIds.entries()) {
-  await db.query(
-    `INSERT INTO public.hotel_search_cache_results
+      for (const [rank, hotelId] of hotelIds.entries()) {
+        await db.query(
+          `INSERT INTO public.hotel_search_cache_results
      (search_hash, tbo_hotel_code, result_rank, price_offered_per_night, price_published_per_night)
      VALUES ($1, $2, $3, $4, $5)
      ON CONFLICT DO NOTHING`,
-    [
-      searchHash, 
-      hotelId, 
-      rank + 1,
-      null,  // price_offered (can extract from sessionMetadata later)
-      null,  // price_published (can extract from sessionMetadata later)
-    ],
-  );
-}
+          [
+            searchHash,
+            hotelId,
+            rank + 1,
+            null, // price_offered (can extract from sessionMetadata later)
+            null, // price_published (can extract from sessionMetadata later)
+          ],
+        );
+      }
 
       console.log(
         `✅ Cached search: ${searchHash} with ${hotelIds.length} hotels`,

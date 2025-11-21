@@ -174,11 +174,11 @@ async function createCityMappings() {
   try {
     // Get all Hotelbeds cities
     const hotelbedsCitiesResult = await db.query(
-      `SELECT c.id, c.name, c.code, c.country_id, co.iso_code
+      `SELECT c.id, c.name, c.country_id, co.iso2 AS iso_code
        FROM cities c
        JOIN countries co ON c.country_id = co.id
        WHERE c.is_active = true
-       ORDER BY co.iso_code, c.name`,
+       ORDER BY co.iso2, c.name`,
     );
 
     const hotelbedsCities = hotelbedsCitiesResult.rows;
@@ -243,7 +243,7 @@ async function createCityMappings() {
            ON CONFLICT (hotelbeds_city_code)
            DO UPDATE SET tbo_city_id = EXCLUDED.tbo_city_id, tbo_city_name = EXCLUDED.tbo_city_name, match_confidence = EXCLUDED.match_confidence, match_method = EXCLUDED.match_method, updated_at = NOW()`,
           [
-            hbCity.code || hbCity.name,
+            hbCity.name,
             hbCity.name,
             hbCity.iso_code,
             bestMatch.tbo_city_id,

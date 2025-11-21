@@ -1,8 +1,8 @@
 {
   "name": "builder-faredown-pricing",
   "private": true,
-  "version": "1.0.0",
-  "description": "Faredown Pricing API (Node/Express)",
+  "version": "1.0.1",
+  "description": "Faredown Pricing API (Node/Express) - TBO Integration Complete",
   "main": "server.js",
   "scripts": {
     "dev": "vite",
