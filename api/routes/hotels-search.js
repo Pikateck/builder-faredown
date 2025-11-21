@@ -298,6 +298,7 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 5: Normalize and store hotel data
     // ============================================================
+    console.log(`💾 Storing hotels with cityId: ${sessionMetadata.destinationId}`);
     const hotelIds = [];
 
     for (const tboHotel of tboHotels) {
