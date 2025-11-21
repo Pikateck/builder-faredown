@@ -1,0 +1,59 @@
+TBO HOTEL API CERTIFICATION TEST SUMMARY
+================================================================================
+Agency: BOMF145
+Execution Time: 2025-11-21T05:44:09.248Z
+Total Test Cases: 8
+Passed: 0
+Failed: 8
+
+TEST CASE RESULTS:
+================================================================================
+
+Case 1: Domestic Booking - Room 1: Adult 1
+Status: ✗ FAIL
+Error: Request failed with status code 400
+
+Case 2: Domestic Booking - Room 1: Adult 2, Child 2
+Status: ✗ FAIL
+Error: Request failed with status code 400
+
+Case 3: Domestic Booking - Room 1: Adult 1, Room 2: Adult 1
+Status: ✗ FAIL
+Error: Request failed with status code 400
+
+Case 4: Domestic Booking - Room 1: Adult 1+Child 2, Room 2: Adult 2
+Status: ✗ FAIL
+Error: Request failed with status code 400
+
+Case 5: International Booking - Room 1: Adult 1
+Status: ✗ FAIL
+Error: Request failed with status code 500
+
+Case 6: International Booking - Room 1: Adult 2, Child 2
+Status: ✗ FAIL
+Error: Request failed with status code 500
+
+Case 7: International Booking - Room 1: Adult 1, Room 2: Adult 1
+Status: ✗ FAIL
+Error: Request failed with status code 500
+
+Case 8: International Booking - Room 1: Adult 1+Child 2, Room 2: Adult 2
+Status: ✗ FAIL
+Error: Request failed with status code 500
+
+ERRORS:
+================================================================================
+
+Case 1: Request failed with status code 400
+Case 2: Request failed with status code 400
+Case 3: Request failed with status code 400
+Case 4: Request failed with status code 400
+Case 5: Request failed with status code 500
+Case 6: Request failed with status code 500
+Case 7: Request failed with status code 500
+Case 8: Request failed with status code 500
+
+================================================================================
+JSON LOGS: tbo-certification-results.json
+For detailed request/response data, please refer to the JSON file.
+================================================================================
