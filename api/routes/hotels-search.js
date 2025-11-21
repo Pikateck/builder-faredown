@@ -244,7 +244,11 @@ router.post("/", async (req, res) => {
       : tboResponse.hotels || tboResponse.results || [];
     const sessionMetadata = tboResponse.sessionMetadata || {};
 
-    console.log("[ROUTE] Extracted hotels", { count: tboHotels.length });
+    console.log("[ROUTE] Extracted hotels", {
+      count: tboHotels.length,
+      source: tboResponse.cacheHit ? 'cache' : 'adapter',
+      firstHotelKeys: tboHotels[0] ? Object.keys(tboHotels[0]) : [],
+    });
 
     if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`, {
