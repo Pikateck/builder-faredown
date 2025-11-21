@@ -523,6 +523,8 @@ async function executeTestCase(testCase) {
       noOfRooms: testCase.roomConfigs.length,
       isVoucherBooking: true,
       hotelRoomDetails: roomResponse.data.hotelRoomDetails,
+    }, {
+      timeout: 60000  // 60 second timeout for block
     });
 
     result.steps.push({
