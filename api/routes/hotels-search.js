@@ -261,6 +261,7 @@ router.post("/", async (req, res) => {
       count: tboHotels.length,
       source: tboResponse.cacheHit ? "cache" : "adapter",
       firstHotelKeys: tboHotels[0] ? Object.keys(tboHotels[0]) : [],
+      cityId: sessionMetadata.destinationId,
     });
 
     if (tboHotels.length === 0) {
