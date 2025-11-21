@@ -347,13 +347,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       countryCode,
     });
 
-    const normalizedDestination = destination.replace(/,.*$/, "").trim();
+    // Normalize inputs first
+    const normalizedDestination = (destination || "").replace(/,.*$/, "").trim();
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
 
     // Try local mapping first (pre-synced data from city_mapping table)
-    const localCityId = await this.getLocalCityMapping(normalizedDestination, normalizedCountryCode);
-    if (localCityId) {
-      return localCityId;
+    try {
+      const localCityId = await this.getLocalCityMapping(normalizedDestination, normalizedCountryCode);
+      if (localCityId) {
+        return localCityId;
+      }
+    } catch (localErr) {
+      console.warn("[TBO] Local mapping error, continuing with API fallback:", localErr.message);
     }
 
     // Fall back to TBO static data API
