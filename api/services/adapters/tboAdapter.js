@@ -116,7 +116,7 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    */
   normalizeRooms(rooms, adults = 2, children = 0, childAges = []) {
-    this.logger.info("🔄 Normalizing rooms parameter", {
+    this.logger.info("�� Normalizing rooms parameter", {
       incoming: {
         rooms,
         roomsType: typeof rooms,
@@ -224,11 +224,11 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
-      const { TokenId, Error, ResponseStatus, Status } = response.data || {};
+      const { TokenId, Error: ErrorResponse, ResponseStatus, Status } = response.data || {};
 
       if (!TokenId || (ResponseStatus !== 1 && Status !== 1)) {
         throw new Error(
-          `Auth failed: ${Error?.ErrorMessage || Error || "Unknown error"}`,
+          `Auth failed: ${ErrorResponse?.ErrorMessage || ErrorResponse || "Unknown error"}`,
         );
       }
 
