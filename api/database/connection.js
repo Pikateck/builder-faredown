@@ -286,35 +286,47 @@ class DatabaseConnection {
       `);
 
       // Add session tracking columns if they don't exist (for existing tables)
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS tbo_trace_id VARCHAR(100)
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS tbo_token_id VARCHAR(500)
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS session_started_at TIMESTAMPTZ
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS session_expires_at TIMESTAMPTZ
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS supplier VARCHAR(50)
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
-      await this.query(`
+      await this.query(
+        `
         ALTER TABLE public.hotel_search_cache
         ADD COLUMN IF NOT EXISTS supplier_metadata JSONB
-      `).catch(() => {});
+      `,
+      ).catch(() => {});
 
       // Create indexes for hotel_search_cache
       await this.query(
