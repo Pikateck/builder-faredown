@@ -246,7 +246,7 @@ router.post("/", async (req, res) => {
 
     console.log("[ROUTE] Extracted hotels", {
       count: tboHotels.length,
-      source: tboResponse.cacheHit ? 'cache' : 'adapter',
+      source: tboResponse.cacheHit ? "cache" : "adapter",
       firstHotelKeys: tboHotels[0] ? Object.keys(tboHotels[0]) : [],
     });
 
