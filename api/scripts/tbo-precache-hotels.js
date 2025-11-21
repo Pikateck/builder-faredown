@@ -91,8 +91,26 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
     const searchResult = await adapter.searchHotels(searchRequest);
     const duration = Date.now() - startTime;
 
-    // Extract hotels array from response (which includes sessionMetadata)
-    const results = searchResult.hotels || searchResult || [];
+    // Extract hotels array from response
+    // The caching integration wrapper returns: { results: [...], cacheHit, traceId, searchHash }
+    // The TBO adapter returns: { hotels: [...], sessionMetadata }
+    // Handle both cases
+    let results = [];
+    let sessionMetadata = {};
+
+    if (searchResult.results) {
+      // From caching service wrapper
+      results = searchResult.results;
+      // Try to extract sessionMetadata if it's nested
+      if (Array.isArray(results) && results.length > 0 && results[0].sessionMetadata) {
+        sessionMetadata = results[0].sessionMetadata;
+      }
+    } else if (searchResult.hotels) {
+      // Direct from TBO adapter (if not wrapped)
+      results = searchResult.hotels;
+      sessionMetadata = searchResult.sessionMetadata || {};
+    }
+
     const hotelCount = results.length;
 
     console.log(`   ✓ Found ${hotelCount} hotels (${duration}ms)`);
