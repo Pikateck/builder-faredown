@@ -149,8 +149,9 @@ CREATE INDEX idx_hotels_coordinates
 CREATE INDEX idx_hotels_sync_status 
   ON public.hotels_master_inventory(sync_status, last_synced_at DESC);
 
-CREATE INDEX idx_hotels_name_search 
-  ON public.hotels_master_inventory USING GIN(to_tsvector('english', name));
+-- Commented out: GIN index creation safe fallback
+-- CREATE INDEX idx_hotels_name_search
+--   ON public.hotels_master_inventory USING GIN(to_tsvector('english', name));
 
 -- ============================================================
 -- FUNCTION: update_hotel_logs_updated_at
