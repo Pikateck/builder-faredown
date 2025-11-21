@@ -738,13 +738,15 @@ class TBOAdapter extends BaseSupplierAdapter {
       );
 
       // Transform to our format
+      console.log('[TBO] About to transform hotels', { count: hotels.length, firstHotelKeys: Object.keys(hotels[0] || {}) });
       const transformedHotels = this.transformHotelResults(
         hotels,
         searchParams,
       );
+      console.log('[TBO] Hotels transformed', { count: transformedHotels.length, firstHotel: transformedHotels[0] });
 
       // Return hotels with session metadata
-      return {
+      const finalResponse = {
         hotels: transformedHotels,
         sessionMetadata: {
           traceId: searchResult?.TraceId || null,
@@ -753,6 +755,8 @@ class TBOAdapter extends BaseSupplierAdapter {
           supplierResponseFull: searchResult,
         },
       };
+      console.log('[TBO] Returning response', { hotelsCount: finalResponse.hotels.length });
+      return finalResponse;
     } catch (error) {
       // ✅ CASE 3: Error
       this.logger.error("❌ TBO Hotel Search FAILED", {

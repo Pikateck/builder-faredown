@@ -228,10 +228,20 @@ router.post("/", async (req, res) => {
     }
 
     // Extract hotels and session metadata from response
+    console.log('[ROUTE] TBO Response received', {
+      isArray: Array.isArray(tboResponse),
+      hasHotels: !!tboResponse.hotels,
+      hotelsLength: tboResponse.hotels?.length,
+      hasSessionMetadata: !!tboResponse.sessionMetadata,
+      responseKeys: Object.keys(tboResponse || {}),
+    });
+
     const tboHotels = Array.isArray(tboResponse)
       ? tboResponse // Backwards compatibility
       : tboResponse.hotels || [];
     const sessionMetadata = tboResponse.sessionMetadata || {};
+
+    console.log('[ROUTE] Extracted hotels', { count: tboHotels.length });
 
     if (tboHotels.length === 0) {
       console.log(`ℹ️ TBO returned 0 hotels [${traceId}]`, {
