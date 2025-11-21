@@ -460,7 +460,15 @@ async function executeTestCase(testCase) {
     const traceId = searchResponse.data.traceId;
     const selectedHotel = searchResponse.data.hotels[0];
     console.log(`✓ Found ${searchResponse.data.hotels.length} hotels`);
-    console.log(`✓ Selected hotel: ${selectedHotel.hotelName}`);
+    console.log(`  First hotel keys: ${Object.keys(selectedHotel).slice(0, 10).join(", ")}`);
+    console.log(`  hotelName: ${selectedHotel?.hotelName}`);
+    console.log(`  HotelName: ${selectedHotel?.HotelName}`);
+    console.log(`✓ Selected hotel: ${selectedHotel.hotelName || selectedHotel.HotelName || "Unknown"}`);
+
+    if (!selectedHotel.hotelCode) {
+      console.log(`  ERROR: No hotelCode found in response!`);
+      console.log(`  Available code fields: hotelCode=${selectedHotel?.hotelCode}, HotelCode=${selectedHotel?.HotelCode}`);
+    }
 
     // Step 2: Get Hotel Room Details
     console.log(`\n[Step 2] Getting room details...`);
