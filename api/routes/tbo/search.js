@@ -85,6 +85,23 @@ router.post("/", async (req, res) => {
       guestNationality,
     });
 
+    // Normalize hotels to standard format
+    const normalizedHotels = (result.hotels || []).map((hotel, index) => ({
+      resultIndex: index,
+      hotelCode: hotel.HotelCode || hotel.hotelCode,
+      hotelName: hotel.HotelName || hotel.hotelName || "Unknown Hotel",
+      starRating: hotel.StarRating || hotel.starRating,
+      price: {
+        currencyCode: hotel.Price?.CurrencyCode || hotel.CurrencyCode || currency,
+        publishedPrice: hotel.Price?.PublishedPrice || hotel.PublishedPrice,
+        offeredPrice: hotel.Price?.OfferedPrice || hotel.OfferedPrice,
+      },
+      checkInDate: result.checkInDate,
+      checkOutDate: result.checkOutDate,
+      // Pass through original hotel data for downstream use
+      ...hotel,
+    }));
+
     res.json({
       success: true,
       traceId: result.traceId,
@@ -93,7 +110,7 @@ router.post("/", async (req, res) => {
       checkOutDate: result.checkOutDate,
       currency: result.currency,
       noOfRooms: result.noOfRooms,
-      hotels: result.hotels,
+      hotels: normalizedHotels,
     });
   } catch (error) {
     console.error("TBO Hotel Search Error:", error);
