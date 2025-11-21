@@ -342,9 +342,17 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 6: Cache the search with session metadata
     // ============================================================
+    // Ensure rooms is a number for caching (not an array)
+    const cacheParams = {
+      ...searchParams,
+      rooms: Array.isArray(searchParams.rooms)
+        ? searchParams.rooms.length
+        : searchParams.rooms || 1,
+    };
+
     await hotelCacheService.cacheSearchResults(
       searchHash,
-      searchParams,
+      cacheParams,
       hotelIds,
       "tbo",
       sessionMetadata,
