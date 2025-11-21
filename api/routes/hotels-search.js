@@ -247,7 +247,7 @@ router.post("/", async (req, res) => {
       // Backwards compatibility
       tboHotels = tboResponse;
       sessionMetadata = {};
-    } else if (tboResponse.results && typeof tboResponse.results === 'object') {
+    } else if (tboResponse.results && typeof tboResponse.results === "object") {
       // Cache format: { results: { hotels: [...], sessionMetadata: {...} }, cacheHit: true }
       tboHotels = tboResponse.results.hotels || [];
       sessionMetadata = tboResponse.results.sessionMetadata || {};
