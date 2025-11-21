@@ -21,7 +21,7 @@ require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 // Use localhost for local testing, production URL for remote
 const isLocalEnvironment = !process.env.RENDER || process.env.NODE_ENV !== "production";
 const API_BASE_URL = isLocalEnvironment
-  ? "http://localhost:3000/api"
+  ? "http://localhost:3001/api"
   : (process.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api");
 
 /**
