@@ -9,6 +9,7 @@
 ## 📋 Phase 1: Core Search & UI (In Progress)
 
 ### Step 1: Standardize TBO → Cache → Search Flow
+
 - **Status**: ✅ COMPLETE (Already Implemented)
 - **Description**: Live TBO searches use the same DB-backed pipeline as precache
 - **Implementation Details**:
@@ -30,6 +31,7 @@
 - **DB Tables**: `hotel_search_cache`, `hotel_search_cache_results`
 
 ### Step 2: Session Tracking for Live Searches
+
 - **Status**: 🔄 NEEDS VERIFICATION
 - **Description**: Write session fields for every live search (same fields as precache)
 - **Current Implementation**:
@@ -49,6 +51,7 @@
 - **DB Tables**: `hotel_search_cache` (session fields)
 
 ### Step 2.5: UI Wiring (Part of Phase 1)
+
 - **Status**: ⏳ Pending
 - **Description**: Wire TBO into existing generic `/api/hotels/*` endpoints
 - **Deliverables**:
@@ -82,6 +85,7 @@
 ## 📋 Phase 2: Booking Chain & Diagnostics (✅ IMPLEMENTED)
 
 ### Step 3: PreBook → BlockRoom → BookRoom Chain
+
 - **Status**: ⏳ Pending
 - **Description**: Full booking flow with price validation & de-dupe logic
 - **Subtasks**:
@@ -95,6 +99,7 @@
 - **DB Tables**: `bookings`, `booking_details`, `tbo_sync_log`
 
 ### Step 5: Logging Hooks
+
 - **Status**: ⏳ Pending
 - **Description**: Comprehensive request/response logging for all TBO paths
 - **Deliverables**:
@@ -112,6 +117,7 @@
 ## 📋 Phase 3: Hardening (Pending)
 
 ### Step 6: DB Indexes for Production Load
+
 - **Status**: ⏳ Pending
 - **Description**: Add indexes for fast queries at scale
 - **Deliverables**:
@@ -127,6 +133,7 @@
   ```
 
 ### Step 4: Extra Countries (CH, ES, IT)
+
 - **Status**: ⏳ Pending
 - **Description**: Sync city data for missing countries
 - **Deliverables**:
@@ -144,6 +151,7 @@
 ## ✅ Phase 1 Summary
 
 **MAJOR MILESTONE REACHED:**
+
 - Step 1 (Standardize Search Flow): ✅ COMPLETE
 - Live `/api/hotels/search` endpoint properly caches and serves TBO hotels
 - Frontend integration working (2,957 hotels in cache from precache run)
@@ -151,6 +159,7 @@
 - Session metadata being collected from TBO and passed through system
 
 **Phase 1 Next Action:**
+
 - Verify Step 2 (Session Tracking) implementation status
 - Ensure session fields are persisted to hotel_search_cache
 - Add session validation/reuse endpoints for booking flow
@@ -160,18 +169,21 @@
 ## 🧪 Testing Strategy
 
 ### Phase 1 Testing:
+
 1. Precache script (regression test): `node scripts/tbo-precache-hotels.js --cities=Mumbai`
 2. Live search test: `POST /api/hotels/search` with Mumbai query
 3. Verify DB: Check `hotel_search_cache` and `hotel_search_cache_results`
 4. UI test: Load HotelResults page with TBO results
 
 ### Phase 2 Testing:
+
 1. Prebook test: `POST /api/hotels/prebook` with cached session
 2. BlockRoom test: Verify CategoryId usage and price change detection
 3. BookRoom test: Full booking flow end-to-end
 4. Logging test: Verify `tbo_trace_logs` has complete request/response trail
 
 ### Phase 3 Testing:
+
 1. Index performance: Run queries before/after index creation
 2. Extra countries: Precache CH, ES, IT cities
 

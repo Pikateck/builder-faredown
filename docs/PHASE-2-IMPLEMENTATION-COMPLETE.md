@@ -9,6 +9,7 @@
 ## 📋 Phase 2 Summary
 
 Implemented the full booking chain with comprehensive logging:
+
 - **PreBook** endpoint: Get room details + validate pricing
 - **BlockRoom** endpoint: Detect price/policy changes with de-dupe
 - **BookRoom** endpoint: Confirm booking + persist full response
@@ -19,10 +20,12 @@ Implemented the full booking chain with comprehensive logging:
 ## 🛠️ What Was Implemented
 
 ### Step 3A: PreBook Endpoint
+
 **File**: `api/routes/hotels-booking.js` (lines 77-193)  
 **Endpoint**: `POST /api/hotels/prebook`
 
 **Request**:
+
 ```json
 {
   "searchHash": "10fb56535af2ff546cae88aa8640f272",
@@ -34,6 +37,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Response** (Normalized):
+
 ```json
 {
   "success": true,
@@ -59,6 +63,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Key Features**:
+
 - ✅ Reads from cached search session (`hotel_search_cache`)
 - ✅ Uses TBO adapter's `getHotelRoom` method
 - ✅ Returns normalized room list (supplier-agnostic)
@@ -68,10 +73,12 @@ Implemented the full booking chain with comprehensive logging:
 ---
 
 ### Step 3B: BlockRoom Endpoint
+
 **File**: `api/routes/hotels-booking.js` (lines 195-336)  
 **Endpoint**: `POST /api/hotels/block`
 
 **Request**:
+
 ```json
 {
   "searchHash": "10fb56535af2ff546cae88aa8640f272",
@@ -88,6 +95,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -101,6 +109,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Key Features**:
+
 - ✅ Validates session hasn't expired
 - ✅ Calls TBO's `blockRoom` method
 - ✅ Detects price changes (returns `isPriceChanged: true` if price increased)
@@ -112,10 +121,12 @@ Implemented the full booking chain with comprehensive logging:
 ---
 
 ### Step 3C: BookRoom Endpoint
+
 **File**: `api/routes/hotels-booking.js` (lines 338-480)  
 **Endpoint**: `POST /api/hotels/book`
 
 **Request**:
+
 ```json
 {
   "searchHash": "10fb56535af2ff546cae88aa8640f272",
@@ -139,6 +150,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -159,6 +171,7 @@ Implemented the full booking chain with comprehensive logging:
 ```
 
 **Database Persistence**:
+
 ```sql
 INSERT INTO bookings (
   id, tbo_trace_id, tbo_booking_reference, tbo_full_response,
@@ -167,6 +180,7 @@ INSERT INTO bookings (
 ```
 
 **Key Features**:
+
 - ✅ Validates all guest details
 - ✅ Calls TBO's `bookHotel` method
 - ✅ **FULL RESPONSE PERSISTED** to `bookings.tbo_full_response` (JSONB)
@@ -179,9 +193,11 @@ INSERT INTO bookings (
 ---
 
 ### Step 5: Logging Infrastructure
+
 **File**: `api/database/migrations/20251121_tbo_phase2_logging_and_booking.sql`
 
 #### New Table: `tbo_trace_logs`
+
 ```sql
 CREATE TABLE public.tbo_trace_logs (
   id BIGSERIAL PRIMARY KEY,
@@ -201,6 +217,7 @@ CREATE TABLE public.tbo_trace_logs (
 ```
 
 **Logging Implementation** (in each endpoint):
+
 ```javascript
 await logTboTrace({
   traceId,
@@ -217,12 +234,14 @@ await logTboTrace({
 ```
 
 **Indexes for Fast Lookup**:
+
 - `idx_tbo_trace_trace_id` - Query by request chain
 - `idx_tbo_trace_request_type` - Filter by endpoint
 - `idx_tbo_trace_hotel_code` - Find hotel-specific logs
 - `idx_tbo_trace_created_at` - Time-range queries
 
 **Use Cases**:
+
 - ✅ Certification debugging (full request/response visibility)
 - ✅ Price change auditing (detect when prices changed during booking)
 - ✅ Error analysis (which step failed and why)
@@ -231,9 +250,11 @@ await logTboTrace({
 ---
 
 ### Enhanced Tables for Booking Tracking
+
 **File**: Same migration
 
 #### Extended `hotel_search_cache`:
+
 ```sql
 ALTER TABLE hotel_search_cache
 ADD COLUMN prebook_session_id UUID,
@@ -244,6 +265,7 @@ ADD COLUMN is_session_locked BOOLEAN;
 ```
 
 #### New `tbo_booking_sessions`:
+
 ```sql
 CREATE TABLE public.tbo_booking_sessions (
   id UUID PRIMARY KEY,
@@ -259,6 +281,7 @@ CREATE TABLE public.tbo_booking_sessions (
 ```
 
 **Lifecycle Tracking**:
+
 ```
 Search
   ↓ search_completed_at
@@ -275,6 +298,7 @@ Voucher
 ```
 
 #### Extended `bookings` Table:
+
 ```sql
 ALTER TABLE bookings
 ADD COLUMN tbo_trace_id UUID,
@@ -297,6 +321,7 @@ ADD COLUMN is_policy_changed_at_block BOOLEAN;
 ## 🏗️ Architecture
 
 ### Flow Diagram
+
 ```
 Frontend (HotelBooking.tsx)
     ↓
@@ -333,6 +358,7 @@ Booking Confirmed ✅
 ```
 
 ### Session Flow
+
 ```
 Search Result
   ↓ [token_id, trace_id, destination_id] cached in hotel_search_cache
@@ -359,6 +385,7 @@ Book Request
 ## 📊 Database Schema Changes
 
 ### New Tables Created
+
 1. **tbo_trace_logs** (163 columns + indexes)
    - Every request logged with full payload
    - Supports debugging and compliance
@@ -368,6 +395,7 @@ Book Request
    - One record per search → booking chain
 
 ### Extended Tables
+
 1. **hotel_search_cache** (+4 columns)
    - Prebook session tracking
    - Session locking support
@@ -382,24 +410,29 @@ Book Request
 ## 🧪 Testing
 
 ### Test Script Created
+
 **File**: `api/scripts/test-tbo-booking-chain.js`
 
 **Run Full Chain Test**:
+
 ```bash
 node api/scripts/test-tbo-booking-chain.js
 ```
 
 **Test with Specific Destination**:
+
 ```bash
 node api/scripts/test-tbo-booking-chain.js --destination=Mumbai
 ```
 
 **Dry Run (No API Calls)**:
+
 ```bash
 node api/scripts/test-tbo-booking-chain.js --dry-run
 ```
 
 **Test Output**:
+
 ```
 ✅ SEARCH PASSED (666 hotels)
 ✅ PREBOOK PASSED (12 rooms)
@@ -417,44 +450,47 @@ Booking Chain Completed:
 ## 🔍 Verification Queries
 
 ### Verify Logging Works
+
 ```sql
 -- Check recent logs
-SELECT request_type, endpoint_name, response_time_ms, created_at 
-FROM tbo_trace_logs 
-ORDER BY created_at DESC 
+SELECT request_type, endpoint_name, response_time_ms, created_at
+FROM tbo_trace_logs
+ORDER BY created_at DESC
 LIMIT 10;
 
 -- Check error logs
-SELECT request_type, error_message, created_at 
-FROM tbo_trace_logs 
-WHERE error_message IS NOT NULL 
+SELECT request_type, error_message, created_at
+FROM tbo_trace_logs
+WHERE error_message IS NOT NULL
 ORDER BY created_at DESC;
 ```
 
 ### Verify Booking Persistence
+
 ```sql
 -- Check booked hotels
-SELECT tbo_booking_reference, tbo_hotel_confirmation_no, 
-       supplier, status, created_at 
-FROM bookings 
-WHERE supplier = 'TBO' 
-ORDER BY created_at DESC 
+SELECT tbo_booking_reference, tbo_hotel_confirmation_no,
+       supplier, status, created_at
+FROM bookings
+WHERE supplier = 'TBO'
+ORDER BY created_at DESC
 LIMIT 5;
 
 -- Check price changes during booking
-SELECT tbo_booking_reference, price_at_search, price_at_block, 
-       price_at_book, is_price_changed_at_block 
-FROM bookings 
+SELECT tbo_booking_reference, price_at_search, price_at_block,
+       price_at_book, is_price_changed_at_block
+FROM bookings
 WHERE is_price_changed_at_block = true;
 ```
 
 ### Check Session Lifecycle
+
 ```sql
 -- View booking session progress
-SELECT id, search_hash, current_step, status, 
-       prebook_completed_at, block_completed_at, book_completed_at 
-FROM tbo_booking_sessions 
-ORDER BY created_at DESC 
+SELECT id, search_hash, current_step, status,
+       prebook_completed_at, block_completed_at, book_completed_at
+FROM tbo_booking_sessions
+ORDER BY created_at DESC
 LIMIT 5;
 ```
 
@@ -462,19 +498,20 @@ LIMIT 5;
 
 ## 📁 Files Modified/Created
 
-| File | Type | Purpose |
-|------|------|---------|
-| `api/routes/hotels-booking.js` | Created | PreBook, Block, Book endpoints |
-| `api/database/migrations/20251121_...sql` | Created | Tables: tbo_trace_logs, tbo_booking_sessions |
-| `api/server.js` | Modified | Register `/api/hotels` booking routes |
-| `api/scripts/test-tbo-booking-chain.js` | Created | End-to-end test script |
-| `docs/tbo-roadmap.md` | Updated | Phase 2 status |
+| File                                      | Type     | Purpose                                      |
+| ----------------------------------------- | -------- | -------------------------------------------- |
+| `api/routes/hotels-booking.js`            | Created  | PreBook, Block, Book endpoints               |
+| `api/database/migrations/20251121_...sql` | Created  | Tables: tbo_trace_logs, tbo_booking_sessions |
+| `api/server.js`                           | Modified | Register `/api/hotels` booking routes        |
+| `api/scripts/test-tbo-booking-chain.js`   | Created  | End-to-end test script                       |
+| `docs/tbo-roadmap.md`                     | Updated  | Phase 2 status                               |
 
 ---
 
 ## ✅ Completeness Checklist
 
 ### PreBook Endpoint
+
 - ✅ Reads from cached search session
 - ✅ Validates session expiry
 - ✅ Calls TBO adapter method
@@ -483,6 +520,7 @@ LIMIT 5;
 - ✅ Supplier-agnostic response
 
 ### BlockRoom Endpoint
+
 - ✅ Reuses same session
 - ✅ Validates room details
 - ✅ Detects price changes
@@ -492,6 +530,7 @@ LIMIT 5;
 - ✅ Logs full request/response
 
 ### BookRoom Endpoint
+
 - ✅ Validates guest details
 - ✅ Calls TBO bookHotel
 - ✅ Persists to bookings table
@@ -501,6 +540,7 @@ LIMIT 5;
 - ✅ Logs complete booking attempt
 
 ### Logging Infrastructure
+
 - ✅ tbo_trace_logs table created
 - ✅ All endpoints log requests/responses
 - ✅ Trace ID tracking enabled
@@ -509,6 +549,7 @@ LIMIT 5;
 - ✅ Indexes created for fast lookup
 
 ### Session Tracking
+
 - ✅ Search → Room → PreBook → Block → Book chain maintained
 - ✅ Single token reused across steps
 - ✅ Session expiry validation at each step
@@ -516,6 +557,7 @@ LIMIT 5;
 - ✅ Bookings table extended for full context
 
 ### UI Integration
+
 - ✅ All responses normalized (supplier-agnostic)
 - ✅ No TBO-specific fields exposed
 - ✅ Warnings returned for price/policy changes
@@ -527,14 +569,16 @@ LIMIT 5;
 ## 🚀 Ready for Next Phase
 
 **Phase 3 (Remaining)**:
+
 1. ✅ Voucher generation endpoint
 2. ✅ DB indexes for production load
 3. ✅ Extra countries (CH, ES, IT)
 4. ✅ Final certification testing
 
 **Current Status**:
+
 - Search ✅
-- Room Details ✅  
+- Room Details ✅
 - PreBook ✅
 - BlockRoom ✅
 - BookRoom ✅
@@ -546,6 +590,7 @@ LIMIT 5;
 ## 🎯 Next Action
 
 Run the full booking chain test to verify all steps work:
+
 ```bash
 node api/scripts/test-tbo-booking-chain.js
 ```

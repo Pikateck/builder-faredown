@@ -2,21 +2,24 @@
 
 **Date**: 2025-11-21  
 **Status**: COMPLETE  
-**Precaching Verification**: 2,957 hotels cached successfully  
+**Precaching Verification**: 2,957 hotels cached successfully
 
 ---
 
 ## 📋 Phase 1 Deliverables - ALL COMPLETE
 
 ### ✅ Step 1: Standardize TBO → Cache → Search Flow
+
 **Status**: COMPLETE & VERIFIED
 
 **Implementation:**
+
 - Endpoint: `POST /api/hotels/search`
 - File: `api/routes/hotels-search.js`
 - Route Registration: `api/server.js` line 488
 
 **Flow:**
+
 ```
 Frontend (HotelResults.tsx:651)
   ↓ POST /api/hotels/search
@@ -36,6 +39,7 @@ Check cache (hotelCacheService:114)
 ```
 
 **Database Verification:**
+
 ```sql
 -- 2,957 hotels cached from precache run
 SELECT COUNT(*) as cached_hotels FROM public.hotel_search_cache_results;
@@ -46,13 +50,14 @@ SELECT COUNT(*) as searches FROM public.hotel_search_cache;
 -- Result: 2 ✅
 
 -- Sample cached data
-SELECT city_id, hotel_count, supplier, created_at 
-FROM public.hotel_search_cache 
+SELECT city_id, hotel_count, supplier, created_at
+FROM public.hotel_search_cache
 ORDER BY created_at DESC;
 -- Results show cache_source='tbo' and hotel counts ✅
 ```
 
 **Frontend Integration:**
+
 - File: `client/pages/HotelResults.tsx`
 - Function: `fetchTBOHotels()` (line 558)
 - Endpoint Call: `/api/hotels/search` (line 651)
@@ -60,6 +65,7 @@ ORDER BY created_at DESC;
 - Fallback: Mock data on error (line 706, 730, 752)
 
 **Response Format (Normalized):**
+
 ```json
 {
   "success": true,
@@ -101,19 +107,22 @@ ORDER BY created_at DESC;
 ---
 
 ### ✅ Step 2: Session Tracking for Live Searches
+
 **Status**: COMPLETE & VERIFIED
 
 **Implementation:**
+
 - Session metadata extracted from TBO response (line 244-257 in hotels-search.js)
 - Passed to caching service (line 353-359)
 - Stored in `hotel_search_cache` table (hotelCacheService:137-175)
 
 **Session Fields Persisted to DB:**
+
 ```sql
 -- Verify session fields are saved
-SELECT tbo_trace_id, tbo_token_id, session_started_at, session_expires_at 
-FROM public.hotel_search_cache 
-WHERE supplier = 'tbo' 
+SELECT tbo_trace_id, tbo_token_id, session_started_at, session_expires_at
+FROM public.hotel_search_cache
+WHERE supplier = 'tbo'
 LIMIT 1;
 
 -- Result:
@@ -124,11 +133,13 @@ LIMIT 1;
 ```
 
 **Token Management:**
+
 - Gets fresh token on each search (line 585 in tboAdapter.js)
 - Token expiry: 24 hours (line 236 in tboAdapter.js)
 - Token reused within session (line 390-392 in tboAdapter.js)
 
 **Session Metadata Flow:**
+
 ```
 TBO Auth Response
   ↓ tokenId (36 chars)
@@ -145,9 +156,11 @@ Rooms/PreBook endpoints
 ---
 
 ### ✅ Step 2.5: UI Wiring (Part of Phase 1)
+
 **Status**: COMPLETE & VERIFIED
 
 **Confirmation:**
+
 - ✅ `/api/hotels/search` returns normalized response (same shape as would be used for other suppliers)
 - ✅ No TBO-specific hacks in `client/pages/HotelResults.tsx`
 - ✅ UI renders TBO results seamlessly
@@ -155,18 +168,19 @@ Rooms/PreBook endpoints
 - ✅ Fallback mechanism working (mock data on error)
 
 **Example Frontend Usage:**
+
 ```typescript
 // From HotelResults.tsx:651
 const searchPayload = {
-  cityId: destCode,        // "DXB" or canonical code
-  destination: "Dubai",    // Human-readable name
-  countryCode: "AE",       // Resolved from destination
-  checkIn: "2025-12-21",   // YYYY-MM-DD
+  cityId: destCode, // "DXB" or canonical code
+  destination: "Dubai", // Human-readable name
+  countryCode: "AE", // Resolved from destination
+  checkIn: "2025-12-21", // YYYY-MM-DD
   checkOut: "2025-12-22",
   rooms: "1",
   adults: "2",
   children: "0",
-  currency: "INR"
+  currency: "INR",
 };
 
 // Response automatically handles:
@@ -180,26 +194,27 @@ const searchPayload = {
 
 ## 🎯 Phase 1 Metrics
 
-| Metric | Value |
-|--------|-------|
-| **Hotels Cached** | 2,957 |
-| **Cities Precached** | 2 (Mumbai + Dubai) |
-| **Avg Response Time** | 12-16s (live), <100ms (cache) |
-| **Cache Hit Rate** | 100% on precached searches |
-| **Session TTL** | 24 hours |
-| **ReferenceError Fixed** | ✅ Yes |
-| **Merge Conflicts Resolved** | ✅ Yes (3 files) |
-| **DB Indexes Added** | ⏳ Pending (Phase 3) |
-| **UI Integration Complete** | ✅ Yes |
-| **Precache Script** | ✅ Working (2,957 hotels) |
+| Metric                       | Value                         |
+| ---------------------------- | ----------------------------- |
+| **Hotels Cached**            | 2,957                         |
+| **Cities Precached**         | 2 (Mumbai + Dubai)            |
+| **Avg Response Time**        | 12-16s (live), <100ms (cache) |
+| **Cache Hit Rate**           | 100% on precached searches    |
+| **Session TTL**              | 24 hours                      |
+| **ReferenceError Fixed**     | ✅ Yes                        |
+| **Merge Conflicts Resolved** | ✅ Yes (3 files)              |
+| **DB Indexes Added**         | ⏳ Pending (Phase 3)          |
+| **UI Integration Complete**  | ✅ Yes                        |
+| **Precache Script**          | ✅ Working (2,957 hotels)     |
 
 ---
 
 ## 🚀 Ready for Phase 2
 
 **Next Steps:**
+
 1. **Step 3**: PreBook → BlockRoom → BookRoom Chain
-   - Implement `/api/hotels/prebook` 
+   - Implement `/api/hotels/prebook`
    - Implement `/api/hotels/block`
    - Implement `/api/hotels/book`
    - Store complete booking object
@@ -213,6 +228,7 @@ const searchPayload = {
 ## 📝 Testing Commands
 
 ### Test Live Search (Cache Miss)
+
 ```bash
 curl -X POST http://localhost:3001/api/hotels/search \
   -H "Content-Type: application/json" \
@@ -229,6 +245,7 @@ curl -X POST http://localhost:3001/api/hotels/search \
 ```
 
 ### Test Cached Search (Cache Hit)
+
 ```bash
 curl -X POST http://localhost:3001/api/hotels/search \
   -H "Content-Type: application/json" \
@@ -245,6 +262,7 @@ curl -X POST http://localhost:3001/api/hotels/search \
 ```
 
 ### Verify Precache Regression
+
 ```bash
 cd /opt/render/project/src/api
 node scripts/tbo-precache-hotels.js --cities=Mumbai
@@ -266,14 +284,14 @@ node scripts/tbo-precache-hotels.js --cities=Mumbai
 
 ## 📊 Files Modified for Phase 1
 
-| File | Changes | Status |
-|------|---------|--------|
-| `api/routes/hotels-search.js` | Cache-backed search endpoint | ✅ Complete |
+| File                                  | Changes                      | Status      |
+| ------------------------------------- | ---------------------------- | ----------- |
+| `api/routes/hotels-search.js`         | Cache-backed search endpoint | ✅ Complete |
 | `api/services/adapters/tboAdapter.js` | Session metadata in response | ✅ Complete |
-| `api/services/hotelCacheService.js` | Session field persistence | ✅ Complete |
-| `api/server.js` | Route registration | ✅ Complete |
-| `client/pages/HotelResults.tsx` | Use `/api/hotels/search` | ✅ Complete |
-| `docs/tbo-roadmap.md` | Phase tracking | ✅ Updated |
+| `api/services/hotelCacheService.js`   | Session field persistence    | ✅ Complete |
+| `api/server.js`                       | Route registration           | ✅ Complete |
+| `client/pages/HotelResults.tsx`       | Use `/api/hotels/search`     | ✅ Complete |
+| `docs/tbo-roadmap.md`                 | Phase tracking               | ✅ Updated  |
 
 ---
 

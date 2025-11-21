@@ -1,22 +1,22 @@
 /**
  * Generic Hotel Booking Endpoints
  * Supplier-agnostic interface for PreBook → BlockRoom → BookRoom chain
- * 
+ *
  * Wraps supplier-specific adapters but provides unified response structure
  * Reads from cached session (hotel_search_cache) and logs all requests
- * 
+ *
  * Endpoints:
  * - POST /api/hotels/prebook - Get room details + validate prices
- * - POST /api/hotels/block    - Block room + detect price/policy changes  
+ * - POST /api/hotels/block    - Block room + detect price/policy changes
  * - POST /api/hotels/book     - Confirm booking + store full response
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../lib/db');
-const { v4: uuidv4 } = require('uuid');
-const hotelCacheService = require('../services/hotelCacheService');
-const supplierAdapterManager = require('../services/adapters/supplierAdapterManager');
+const db = require("../lib/db");
+const { v4: uuidv4 } = require("uuid");
+const hotelCacheService = require("../services/hotelCacheService");
+const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 
 /**
  * LOGGING HELPER: Write trace log for all TBO requests
@@ -60,10 +60,10 @@ async function logTboTrace(traceInfo) {
         searchHash,
         bookingId,
         responseTimeMs,
-      ]
+      ],
     );
   } catch (err) {
-    console.error('❌ Failed to log TBO trace:', err.message);
+    console.error("❌ Failed to log TBO trace:", err.message);
     // Don't throw - logging should never break the flow
   }
 }
@@ -71,22 +71,22 @@ async function logTboTrace(traceInfo) {
 /**
  * POST /api/hotels/prebook
  * Get room details + validate pricing for selected hotel
- * 
+ *
  * Called after user selects hotel on results page
  * Returns room options with prices + cancellation policies
  */
-router.post('/prebook', async (req, res) => {
+router.post("/prebook", async (req, res) => {
   const traceId = uuidv4();
   const startTime = Date.now();
 
   try {
     const {
-      searchHash,      // From search results
-      hotelId,         // Canonical hotel ID
-      supplier = 'TBO', // Default to TBO
+      searchHash, // From search results
+      hotelId, // Canonical hotel ID
+      supplier = "TBO", // Default to TBO
       checkIn,
       checkOut,
-      roomConfig,      // Room configuration from search
+      roomConfig, // Room configuration from search
     } = req.body;
 
     console.log(`🏨 [${traceId}] PreBook Request:`, {
@@ -103,7 +103,7 @@ router.post('/prebook', async (req, res) => {
     if (!searchHash) {
       return res.status(400).json({
         success: false,
-        error: 'searchHash is required',
+        error: "searchHash is required",
         traceId,
       });
     }
@@ -113,14 +113,16 @@ router.post('/prebook', async (req, res) => {
       console.warn(`⚠️ [${traceId}] Search cache not found:`, searchHash);
       return res.status(404).json({
         success: false,
-        error: 'Search session expired or not found',
+        error: "Search session expired or not found",
         traceId,
       });
     }
 
     console.log(`✅ [${traceId}] Cached session found:`, {
       supplier: cachedSearch.supplier,
-      tboSessionId: cachedSearch.tbo_token_id ? cachedSearch.tbo_token_id.substring(0, 8) + '...' : 'missing',
+      tboSessionId: cachedSearch.tbo_token_id
+        ? cachedSearch.tbo_token_id.substring(0, 8) + "..."
+        : "missing",
       sessionStatus: cachedSearch.session_status,
     });
 
@@ -130,10 +132,10 @@ router.post('/prebook', async (req, res) => {
     let prebookResult;
     const responseTimeMs = Date.now() - startTime;
 
-    if (supplier === 'TBO' || cachedSearch.supplier === 'TBO') {
-      const tboAdapter = supplierAdapterManager.getAdapter('TBO');
+    if (supplier === "TBO" || cachedSearch.supplier === "TBO") {
+      const tboAdapter = supplierAdapterManager.getAdapter("TBO");
       if (!tboAdapter) {
-        throw new Error('TBO adapter not initialized');
+        throw new Error("TBO adapter not initialized");
       }
 
       // Use cached session data
@@ -143,7 +145,9 @@ router.post('/prebook', async (req, res) => {
         hotelCode: hotelId,
       });
     } else {
-      throw new Error(`Supplier ${supplier} not yet supported in generic endpoint`);
+      throw new Error(
+        `Supplier ${supplier} not yet supported in generic endpoint`,
+      );
     }
 
     // =========================================================================
@@ -151,8 +155,8 @@ router.post('/prebook', async (req, res) => {
     // =========================================================================
     await logTboTrace({
       traceId,
-      requestType: 'prebook',
-      endpointName: '/api/hotels/prebook',
+      requestType: "prebook",
+      endpointName: "/api/hotels/prebook",
       requestPayload: {
         searchHash,
         hotelId,
@@ -172,12 +176,12 @@ router.post('/prebook', async (req, res) => {
     const normalizedRooms = (prebookResult.rooms || []).map((room) => ({
       roomId: room.roomTypeCode || room.rateKey,
       roomName: room.roomTypeName,
-      boardType: room.boardType || 'All Inclusive',
+      boardType: room.boardType || "All Inclusive",
       occupancy: room.occupancy || { adults: 2, children: 0 },
       price: {
         offered: room.price?.offeredPrice || 0,
         published: room.price?.publishedPrice || 0,
-        currency: room.price?.currencyCode || 'INR',
+        currency: room.price?.currencyCode || "INR",
       },
       cancellationPolicy: room.cancellationPolicy,
       cancellationPolicies: room.cancellationPolicies || [],
@@ -190,7 +194,7 @@ router.post('/prebook', async (req, res) => {
       success: true,
       traceId,
       rooms: normalizedRooms,
-      sessionStatus: 'active',
+      sessionStatus: "active",
       supplier,
       responseTime: `${responseTimeMs}ms`,
     });
@@ -201,8 +205,8 @@ router.post('/prebook', async (req, res) => {
 
     await logTboTrace({
       traceId,
-      requestType: 'prebook',
-      endpointName: '/api/hotels/prebook',
+      requestType: "prebook",
+      endpointName: "/api/hotels/prebook",
       requestPayload: req.body,
       httpStatusCode: 500,
       tboResponseStatus: 0,
@@ -222,11 +226,11 @@ router.post('/prebook', async (req, res) => {
 /**
  * POST /api/hotels/block
  * Block room + detect price/policy changes
- * 
+ *
  * Called when user confirms room selection
  * Returns availability + price change warnings
  */
-router.post('/block', async (req, res) => {
+router.post("/block", async (req, res) => {
   const traceId = uuidv4();
   const startTime = Date.now();
 
@@ -235,8 +239,8 @@ router.post('/block', async (req, res) => {
       searchHash,
       hotelId,
       roomId,
-      supplier = 'TBO',
-      hotelRoomDetails,     // From prebook response
+      supplier = "TBO",
+      hotelRoomDetails, // From prebook response
     } = req.body;
 
     console.log(`🔒 [${traceId}] Block Request:`, {
@@ -252,7 +256,7 @@ router.post('/block', async (req, res) => {
     if (!searchHash || !hotelId || !hotelRoomDetails) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: searchHash, hotelId, hotelRoomDetails',
+        error: "Missing required fields: searchHash, hotelId, hotelRoomDetails",
         traceId,
       });
     }
@@ -261,7 +265,7 @@ router.post('/block', async (req, res) => {
     if (!cachedSearch) {
       return res.status(404).json({
         success: false,
-        error: 'Search session expired',
+        error: "Search session expired",
         traceId,
       });
     }
@@ -272,10 +276,10 @@ router.post('/block', async (req, res) => {
     let blockResult;
     const responseTimeMs = Date.now() - startTime;
 
-    if (supplier === 'TBO' || cachedSearch.supplier === 'TBO') {
-      const tboAdapter = supplierAdapterManager.getAdapter('TBO');
+    if (supplier === "TBO" || cachedSearch.supplier === "TBO") {
+      const tboAdapter = supplierAdapterManager.getAdapter("TBO");
       if (!tboAdapter) {
-        throw new Error('TBO adapter not initialized');
+        throw new Error("TBO adapter not initialized");
       }
 
       blockResult = await tboAdapter.blockRoom({
@@ -296,8 +300,8 @@ router.post('/block', async (req, res) => {
 
     await logTboTrace({
       traceId,
-      requestType: 'block',
-      endpointName: '/api/hotels/block',
+      requestType: "block",
+      endpointName: "/api/hotels/block",
       requestPayload: {
         searchHash,
         hotelId,
@@ -318,10 +322,10 @@ router.post('/block', async (req, res) => {
       isPriceChanged,
       isPolicyChanged,
       warningMessage: isPriceChanged
-        ? 'Price has changed since search. Please confirm before proceeding.'
+        ? "Price has changed since search. Please confirm before proceeding."
         : isPolicyChanged
-        ? 'Cancellation policy has changed. Please review before booking.'
-        : null,
+          ? "Cancellation policy has changed. Please review before booking."
+          : null,
       roomDetails: blockResult.hotelRoomDetails,
       supplier,
       responseTime: `${responseTimeMs}ms`,
@@ -333,8 +337,8 @@ router.post('/block', async (req, res) => {
 
     await logTboTrace({
       traceId,
-      requestType: 'block',
-      endpointName: '/api/hotels/block',
+      requestType: "block",
+      endpointName: "/api/hotels/block",
       requestPayload: req.body,
       httpStatusCode: 500,
       tboResponseStatus: 0,
@@ -354,11 +358,11 @@ router.post('/block', async (req, res) => {
 /**
  * POST /api/hotels/book
  * Confirm booking + store complete response
- * 
+ *
  * Called when user confirms after block validation
  * Returns booking reference + confirmation details
  */
-router.post('/book', async (req, res) => {
+router.post("/book", async (req, res) => {
   const traceId = uuidv4();
   const startTime = Date.now();
 
@@ -367,9 +371,9 @@ router.post('/book', async (req, res) => {
       searchHash,
       hotelId,
       roomId,
-      supplier = 'TBO',
-      hotelRoomDetails,     // From block response
-      guestDetails,         // Passenger information
+      supplier = "TBO",
+      hotelRoomDetails, // From block response
+      guestDetails, // Passenger information
       contactEmail,
       contactPhone,
     } = req.body;
@@ -388,7 +392,7 @@ router.post('/book', async (req, res) => {
     if (!searchHash || !hotelId || !guestDetails) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: searchHash, hotelId, guestDetails',
+        error: "Missing required fields: searchHash, hotelId, guestDetails",
         traceId,
       });
     }
@@ -397,7 +401,7 @@ router.post('/book', async (req, res) => {
     if (!cachedSearch) {
       return res.status(404).json({
         success: false,
-        error: 'Search session expired',
+        error: "Search session expired",
         traceId,
       });
     }
@@ -408,10 +412,10 @@ router.post('/book', async (req, res) => {
     let bookResult;
     const responseTimeMs = Date.now() - startTime;
 
-    if (supplier === 'TBO' || cachedSearch.supplier === 'TBO') {
-      const tboAdapter = supplierAdapterManager.getAdapter('TBO');
+    if (supplier === "TBO" || cachedSearch.supplier === "TBO") {
+      const tboAdapter = supplierAdapterManager.getAdapter("TBO");
       if (!tboAdapter) {
-        throw new Error('TBO adapter not initialized');
+        throw new Error("TBO adapter not initialized");
       }
 
       bookResult = await tboAdapter.bookHotel({
@@ -443,9 +447,9 @@ router.post('/book', async (req, res) => {
           JSON.stringify(bookResult),
           cachedSearch.search_hash,
           JSON.stringify(bookResult),
-          'TBO',
-          'confirmed',
-        ]
+          "TBO",
+          "confirmed",
+        ],
       );
 
       bookingRecord = { id: bookingId, ...bookResult };
@@ -463,8 +467,8 @@ router.post('/book', async (req, res) => {
     // =========================================================================
     await logTboTrace({
       traceId,
-      requestType: 'book',
-      endpointName: '/api/hotels/book',
+      requestType: "book",
+      endpointName: "/api/hotels/book",
       requestPayload: {
         searchHash,
         hotelId,
@@ -486,14 +490,14 @@ router.post('/book', async (req, res) => {
       traceId,
       bookingReference: bookResult.bookingRefNo || bookResult.confirmationNo,
       hotelConfirmationNo: bookResult.hotelConfirmationNo,
-      bookingStatus: 'confirmed',
+      bookingStatus: "confirmed",
       bookingDetails: {
         hotelName: bookResult.hotelName,
         checkIn: bookResult.checkInDate,
         checkOut: bookResult.checkOutDate,
         roomDetails: bookResult.hotelRoomDetails,
         totalPrice: bookResult.totalPrice,
-        currency: bookResult.currency || 'INR',
+        currency: bookResult.currency || "INR",
       },
       supplier,
       responseTime: `${responseTimeMs}ms`,
@@ -506,8 +510,8 @@ router.post('/book', async (req, res) => {
 
     await logTboTrace({
       traceId,
-      requestType: 'book',
-      endpointName: '/api/hotels/book',
+      requestType: "book",
+      endpointName: "/api/hotels/book",
       requestPayload: req.body,
       httpStatusCode: 500,
       tboResponseStatus: 0,
