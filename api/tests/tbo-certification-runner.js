@@ -514,6 +514,8 @@ async function executeTestCase(testCase) {
 
     // Step 3: Block Room
     console.log(`\n[Step 3] Blocking room...`);
+    // Use either hotelRoomDetails or rooms (handle both naming conventions)
+    const hotelRoomDetails = roomResponse.data.hotelRoomDetails || roomResponse.data.rooms;
     const blockResponse = await axios.post(`${API_BASE_URL}/tbo/block`, {
       traceId,
       resultIndex: selectedHotel.resultIndex,
@@ -522,7 +524,7 @@ async function executeTestCase(testCase) {
       guestNationality: testCase.nationality,
       noOfRooms: testCase.roomConfigs.length,
       isVoucherBooking: true,
-      hotelRoomDetails: roomResponse.data.hotelRoomDetails,
+      hotelRoomDetails: hotelRoomDetails,
     }, {
       timeout: 60000  // 60 second timeout for block
     });
