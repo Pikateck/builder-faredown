@@ -627,6 +627,9 @@ async function executeTestCase(testCase) {
   } catch (error) {
     result.error = error.message;
     console.error(`✗ Case ${testCase.caseId} failed: ${error.message}`);
+    if (error.response?.data) {
+      console.error(`  Response error: ${JSON.stringify(error.response.data).substring(0, 200)}`);
+    }
   }
 
   return result;
