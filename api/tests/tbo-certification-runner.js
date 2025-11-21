@@ -556,6 +556,8 @@ async function executeTestCase(testCase) {
 
     // Step 4: Book Hotel
     console.log(`\n[Step 4] Booking hotel...`);
+    // Use either hotelRoomDetails or rooms from block response
+    const blockHotelRoomDetails = blockResponse.data.hotelRoomDetails || blockResponse.data.rooms;
     const bookResponse = await axios.post(`${API_BASE_URL}/tbo/book`, {
       traceId,
       resultIndex: selectedHotel.resultIndex,
@@ -565,7 +567,7 @@ async function executeTestCase(testCase) {
       guestNationality: testCase.nationality,
       noOfRooms: testCase.roomConfigs.length,
       isVoucherBooking: true,
-      hotelRoomDetails: blockResponse.data.hotelRoomDetails,
+      hotelRoomDetails: blockHotelRoomDetails,
       hotelPassenger: testCase.passengers.map((p) => ({
         Title: p.title,
         FirstName: p.firstName,
