@@ -117,17 +117,31 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
     if (!dryRun && hotelCount > 0) {
       // Cache the results using hotelCacheService
       // This will populate hotel_search_cache and hotel_search_cache_results
-      const cached = await hotelCacheService.cacheSearchResults(
-        results,
-        searchRequest,
-        "precache_nightly",
-        sessionMetadata,
-      );
+      try {
+        // Generate searchHash using the same logic as hotelApiCachingService
+        const hotelApiCachingService = require("../services/hotelApiCachingService");
+        const cachingService = new hotelApiCachingService();
+        const searchHash = cachingService.generateSearchHash(searchRequest);
 
-      if (cached) {
-        console.log(`   ✅ Cached ${hotelCount} hotels for ${city.city}`);
-      } else {
-        console.warn(`   ⚠️  Cache write may have failed for ${city.city}`);
+        // Extract hotel IDs from results
+        const hotelIds = results.map((hotel) => hotel.hotelId || hotel.code);
+
+        // Cache the results
+        const cached = await hotelCacheService.cacheSearchResults(
+          searchHash,
+          searchRequest,
+          hotelIds,
+          "precache_nightly",
+          sessionMetadata,
+        );
+
+        if (cached) {
+          console.log(`   ✅ Cached ${hotelCount} hotels for ${city.city}`);
+        } else {
+          console.warn(`   ⚠️  Cache write may have failed for ${city.city}`);
+        }
+      } catch (cacheErr) {
+        console.warn(`   ⚠️  Error during caching for ${city.city}:`, cacheErr.message);
       }
 
       // Also store normalized hotel metadata
