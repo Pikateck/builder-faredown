@@ -92,20 +92,19 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
     const duration = Date.now() - startTime;
 
     // Extract hotels array from response
-    // The caching integration wrapper returns: { results: [...], cacheHit, traceId, searchHash }
-    // The TBO adapter returns: { hotels: [...], sessionMetadata }
-    // Handle both cases
+    // The caching integration wrapper returns: { results: { hotels: [...], sessionMetadata }, cacheHit, traceId, searchHash }
+    // Navigate through the wrapping layers
     let results = [];
     let sessionMetadata = {};
 
-    if (searchResult.results) {
-      // From caching service wrapper
+    if (searchResult?.results?.hotels) {
+      // From caching service wrapper around TBO adapter
+      results = searchResult.results.hotels;
+      sessionMetadata = searchResult.results.sessionMetadata || {};
+    } else if (searchResult?.results && Array.isArray(searchResult.results)) {
+      // If results is directly an array (fallback)
       results = searchResult.results;
-      // Try to extract sessionMetadata if it's nested
-      if (Array.isArray(results) && results.length > 0 && results[0].sessionMetadata) {
-        sessionMetadata = results[0].sessionMetadata;
-      }
-    } else if (searchResult.hotels) {
+    } else if (searchResult?.hotels) {
       // Direct from TBO adapter (if not wrapped)
       results = searchResult.hotels;
       sessionMetadata = searchResult.sessionMetadata || {};
