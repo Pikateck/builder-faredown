@@ -239,10 +239,23 @@ router.post("/", async (req, res) => {
     });
 
     // ✅ Handle both cache format (results) and adapter format (hotels)
-    const tboHotels = Array.isArray(tboResponse)
-      ? tboResponse // Backwards compatibility
-      : tboResponse.hotels || tboResponse.results || [];
-    const sessionMetadata = tboResponse.sessionMetadata || {};
+    // Cache wraps adapter response: { results: { hotels: [...], sessionMetadata: {...} } }
+    // Adapter returns directly: { hotels: [...], sessionMetadata: {...} }
+    let tboHotels, sessionMetadata;
+
+    if (Array.isArray(tboResponse)) {
+      // Backwards compatibility
+      tboHotels = tboResponse;
+      sessionMetadata = {};
+    } else if (tboResponse.results && typeof tboResponse.results === 'object') {
+      // Cache format: { results: { hotels: [...], sessionMetadata: {...} }, cacheHit: true }
+      tboHotels = tboResponse.results.hotels || [];
+      sessionMetadata = tboResponse.results.sessionMetadata || {};
+    } else {
+      // Direct adapter format: { hotels: [...], sessionMetadata: {...} }
+      tboHotels = tboResponse.hotels || [];
+      sessionMetadata = tboResponse.sessionMetadata || {};
+    }
 
     console.log("[ROUTE] Extracted hotels", {
       count: tboHotels.length,
