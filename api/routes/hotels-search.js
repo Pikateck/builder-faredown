@@ -231,14 +231,17 @@ router.post("/", async (req, res) => {
     console.log("[ROUTE] TBO Response received", {
       isArray: Array.isArray(tboResponse),
       hasHotels: !!tboResponse.hotels,
+      hasResults: !!tboResponse.results,
       hotelsLength: tboResponse.hotels?.length,
+      resultsLength: tboResponse.results?.length,
       hasSessionMetadata: !!tboResponse.sessionMetadata,
       responseKeys: Object.keys(tboResponse || {}),
     });
 
+    // ✅ Handle both cache format (results) and adapter format (hotels)
     const tboHotels = Array.isArray(tboResponse)
       ? tboResponse // Backwards compatibility
-      : tboResponse.hotels || [];
+      : tboResponse.hotels || tboResponse.results || [];
     const sessionMetadata = tboResponse.sessionMetadata || {};
 
     console.log("[ROUTE] Extracted hotels", { count: tboHotels.length });
