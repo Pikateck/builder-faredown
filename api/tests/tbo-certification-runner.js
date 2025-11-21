@@ -575,6 +575,8 @@ async function executeTestCase(testCase) {
         Phoneno: p.phone,
         Nationality: p.nationality,
       })),
+    }, {
+      timeout: 60000  // 60 second timeout for booking
     });
 
     result.steps.push({
