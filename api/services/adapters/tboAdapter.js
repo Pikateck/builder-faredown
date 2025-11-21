@@ -298,7 +298,38 @@ class TBOAdapter extends BaseSupplierAdapter {
     );
     return null;
   }
+async getLocalCityMapping(destination, countryCode) {
+  try {
+    const normalizedDestination = destination.replace(/,.*$/, "").trim();
+    const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
 
+    const result = await pool.query(
+      `SELECT cm.tbo_city_id, tc.city_name, cm.match_confidence
+       FROM city_mapping cm
+       JOIN tbo_cities tc ON cm.tbo_city_id = tc.tbo_city_id
+       WHERE LOWER(cm.hotelbeds_city_name) LIKE LOWER($1)
+         AND cm.hotelbeds_country_code = $2
+         AND cm.is_active = true
+       ORDER BY cm.match_confidence DESC, cm.is_verified DESC
+       LIMIT 1`,
+      [normalizedDestination, normalizedCountryCode],
+    );
+
+    if (result.rows.length > 0) {
+      const mapping = result.rows[0];
+      console.info("[TBO] ✅ Local city mapping found", {
+        destination: normalizedDestination,
+        country: normalizedCountryCode,
+        destinationId: mapping.tbo_city_id,
+      });
+      return mapping.tbo_city_id;
+    }
+    return null;
+  } catch (error) {
+    console.warn("[TBO] Local mapping lookup failed, falling back to API:", error.message);
+    return null;
+  }
+}
   /**
    * ========================================
    * 2. STATIC DATA - GET CITY ID
@@ -309,7 +340,15 @@ class TBOAdapter extends BaseSupplierAdapter {
       destination,
       countryCode,
     });
+  // Try local mapping first
+    console.info("[TBO] Attempting local city mapping...");
+    const localCityId = await this.getLocalCityMapping(normalizedDestination, normalizedCountryCode);
+    if (localCityId) {
+      return localCityId;
+    }
+    console.info("[TBO] Local mapping not found, using TBO API...");
 
+    // Rest of getCityId continues as is...
     const normalizedDestination = destination.replace(/,.*$/, "").trim();
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
 
