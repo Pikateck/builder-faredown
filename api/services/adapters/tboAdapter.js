@@ -358,12 +358,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       console.info("[TBO] Attempting local city mapping...");
 
       // Try local mapping first (pre-synced data from city_mapping table)
-      const localCityId = await this.getLocalCityMapping(normalizedDestination, normalizedCountryCode);
+      const localCityId = await this.getLocalCityMapping(
+        normalizedDestination,
+        normalizedCountryCode,
+      );
       if (localCityId) {
         return localCityId;
       }
     } catch (localErr) {
-      console.warn("[TBO] Local mapping error, continuing with API fallback:", localErr?.message);
+      console.warn(
+        "[TBO] Local mapping error, continuing with API fallback:",
+        localErr?.message,
+      );
       // Continue to API fallback
     }
 

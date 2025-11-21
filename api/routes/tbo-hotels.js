@@ -254,7 +254,7 @@ router.post("/search", async (req, res) => {
     // Merge nationality into search request
     const searchRequest = {
       ...req.body,
-      guestNationality: req.body.guestNationality || guestNationality
+      guestNationality: req.body.guestNationality || guestNationality,
     };
 
     // Execute raw search with 90-second timeout (large result sets via proxy)
@@ -291,7 +291,7 @@ router.post("/search", async (req, res) => {
         unifiedResults,
         searchRequest,
         "tbo_search",
-        {}
+        {},
       );
       console.log(`✅ Cached ${unifiedResults.length} hotels for TBO search`);
     } catch (cacheErr) {
