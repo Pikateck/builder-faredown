@@ -1,9 +1,11 @@
 # Hotel Cache Service - Price Snapshot Enhancement
 
 ## Purpose
+
 Enhance `hotelCacheService.cacheSearchResults()` to populate `price_offered_per_night` and `price_published_per_night` columns in `hotel_search_cache_results` table. Currently only `search_hash`, `tbo_hotel_code`, and `result_rank` are inserted.
 
 ## Current Behavior (Limited)
+
 ```javascript
 // CURRENT (line 180-186):
 for (const [rank, hotelId] of hotelIds.entries()) {
@@ -29,10 +31,12 @@ for (const [rank, hotelData] of hotelIds.entries()) {
   // hotelData can be either:
   // - string (hotelId) - backward compatible
   // - object with { hotelId, basePrice, publishedPrice }
-  
-  const hotelId = typeof hotelData === 'string' ? hotelData : hotelData.hotelId;
-  const offeredPrice = typeof hotelData === 'object' ? hotelData.basePrice : null;
-  const publishedPrice = typeof hotelData === 'object' ? hotelData.publishedPrice : null;
+
+  const hotelId = typeof hotelData === "string" ? hotelData : hotelData.hotelId;
+  const offeredPrice =
+    typeof hotelData === "object" ? hotelData.basePrice : null;
+  const publishedPrice =
+    typeof hotelData === "object" ? hotelData.publishedPrice : null;
 
   await db.query(
     `INSERT INTO public.hotel_search_cache_results
@@ -51,12 +55,16 @@ If prices are in the `supplierResponseFull` object from TBO response:
 ```javascript
 // Get prices from response if available
 let priceMap = {};
-if (sessionMetadata.supplierResponseFull && sessionMetadata.supplierResponseFull.Hotels) {
-  sessionMetadata.supplierResponseFull.Hotels.forEach(h => {
+if (
+  sessionMetadata.supplierResponseFull &&
+  sessionMetadata.supplierResponseFull.Hotels
+) {
+  sessionMetadata.supplierResponseFull.Hotels.forEach((h) => {
     if (h.HotelCode) {
       priceMap[h.HotelCode] = {
         offered: h.Price?.OfferedPricePerNight || h.TotalPrice,
-        published: h.Price?.PublishedPricePerNight || h.Price?.OfferedPricePerNight,
+        published:
+          h.Price?.PublishedPricePerNight || h.Price?.OfferedPricePerNight,
       };
     }
   });
@@ -65,19 +73,19 @@ if (sessionMetadata.supplierResponseFull && sessionMetadata.supplierResponseFull
 // Now in the insert loop:
 for (const [rank, hotelId] of hotelIds.entries()) {
   const prices = priceMap[hotelId] || {};
-  
+
   await db.query(
     `INSERT INTO public.hotel_search_cache_results
      (search_hash, tbo_hotel_code, result_rank, price_offered_per_night, price_published_per_night, available_rooms)
      VALUES ($1, $2, $3, $4, $5, $6)
      ON CONFLICT DO NOTHING`,
     [
-      searchHash, 
-      hotelId, 
-      rank + 1, 
+      searchHash,
+      hotelId,
+      rank + 1,
       prices.offered || null,
       prices.published || null,
-      hotels.length // or get actual room count if available
+      hotels.length, // or get actual room count if available
     ],
   );
 }
@@ -88,11 +96,13 @@ for (const [rank, hotelId] of hotelIds.entries()) {
 File: `api/services/hotelCacheService.js`
 
 ### Location 1: cacheSearchResults() method
+
 - Current: lines ~179-186
 - Modify the hotel insertion loop to include price fields
 - Add price extraction logic before the loop (lines ~175-178)
 
 ### Location 2: Update ON CONFLICT clause
+
 - Ensure ON CONFLICT (search_hash, tbo_hotel_code) DO UPDATE includes price columns if they should be refreshable
 
 ## Database Verification
@@ -100,7 +110,7 @@ File: `api/services/hotelCacheService.js`
 After implementation, verify with:
 
 ```sql
-SELECT 
+SELECT
   search_hash,
   tbo_hotel_code,
   result_rank,

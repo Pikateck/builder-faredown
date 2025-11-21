@@ -100,7 +100,9 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
         results,
         searchRequest,
         "precache_nightly",
-        { /* sessionMetadata - TBO will populate this */ }
+        {
+          /* sessionMetadata - TBO will populate this */
+        },
       );
 
       if (cached) {
@@ -136,7 +138,10 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
             tboResponseBlob: hotel, // Full TBO response
           });
         } catch (normalizeErr) {
-          console.warn(`   ⚠️  Failed to normalize hotel ${hotel.hotelCode}:`, normalizeErr.message);
+          console.warn(
+            `   ⚠️  Failed to normalize hotel ${hotel.hotelCode}:`,
+            normalizeErr.message,
+          );
         }
       }
 
@@ -195,7 +200,9 @@ async function main() {
   if (citiesArg) {
     const cityNames = citiesArg.replace("--cities=", "").split(",");
     citiesToCache = TOP_CITIES_TO_PRECACHE.filter((c) =>
-      cityNames.some((name) => c.city.toLowerCase().includes(name.toLowerCase())),
+      cityNames.some((name) =>
+        c.city.toLowerCase().includes(name.toLowerCase()),
+      ),
     );
   }
 

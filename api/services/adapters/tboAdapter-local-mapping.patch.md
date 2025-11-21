@@ -1,6 +1,7 @@
 # TBO Adapter - Local City Mapping Enhancement
 
 ## Purpose
+
 Modify `tboAdapter.js` getCityId() function to use pre-synced city mappings from the database before calling TBO's live API. This improves performance and reduces dependency on TBO's static data endpoint.
 
 ## Implementation Steps
@@ -79,13 +80,13 @@ In the getCityId() function (around line 307-350), add this logic right after th
 When the function logs "✅ CityId resolved" (around line 488), add a note that it came from live API:
 
 ```javascript
-      console.info("[TBO] ✅ CityId resolved (via TBO StaticData API)", {
-        requestedCity: requestedCityRaw,
-        requestedCountry,
-        destinationId: resolvedId,
-        matchedCity: match.CityName,
-        matchedCountry: match.CountryCode,
-      });
+console.info("[TBO] ✅ CityId resolved (via TBO StaticData API)", {
+  requestedCity: requestedCityRaw,
+  requestedCountry,
+  destinationId: resolvedId,
+  matchedCity: match.CityName,
+  matchedCountry: match.CountryCode,
+});
 ```
 
 ## Expected Behavior After Change
