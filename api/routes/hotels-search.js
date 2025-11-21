@@ -310,7 +310,7 @@ router.post("/", async (req, res) => {
         // Store normalized hotel
         await hotelCacheService.storeNormalizedHotel({
           tboHotelCode: hotelCode,
-          cityId: searchParams.cityId,
+          cityId: sessionMetadata.destinationId,
           cityName: searchParams.destination || searchParams.City,
           countryCode: searchParams.countryCode || "AE",
           name: tboHotel.name || tboHotel.HotelName || "Hotel",
