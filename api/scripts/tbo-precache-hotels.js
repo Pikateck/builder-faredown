@@ -88,25 +88,27 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
 
     // Execute search
     const startTime = Date.now();
-    const results = await adapter.searchHotels(searchRequest);
+    const searchResult = await adapter.searchHotels(searchRequest);
     const duration = Date.now() - startTime;
 
-    console.log(`   ✓ Found ${results.length} hotels (${duration}ms)`);
+    // Extract hotels array from response (which includes sessionMetadata)
+    const results = searchResult.hotels || searchResult || [];
+    const hotelCount = results.length;
 
-    if (!dryRun && results.length > 0) {
+    console.log(`   ✓ Found ${hotelCount} hotels (${duration}ms)`);
+
+    if (!dryRun && hotelCount > 0) {
       // Cache the results using hotelCacheService
       // This will populate hotel_search_cache and hotel_search_cache_results
       const cached = await hotelCacheService.cacheSearchResults(
         results,
         searchRequest,
         "precache_nightly",
-        {
-          /* sessionMetadata - TBO will populate this */
-        },
+        searchResult.sessionMetadata || {},
       );
 
       if (cached) {
-        console.log(`   ✅ Cached ${results.length} hotels for ${city.city}`);
+        console.log(`   ✅ Cached ${hotelCount} hotels for ${city.city}`);
       } else {
         console.warn(`   ⚠️  Cache write may have failed for ${city.city}`);
       }
