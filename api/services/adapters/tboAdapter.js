@@ -367,12 +367,23 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Continue to API fallback
     }
 
+    // Fallback: ensure variables are initialized before continuing
+    if (!normalizedDestination || !normalizedCountryCode) {
+      console.error("[TBO] ❌ Failed to normalize inputs", {
+        originalDestination: destination,
+        originalCountryCode: countryCode,
+        normalizedDestination,
+        normalizedCountryCode,
+      });
+      return this.applyDestinationFallback(destination, countryCode);
+    }
+
     // Fall back to TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
 
     // Ensure we have a valid token before calling static data
     if (!this.tokenId || (this.tokenExpiry && new Date() > this.tokenExpiry)) {
-      this.logger.info("��� Token expired or missing, obtaining new token...");
+      this.logger.info("Token expired or missing, obtaining new token...");
       await this.getHotelToken();
     }
 
