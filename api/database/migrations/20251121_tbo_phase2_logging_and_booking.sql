@@ -47,19 +47,19 @@ CREATE TABLE IF NOT EXISTS public.tbo_trace_logs (
 );
 
 -- Indexes for fast lookups
-CREATE INDEX idx_tbo_trace_trace_id ON public.tbo_trace_logs(trace_id);
-CREATE INDEX idx_tbo_trace_session_id ON public.tbo_trace_logs(session_id);
-CREATE INDEX idx_tbo_trace_request_type ON public.tbo_trace_logs(request_type);
-CREATE INDEX idx_tbo_trace_hotel_code ON public.tbo_trace_logs(hotel_code);
-CREATE INDEX idx_tbo_trace_search_hash ON public.tbo_trace_logs(search_hash);
-CREATE INDEX idx_tbo_trace_created_at ON public.tbo_trace_logs(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_trace_id ON public.tbo_trace_logs(trace_id);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_session_id ON public.tbo_trace_logs(session_id);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_request_type ON public.tbo_trace_logs(request_type);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_hotel_code ON public.tbo_trace_logs(hotel_code);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_search_hash ON public.tbo_trace_logs(search_hash);
+CREATE INDEX IF NOT EXISTS idx_tbo_trace_created_at ON public.tbo_trace_logs(created_at DESC);
 
 -- =============================================================================
 -- 2. EXTEND HOTEL_SEARCH_CACHE FOR PREBOOK SESSION TRACKING
 -- =============================================================================
 -- Ensure we have all fields needed for session reuse through booking chain
 
-ALTER TABLE public.hotel_search_cache
+ALTER TABLE IF EXISTS public.hotel_search_cache
 ADD COLUMN IF NOT EXISTS prebook_session_id UUID,
 ADD COLUMN IF NOT EXISTS prebook_completed_at TIMESTAMPTZ,
 ADD COLUMN IF NOT EXISTS block_session_id UUID,
@@ -114,18 +114,18 @@ CREATE TABLE IF NOT EXISTS public.tbo_booking_sessions (
 );
 
 -- Indexes
-CREATE INDEX idx_tbs_search_hash ON public.tbo_booking_sessions(search_hash);
-CREATE INDEX idx_tbs_trace_id ON public.tbo_booking_sessions(trace_id);
-CREATE INDEX idx_tbs_current_step ON public.tbo_booking_sessions(current_step);
-CREATE INDEX idx_tbs_status ON public.tbo_booking_sessions(status);
-CREATE INDEX idx_tbs_session_expires_at ON public.tbo_booking_sessions(session_expires_at);
+CREATE INDEX IF NOT EXISTS idx_tbs_search_hash ON public.tbo_booking_sessions(search_hash);
+CREATE INDEX IF NOT EXISTS idx_tbs_trace_id ON public.tbo_booking_sessions(trace_id);
+CREATE INDEX IF NOT EXISTS idx_tbs_current_step ON public.tbo_booking_sessions(current_step);
+CREATE INDEX IF NOT EXISTS idx_tbs_status ON public.tbo_booking_sessions(status);
+CREATE INDEX IF NOT EXISTS idx_tbs_session_expires_at ON public.tbo_booking_sessions(session_expires_at);
 
 -- =============================================================================
 -- 4. EXTEND BOOKINGS TABLE FOR TBO DETAILS
 -- =============================================================================
 -- Ensure full TBO response persistence
 
-ALTER TABLE public.bookings
+ALTER TABLE IF EXISTS public.bookings
 ADD COLUMN IF NOT EXISTS tbo_trace_id UUID,
 ADD COLUMN IF NOT EXISTS tbo_booking_reference VARCHAR(100),
 ADD COLUMN IF NOT EXISTS tbo_hotel_confirmation_no VARCHAR(100),
