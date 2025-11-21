@@ -350,7 +350,13 @@ class TBOAdapter extends BaseSupplierAdapter {
     const normalizedDestination = destination.replace(/,.*$/, "").trim();
     const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
 
-    // Call TBO static data API
+    // Try local mapping first (pre-synced data from city_mapping table)
+    const localCityId = await this.getLocalCityMapping(normalizedDestination, normalizedCountryCode);
+    if (localCityId) {
+      return localCityId;
+    }
+
+    // Fall back to TBO static data API
     const staticUrl = this.config.hotelStaticDataUrl;
 
     // Ensure we have a valid token before calling static data
