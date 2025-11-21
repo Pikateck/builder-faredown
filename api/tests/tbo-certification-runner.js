@@ -485,6 +485,8 @@ async function executeTestCase(testCase) {
       checkInDate: testCase.checkInDate,
       checkOutDate: testCase.checkOutDate,
       noOfRooms: testCase.roomConfigs.length,
+    }, {
+      timeout: 60000  // 60 second timeout for room details
     });
 
     result.steps.push({
