@@ -300,6 +300,43 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Check local city mappings first (pre-synced TBO data)
+   * Avoids unnecessary API calls and uses pre-verified mappings
+   */
+  async getLocalCityMapping(destination, countryCode) {
+    try {
+      const normalizedDestination = destination.replace(/,.*$/, "").trim();
+      const normalizedCountryCode = (countryCode || "").trim().toUpperCase();
+
+      const result = await pool.query(
+        `SELECT cm.tbo_city_id, tc.city_name, cm.match_confidence
+         FROM city_mapping cm
+         JOIN tbo_cities tc ON cm.tbo_city_id = tc.tbo_city_id
+         WHERE LOWER(cm.hotelbeds_city_name) LIKE LOWER($1)
+           AND cm.hotelbeds_country_code = $2
+           AND cm.is_active = true
+         ORDER BY cm.match_confidence DESC, cm.is_verified DESC
+         LIMIT 1`,
+        [normalizedDestination, normalizedCountryCode],
+      );
+
+      if (result.rows.length > 0) {
+        const mapping = result.rows[0];
+        console.info("[TBO] Local city mapping found", {
+          destinationId: mapping.tbo_city_id,
+          city: mapping.city_name,
+          confidence: mapping.match_confidence,
+        });
+        return mapping.tbo_city_id;
+      }
+      return null;
+    } catch (error) {
+      console.warn("[TBO] Local mapping lookup failed:", error.message);
+      return null;
+    }
+  }
+
+  /**
    * ========================================
    * 2. STATIC DATA - GET CITY ID
    * ========================================
