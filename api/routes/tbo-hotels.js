@@ -284,6 +284,20 @@ router.post("/search", async (req, res) => {
       .map((h) => TBOAdapter.toUnifiedHotel(h, searchContext))
       .filter(Boolean);
 
+    // Cache search results
+    try {
+      const hotelCacheService = require("../services/hotelCacheService");
+      await hotelCacheService.cacheSearchResults(
+        unifiedResults,
+        searchRequest,
+        "tbo_search",
+        {}
+      );
+      console.log(`✅ Cached ${unifiedResults.length} hotels for TBO search`);
+    } catch (cacheErr) {
+      console.warn("⚠️ Failed to cache TBO search results:", cacheErr.message);
+    }
+
     // Generate searchId for tracking
     const searchId = uuidv4();
 
