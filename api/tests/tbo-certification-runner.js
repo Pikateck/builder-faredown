@@ -436,6 +436,8 @@ async function executeTestCase(testCase) {
       rooms: testCase.roomConfigs,
       currency: testCase.currency,
       guestNationality: testCase.nationality,
+    }, {
+      timeout: 90000  // 90 second timeout for search
     });
 
     result.steps.push({
