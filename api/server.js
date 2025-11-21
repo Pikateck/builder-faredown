@@ -81,6 +81,7 @@ const pricingEngineRoutes = require("./routes/pricing-engine.js");
 const adminUsersVerifyRoutes = require("./routes/admin-users-verify.js");
 const adminUsersPublic = require("./routes/admin-users-public.js");
 const hotelsSearchRoutes = require("./routes/hotels-search.js");
+const hotelsBookingRoutes = require("./routes/hotels-booking.js");
 const adminSystemStatusRoutes = require("./routes/admin-system-status.js");
 const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history.js");
 const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
