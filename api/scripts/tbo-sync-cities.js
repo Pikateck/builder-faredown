@@ -24,9 +24,7 @@
  */
 
 const db = require("../lib/db");
-const {
-  getDestinationSearchStaticData,
-} = require("../tbo/static");
+const { getDestinationSearchStaticData } = require("../tbo/static");
 const { authenticateTBO } = require("../tbo/auth");
 
 // Normalize string for matching
@@ -82,7 +80,7 @@ async function syncTBOCountries() {
         console.log(`\n  Fetching cities for country: ${countryCode}`);
         const staticData = await getDestinationSearchStaticData(
           countryCode,
-          tokenId
+          tokenId,
         );
 
         // First, ensure country exists
@@ -95,7 +93,7 @@ async function syncTBOCountries() {
            VALUES ($1, $2, $3, $4, NOW(), NOW())
            ON CONFLICT (country_code)
            DO UPDATE SET country_name = EXCLUDED.country_name, country_name_normalized = EXCLUDED.country_name_normalized, updated_at = NOW()`,
-          [countryCode, countryName, countryNorm, true]
+          [countryCode, countryName, countryNorm, true],
         );
 
         console.log(`  ✓ Country ${countryCode} (${countryName}) synced`);
@@ -137,13 +135,13 @@ async function syncTBOCountries() {
                 tboCity.is_active,
                 tboCity.last_synced_at,
                 JSON.stringify(tboCity.tbo_response),
-              ]
+              ],
             );
             cityCount++;
           } catch (cityError) {
             console.error(
               `    ⚠️  Failed to sync city ${city.cityName}:`,
-              cityError.message
+              cityError.message,
             );
           }
         }
@@ -152,7 +150,7 @@ async function syncTBOCountries() {
       } catch (countryError) {
         console.warn(
           `⚠️  Failed to fetch data for country ${countryCode}:`,
-          countryError.message
+          countryError.message,
         );
       }
     }
@@ -180,7 +178,7 @@ async function createCityMappings() {
        FROM cities c
        JOIN countries co ON c.country_id = co.id
        WHERE c.is_active = true
-       ORDER BY co.iso_code, c.name`
+       ORDER BY co.iso_code, c.name`,
     );
 
     const hotelbedsCities = hotelbedsCitiesResult.rows;
@@ -197,14 +195,14 @@ async function createCityMappings() {
            FROM tbo_cities
            WHERE country_code = $1 AND is_active = true
            ORDER BY city_name_normalized`,
-          [hbCity.iso_code]
+          [hbCity.iso_code],
         );
 
         const tboCities = tboCitiesResult.rows;
 
         if (tboCities.length === 0) {
           console.log(
-            `  ⚠️  No TBO cities found for Hotelbeds city: ${hbCity.name} (${hbCity.iso_code})`
+            `  ⚠️  No TBO cities found for Hotelbeds city: ${hbCity.name} (${hbCity.iso_code})`,
           );
           failedCount++;
           continue;
@@ -224,7 +222,7 @@ async function createCityMappings() {
 
         if (!bestMatch) {
           console.log(
-            `  ⚠️  Could not find match for: ${hbCity.name} (${hbCity.iso_code})`
+            `  ⚠️  Could not find match for: ${hbCity.name} (${hbCity.iso_code})`,
           );
           failedCount++;
           continue;
@@ -255,20 +253,20 @@ async function createCityMappings() {
             matchMethod,
             `Matched: ${hbCity.name} (${hbCity.iso_code}) → ${bestMatch.city_name} (${bestMatch.tbo_city_id})`,
             true,
-          ]
+          ],
         );
 
         mappedCount++;
 
         if (bestScore < 80) {
           console.log(
-            `  ℹ️  Low confidence match (${bestScore}): ${hbCity.name} → ${bestMatch.city_name}`
+            `  ℹ️  Low confidence match (${bestScore}): ${hbCity.name} → ${bestMatch.city_name}`,
           );
         }
       } catch (mapError) {
         console.error(
           `  ❌ Error mapping city ${hbCity.name}:`,
-          mapError.message
+          mapError.message,
         );
         failedCount++;
       }
@@ -297,7 +295,7 @@ async function logSyncOperation(
   recordsInserted,
   recordsUpdated,
   errorMessage,
-  durationMs
+  durationMs,
 ) {
   try {
     await db.query(
@@ -312,7 +310,7 @@ async function logSyncOperation(
         recordsUpdated,
         errorMessage,
         durationMs,
-      ]
+      ],
     );
   } catch (logError) {
     console.error("Failed to log sync operation:", logError.message);
@@ -354,7 +352,7 @@ async function main() {
       0,
       0,
       null,
-      duration
+      duration,
     );
 
     await db.end();
@@ -375,7 +373,7 @@ async function main() {
       0,
       0,
       error.message,
-      duration
+      duration,
     );
 
     await db.end();

@@ -1,8 +1,8 @@
 /**
  * Map Hotelbeds Cities to TBO Cities
- * 
+ *
  * Usage: node api/scripts/map-hotelbeds-to-tbo-cities.js [--limit=50] [--verify]
- * 
+ *
  * This script:
  * 1. Reads all unique cities from hotelbeds_destinations table
  * 2. For each city, finds the best matching TBO city
@@ -29,17 +29,13 @@ async function main() {
 
     // Check if TBO cities exist
     const tboCount = await db.query(
-      "SELECT COUNT(*) as count FROM public.tbo_cities"
+      "SELECT COUNT(*) as count FROM public.tbo_cities",
     );
     if (tboCount.rows[0].count === 0) {
-      throw new Error(
-        "No TBO cities found. Run populate-tbo-cities.js first."
-      );
+      throw new Error("No TBO cities found. Run populate-tbo-cities.js first.");
     }
 
-    console.log(
-      `✅ TBO cities available: ${tboCount.rows[0].count} cities`
-    );
+    console.log(`✅ TBO cities available: ${tboCount.rows[0].count} cities`);
 
     // ============================================================
     // Step 1: Get Hotelbeds cities
@@ -58,12 +54,12 @@ async function main() {
       ORDER BY code
       LIMIT $1
     `,
-      [limit]
+      [limit],
     );
 
     const hbCities = hbResult.rows;
     console.log(
-      `✅ Found ${hbCities.length} unique Hotelbeds cities (limit: ${limit})`
+      `✅ Found ${hbCities.length} unique Hotelbeds cities (limit: ${limit})`,
     );
 
     // ============================================================
@@ -83,14 +79,14 @@ async function main() {
         const result = await CityMappingService.getOrCreateMapping(
           hb.city_code,
           hb.city_name,
-          hb.country_code
+          hb.country_code,
         );
 
         if (result) {
           if (verify) {
             await CityMappingService.verifyMapping(
               hb.city_code,
-              "map-hotelbeds-script"
+              "map-hotelbeds-script",
             );
           }
           mapped++;
@@ -101,12 +97,12 @@ async function main() {
 
         if ((i + 1) % 25 === 0) {
           console.log(
-            `  ${progress} Processed ${i + 1}/${hbCities.length} (${mapped} mapped, ${unmapped} unmapped)`
+            `  ${progress} Processed ${i + 1}/${hbCities.length} (${mapped} mapped, ${unmapped} unmapped)`,
           );
         }
       } catch (error) {
         console.error(
-          `  ❌ ${progress} Error mapping ${hb.city_code} (${hb.city_name}): ${error.message}`
+          `  ❌ ${progress} Error mapping ${hb.city_code} (${hb.city_name}): ${error.message}`,
         );
         unmapped++;
         unmappedCities.push(hb);
@@ -121,7 +117,7 @@ async function main() {
       console.log(`\n⚠️  Unmapped cities (manual review needed):`);
       unmappedCities.forEach((city) => {
         console.log(
-          `  - ${city.city_code} (${city.city_name}) in ${city.country_code}`
+          `  - ${city.city_code} (${city.city_name}) in ${city.country_code}`,
         );
       });
     }
@@ -140,23 +136,23 @@ async function main() {
         SUM(CASE WHEN is_verified THEN 1 ELSE 0 END) as verified_count
       FROM public.city_mapping
       WHERE is_active = true
-    `
+    `,
     );
 
     const s = stats.rows[0];
     console.log(`\n📊 Mapping Quality Stats:`);
     console.log(`  Total mappings: ${s.total}`);
     console.log(
-      `  Exact (100%): ${s.exact_matches} (${((s.exact_matches / s.total) * 100).toFixed(1)}%)`
+      `  Exact (100%): ${s.exact_matches} (${((s.exact_matches / s.total) * 100).toFixed(1)}%)`,
     );
     console.log(
-      `  High (85-99%): ${s.high_confidence} (${((s.high_confidence / s.total) * 100).toFixed(1)}%)`
+      `  High (85-99%): ${s.high_confidence} (${((s.high_confidence / s.total) * 100).toFixed(1)}%)`,
     );
     console.log(
-      `  Medium (60-84%): ${s.medium_confidence} (${((s.medium_confidence / s.total) * 100).toFixed(1)}%)`
+      `  Medium (60-84%): ${s.medium_confidence} (${((s.medium_confidence / s.total) * 100).toFixed(1)}%)`,
     );
     console.log(
-      `  Low (<60%): ${s.low_confidence} (${((s.low_confidence / s.total) * 100).toFixed(1)}%)`
+      `  Low (<60%): ${s.low_confidence} (${((s.low_confidence / s.total) * 100).toFixed(1)}%)`,
     );
     console.log(`  Verified: ${s.verified_count}`);
 
@@ -171,14 +167,14 @@ async function main() {
       WHERE is_active = true AND match_confidence >= 85
       ORDER BY match_confidence DESC, hotelbeds_city_code
       LIMIT 10
-    `
+    `,
     );
 
     if (samples.rows.length > 0) {
       console.log(`\n🎯 Sample High-Quality Mappings (confidence ≥ 85%):`);
       samples.rows.forEach((row) => {
         console.log(
-          `  ${row.hotelbeds_city_code.padEnd(10)} → TBO ${row.tbo_city_id} [${row.match_confidence}% via ${row.match_method}]`
+          `  ${row.hotelbeds_city_code.padEnd(10)} → TBO ${row.tbo_city_id} [${row.match_confidence}% via ${row.match_method}]`,
         );
       });
     }

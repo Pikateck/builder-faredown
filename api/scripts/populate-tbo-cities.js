@@ -1,8 +1,8 @@
 /**
  * Populate TBO Cities Master from TBO Static Data APIs
- * 
+ *
  * Usage: node api/scripts/populate-tbo-cities.js [--countries-only] [--reset]
- * 
+ *
  * This script:
  * 1. Fetches TBO's CountryList API
  * 2. For each country, fetches CityList API
@@ -80,7 +80,12 @@ async function main() {
           tbo_response = $4,
           updated_at = NOW()
       `,
-        [CountryCode, CountryName || CountryCode, normalized, JSON.stringify(country)]
+        [
+          CountryCode,
+          CountryName || CountryCode,
+          normalized,
+          JSON.stringify(country),
+        ],
       );
 
       countryCount++;
@@ -143,13 +148,15 @@ async function main() {
               Latitude || null,
               Longitude || null,
               JSON.stringify(city),
-            ]
+            ],
           );
 
           cityCount++;
         }
       } catch (error) {
-        console.error(`  ❌ Error fetching cities for ${CountryCode}: ${error.message}`);
+        console.error(
+          `  ❌ Error fetching cities for ${CountryCode}: ${error.message}`,
+        );
         errorCount++;
       }
 
@@ -157,16 +164,18 @@ async function main() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    console.log(`\n✅ Stored ${cityCount} cities (${errorCount} country errors)`);
+    console.log(
+      `\n✅ Stored ${cityCount} cities (${errorCount} country errors)`,
+    );
 
     // ============================================================
     // Step 4: Summary statistics
     // ============================================================
     const countResult = await db.query(
-      "SELECT COUNT(*) as count FROM public.tbo_cities"
+      "SELECT COUNT(*) as count FROM public.tbo_cities",
     );
     const countryCountResult = await db.query(
-      "SELECT COUNT(*) as count FROM public.tbo_countries"
+      "SELECT COUNT(*) as count FROM public.tbo_countries",
     );
 
     console.log(`\n📊 Final Counts:`);
@@ -181,7 +190,7 @@ async function main() {
       GROUP BY country_code
       ORDER BY city_count DESC
       LIMIT 10
-    `
+    `,
     );
 
     console.log(`\n🌍 Top 10 Countries by City Count:`);

@@ -57,7 +57,9 @@ class CityMappingService {
     const hbNormalized = this.normalize(hbCityName);
 
     // Strategy 1: Exact match on normalized name
-    let match = tboCities.find((tc) => tc.city_name_normalized === hbNormalized);
+    let match = tboCities.find(
+      (tc) => tc.city_name_normalized === hbNormalized,
+    );
     if (match) {
       return {
         tbo_city_id: match.tbo_city_id,
@@ -71,8 +73,12 @@ class CityMappingService {
     // e.g., "Delhi" in "New Delhi / Delhi"
     match = tboCities.find(
       (tc) =>
-        hbNormalized.split(" ").some((word) => tc.city_name_normalized.includes(word)) ||
-        tc.city_name_normalized.split(" ").some((word) => hbNormalized.includes(word))
+        hbNormalized
+          .split(" ")
+          .some((word) => tc.city_name_normalized.includes(word)) ||
+        tc.city_name_normalized
+          .split(" ")
+          .some((word) => hbNormalized.includes(word)),
     );
     if (match) {
       return {
@@ -116,7 +122,7 @@ class CityMappingService {
     tboCountryCode,
     confidence,
     method,
-    notes = null
+    notes = null,
   ) {
     const query = `
       INSERT INTO public.city_mapping
@@ -157,7 +163,7 @@ class CityMappingService {
     // Check if mapping exists
     const existing = await db.query(
       `SELECT * FROM public.city_mapping WHERE hotelbeds_city_code = $1`,
-      [hbCityCode]
+      [hbCityCode],
     );
 
     if (existing.rows.length > 0) {
@@ -169,7 +175,7 @@ class CityMappingService {
 
     if (!match) {
       console.warn(
-        `⚠️  No TBO city match found for: ${hbCityName} (${hbCountryCode})`
+        `⚠️  No TBO city match found for: ${hbCityName} (${hbCountryCode})`,
       );
       return null;
     }
@@ -184,11 +190,11 @@ class CityMappingService {
       hbCountryCode,
       match.confidence,
       match.method,
-      `Auto-mapped on ${new Date().toISOString()}`
+      `Auto-mapped on ${new Date().toISOString()}`,
     );
 
     console.log(
-      `✅ Created mapping: ${hbCityCode} (${hbCityName}) → TBO ${match.tbo_city_id} (${match.tbo_city_name}) [${match.confidence}% confidence via ${match.method}]`
+      `✅ Created mapping: ${hbCityCode} (${hbCityName}) → TBO ${match.tbo_city_id} (${match.tbo_city_name}) [${match.confidence}% confidence via ${match.method}]`,
     );
 
     return mapping;
@@ -199,7 +205,7 @@ class CityMappingService {
    */
   static async getAllMappings() {
     const result = await db.query(
-      `SELECT * FROM public.city_mapping WHERE is_active = true ORDER BY match_confidence DESC`
+      `SELECT * FROM public.city_mapping WHERE is_active = true ORDER BY match_confidence DESC`,
     );
     return result.rows;
   }
@@ -238,7 +244,7 @@ class CityMappingService {
       WHERE hotelbeds_city_code = $2
       RETURNING *
     `,
-      [verifiedBy, hbCityCode]
+      [verifiedBy, hbCityCode],
     );
     return result.rows[0];
   }

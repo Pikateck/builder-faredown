@@ -19,7 +19,8 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
 const API_BASE_URL =
-  process.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+  process.env.VITE_API_BASE_URL ||
+  "https://builder-faredown-pricing.onrender.com/api";
 
 /**
  * 8 TBO Certification Test Cases
@@ -424,17 +425,21 @@ async function executeTestCase(testCase) {
 
     // Step 1: Search Hotels
     console.log(`\n[Step 1] Searching hotels...`);
-    const searchResponse = await axios.post(`${API_BASE_URL}/tbo/search`, {
-      destination: testCase.destination,
-      countryCode: testCase.countryCode,
-      checkIn: testCase.checkInDate,
-      checkOut: testCase.checkOutDate,
-      rooms: testCase.roomConfigs,
-      currency: testCase.currency,
-      guestNationality: testCase.nationality,
-    }, {
-      timeout: 90000  // 90 second timeout for search
-    });
+    const searchResponse = await axios.post(
+      `${API_BASE_URL}/tbo/search`,
+      {
+        destination: testCase.destination,
+        countryCode: testCase.countryCode,
+        checkIn: testCase.checkInDate,
+        checkOut: testCase.checkOutDate,
+        rooms: testCase.roomConfigs,
+        currency: testCase.currency,
+        guestNationality: testCase.nationality,
+      },
+      {
+        timeout: 90000, // 90 second timeout for search
+      },
+    );
 
     result.steps.push({
       step: "search",
@@ -461,10 +466,14 @@ async function executeTestCase(testCase) {
     // Normalize hotel properties (handle both camelCase and PascalCase)
     if (selectedHotel) {
       selectedHotel = {
-        resultIndex: selectedHotel.resultIndex !== undefined ? selectedHotel.resultIndex : selectedHotel.ResultIndex || 0,
+        resultIndex:
+          selectedHotel.resultIndex !== undefined
+            ? selectedHotel.resultIndex
+            : selectedHotel.ResultIndex || 0,
         hotelCode: selectedHotel.hotelCode || selectedHotel.HotelCode,
-        hotelName: selectedHotel.hotelName || selectedHotel.HotelName || "Unknown Hotel",
-        ...selectedHotel
+        hotelName:
+          selectedHotel.hotelName || selectedHotel.HotelName || "Unknown Hotel",
+        ...selectedHotel,
       };
     }
 
@@ -475,17 +484,21 @@ async function executeTestCase(testCase) {
 
     // Step 2: Get Hotel Room Details
     console.log(`\n[Step 2] Getting room details...`);
-    const roomResponse = await axios.post(`${API_BASE_URL}/tbo/room`, {
-      traceId,
-      resultIndex: selectedHotel.resultIndex,
-      hotelCode: selectedHotel.hotelCode,
-      hotelName: selectedHotel.hotelName,
-      checkInDate: testCase.checkInDate,
-      checkOutDate: testCase.checkOutDate,
-      noOfRooms: testCase.roomConfigs.length,
-    }, {
-      timeout: 60000  // 60 second timeout for room details
-    });
+    const roomResponse = await axios.post(
+      `${API_BASE_URL}/tbo/room`,
+      {
+        traceId,
+        resultIndex: selectedHotel.resultIndex,
+        hotelCode: selectedHotel.hotelCode,
+        hotelName: selectedHotel.hotelName,
+        checkInDate: testCase.checkInDate,
+        checkOutDate: testCase.checkOutDate,
+        noOfRooms: testCase.roomConfigs.length,
+      },
+      {
+        timeout: 60000, // 60 second timeout for room details
+      },
+    );
 
     result.steps.push({
       step: "room",
@@ -511,19 +524,24 @@ async function executeTestCase(testCase) {
     // Step 3: Block Room
     console.log(`\n[Step 3] Blocking room...`);
     // Use either hotelRoomDetails or rooms (handle both naming conventions)
-    const hotelRoomDetails = roomResponse.data.hotelRoomDetails || roomResponse.data.rooms;
-    const blockResponse = await axios.post(`${API_BASE_URL}/tbo/block`, {
-      traceId,
-      resultIndex: selectedHotel.resultIndex,
-      hotelCode: selectedHotel.hotelCode,
-      hotelName: selectedHotel.hotelName,
-      guestNationality: testCase.nationality,
-      noOfRooms: testCase.roomConfigs.length,
-      isVoucherBooking: true,
-      hotelRoomDetails: hotelRoomDetails,
-    }, {
-      timeout: 60000  // 60 second timeout for block
-    });
+    const hotelRoomDetails =
+      roomResponse.data.hotelRoomDetails || roomResponse.data.rooms;
+    const blockResponse = await axios.post(
+      `${API_BASE_URL}/tbo/block`,
+      {
+        traceId,
+        resultIndex: selectedHotel.resultIndex,
+        hotelCode: selectedHotel.hotelCode,
+        hotelName: selectedHotel.hotelName,
+        guestNationality: testCase.nationality,
+        noOfRooms: testCase.roomConfigs.length,
+        isVoucherBooking: true,
+        hotelRoomDetails: hotelRoomDetails,
+      },
+      {
+        timeout: 60000, // 60 second timeout for block
+      },
+    );
 
     result.steps.push({
       step: "block",
@@ -553,31 +571,36 @@ async function executeTestCase(testCase) {
     // Step 4: Book Hotel
     console.log(`\n[Step 4] Booking hotel...`);
     // Use either hotelRoomDetails or rooms from block response
-    const blockHotelRoomDetails = blockResponse.data.hotelRoomDetails || blockResponse.data.rooms;
-    const bookResponse = await axios.post(`${API_BASE_URL}/tbo/book`, {
-      traceId,
-      resultIndex: selectedHotel.resultIndex,
-      hotelCode: selectedHotel.hotelCode,
-      hotelName: selectedHotel.hotelName,
-      bookingId: blockingId,
-      guestNationality: testCase.nationality,
-      noOfRooms: testCase.roomConfigs.length,
-      isVoucherBooking: true,
-      hotelRoomDetails: blockHotelRoomDetails,
-      hotelPassenger: testCase.passengers.map((p) => ({
-        Title: p.title,
-        FirstName: p.firstName,
-        LastName: p.lastName,
-        PaxType: p.paxType,
-        Age: p.age || null,
-        PassportNo: p.passport || null,
-        Email: p.email,
-        Phoneno: p.phone,
-        Nationality: p.nationality,
-      })),
-    }, {
-      timeout: 60000  // 60 second timeout for booking
-    });
+    const blockHotelRoomDetails =
+      blockResponse.data.hotelRoomDetails || blockResponse.data.rooms;
+    const bookResponse = await axios.post(
+      `${API_BASE_URL}/tbo/book`,
+      {
+        traceId,
+        resultIndex: selectedHotel.resultIndex,
+        hotelCode: selectedHotel.hotelCode,
+        hotelName: selectedHotel.hotelName,
+        bookingId: blockingId,
+        guestNationality: testCase.nationality,
+        noOfRooms: testCase.roomConfigs.length,
+        isVoucherBooking: true,
+        hotelRoomDetails: blockHotelRoomDetails,
+        hotelPassenger: testCase.passengers.map((p) => ({
+          Title: p.title,
+          FirstName: p.firstName,
+          LastName: p.lastName,
+          PaxType: p.paxType,
+          Age: p.age || null,
+          PassportNo: p.passport || null,
+          Email: p.email,
+          Phoneno: p.phone,
+          Nationality: p.nationality,
+        })),
+      },
+      {
+        timeout: 60000, // 60 second timeout for booking
+      },
+    );
 
     result.steps.push({
       step: "book",
@@ -628,7 +651,9 @@ async function executeTestCase(testCase) {
     result.error = error.message;
     console.error(`✗ Case ${testCase.caseId} failed: ${error.message}`);
     if (error.response?.data) {
-      console.error(`  Response error: ${JSON.stringify(error.response.data).substring(0, 200)}`);
+      console.error(
+        `  Response error: ${JSON.stringify(error.response.data).substring(0, 200)}`,
+      );
     }
   }
 

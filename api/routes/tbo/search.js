@@ -92,7 +92,8 @@ router.post("/", async (req, res) => {
       hotelName: hotel.HotelName || hotel.hotelName || "Unknown Hotel",
       starRating: hotel.StarRating || hotel.starRating,
       price: {
-        currencyCode: hotel.Price?.CurrencyCode || hotel.CurrencyCode || currency,
+        currencyCode:
+          hotel.Price?.CurrencyCode || hotel.CurrencyCode || currency,
         publishedPrice: hotel.Price?.PublishedPrice || hotel.PublishedPrice,
         offeredPrice: hotel.Price?.OfferedPrice || hotel.OfferedPrice,
       },

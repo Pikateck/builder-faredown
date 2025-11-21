@@ -1,8 +1,8 @@
 /**
  * Pre-Seed TBO Hotel Cache with Smart Batching
- * 
+ *
  * Usage: node api/scripts/preseed-tbo-cache.js [options]
- * 
+ *
  * Options:
  *   --min-confidence=80    Only map cities with ≥ 80% confidence
  *   --verified-only        Only map cities marked as verified
@@ -10,7 +10,7 @@
  *   --max-days=5           Process max 5 concurrent API calls (rate limit)
  *   --dry-run              Show plan without executing
  *   --city-limit=10        Max cities to process (for testing)
- * 
+ *
  * This script:
  * 1. Fetches high-confidence city mappings
  * 2. Plans which (city, date, room_config) to search
@@ -24,27 +24,44 @@ const db = require("../database/connection");
 const CityMappingService = require("../services/cityMappingService");
 
 const args = process.argv.slice(2);
-const minConfidence = parseInt(args.find((a) => a.startsWith("--min-confidence="))?.split("=")[1] || "80");
+const minConfidence = parseInt(
+  args.find((a) => a.startsWith("--min-confidence="))?.split("=")[1] || "80",
+);
 const verifiedOnly = args.includes("--verified-only");
-const dateRange = parseInt(args.find((a) => a.startsWith("--date-range="))?.split("=")[1] || "30");
-const maxConcurrent = parseInt(args.find((a) => a.startsWith("--max-days="))?.split("=")[1] || "3");
+const dateRange = parseInt(
+  args.find((a) => a.startsWith("--date-range="))?.split("=")[1] || "30",
+);
+const maxConcurrent = parseInt(
+  args.find((a) => a.startsWith("--max-days="))?.split("=")[1] || "3",
+);
 const dryRun = args.includes("--dry-run");
-const cityLimit = parseInt(args.find((a) => a.startsWith("--city-limit="))?.split("=")[1] || "999");
+const cityLimit = parseInt(
+  args.find((a) => a.startsWith("--city-limit="))?.split("=")[1] || "999",
+);
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
 
 // Room configurations to test (per certification cases)
 const ROOM_CONFIGS = [
   { label: "1-Adult", rooms: [{ adults: 1, children: 0, childAges: [] }] },
-  { label: "2-Adult-2-Child", rooms: [{ adults: 2, children: 2, childAges: ["5", "8"] }] },
-  { label: "2-Rooms-1A-1A", rooms: [
-    { adults: 1, children: 0, childAges: [] },
-    { adults: 1, children: 0, childAges: [] },
-  ]},
-  { label: "2-Rooms-1A2C-2A", rooms: [
-    { adults: 1, children: 2, childAges: ["4", "10"] },
-    { adults: 2, children: 0, childAges: [] },
-  ]},
+  {
+    label: "2-Adult-2-Child",
+    rooms: [{ adults: 2, children: 2, childAges: ["5", "8"] }],
+  },
+  {
+    label: "2-Rooms-1A-1A",
+    rooms: [
+      { adults: 1, children: 0, childAges: [] },
+      { adults: 1, children: 0, childAges: [] },
+    ],
+  },
+  {
+    label: "2-Rooms-1A2C-2A",
+    rooms: [
+      { adults: 1, children: 2, childAges: ["4", "10"] },
+      { adults: 2, children: 0, childAges: [] },
+    ],
+  },
 ];
 
 /**
@@ -53,13 +70,13 @@ const ROOM_CONFIGS = [
 function getDateRange(days) {
   const dates = [];
   const today = new Date();
-  
+
   for (let i = 0; i < days; i++) {
     const d = new Date(today);
     d.setDate(d.getDate() + i);
     dates.push(d.toISOString().split("T")[0]);
   }
-  
+
   return dates;
 }
 
@@ -80,7 +97,7 @@ async function isAlreadyProcessed(tboCityId, checkInDate, roomsJson) {
     WHERE tbo_city_id = $1 AND check_in_date = $2 AND room_config = $3
       AND status IN ('completed', 'success')
     `,
-    [tboCityId, checkInDate, roomsJson]
+    [tboCityId, checkInDate, roomsJson],
   );
   return result.rows[0].count > 0;
 }
@@ -88,14 +105,22 @@ async function isAlreadyProcessed(tboCityId, checkInDate, roomsJson) {
 /**
  * Log warmup attempt
  */
-async function logWarmup(tboCityId, checkInDate, roomsJson, status, hotelCount, error, durationMs) {
+async function logWarmup(
+  tboCityId,
+  checkInDate,
+  roomsJson,
+  status,
+  hotelCount,
+  error,
+  durationMs,
+) {
   await db.query(
     `
     INSERT INTO public.tbo_cache_warmup_log
       (tbo_city_id, check_in_date, room_config, hotel_count, status, error_message, duration_ms)
     VALUES ($1, $2, $3, $4, $5, $6, $7)
     `,
-    [tboCityId, checkInDate, roomsJson, hotelCount, status, error, durationMs]
+    [tboCityId, checkInDate, roomsJson, hotelCount, status, error, durationMs],
   );
 }
 
@@ -118,7 +143,10 @@ async function main() {
     // Step 1: Get mapped cities
     // ============================================================
     console.log("📥 Fetching city mappings...");
-    const mappedCities = await CityMappingService.getCitiesForWarmup(minConfidence, verifiedOnly);
+    const mappedCities = await CityMappingService.getCitiesForWarmup(
+      minConfidence,
+      verifiedOnly,
+    );
 
     if (!mappedCities.length) {
       throw new Error(`No cities found with confidence ≥ ${minConfidence}%`);
@@ -165,11 +193,13 @@ async function main() {
     console.log(`  Room configs: ${ROOM_CONFIGS.length}`);
 
     if (dryRun) {
-      console.log(`\n✨ Dry run complete. Would process ${tasks.length} searches.`);
+      console.log(
+        `\n✨ Dry run complete. Would process ${tasks.length} searches.`,
+      );
       console.log(`   Sample:`);
       tasks.slice(0, 3).forEach((t) => {
         console.log(
-          `     ${t.tboCityId} (${t.countryCode}) on ${t.checkIn}, ${t.roomsLabel}`
+          `     ${t.tboCityId} (${t.countryCode}) on ${t.checkIn}, ${t.roomsLabel}`,
         );
       });
       process.exit(0);
@@ -178,7 +208,9 @@ async function main() {
     // ============================================================
     // Step 3: Execute searches in batches
     // ============================================================
-    console.log(`\n🔄 Executing searches (batching ${maxConcurrent} at a time)...`);
+    console.log(
+      `\n🔄 Executing searches (batching ${maxConcurrent} at a time)...`,
+    );
 
     let completed = 0;
     let skipped = 0;
@@ -190,7 +222,13 @@ async function main() {
       const promises = batch.map(async (task) => {
         try {
           // Check if already processed
-          if (await isAlreadyProcessed(task.tboCityId, task.checkIn, task.roomsJson)) {
+          if (
+            await isAlreadyProcessed(
+              task.tboCityId,
+              task.checkIn,
+              task.roomsJson,
+            )
+          ) {
             skipped++;
             return;
           }
@@ -209,7 +247,7 @@ async function main() {
               rooms: task.rooms,
               guestNationality: task.countryCode, // Simple default
             },
-            { timeout: 30000 }
+            { timeout: 30000 },
           );
 
           const durationMs = Date.now() - startTime;
@@ -222,14 +260,14 @@ async function main() {
             "completed",
             hotelCount,
             null,
-            durationMs
+            durationMs,
           );
 
           completed++;
 
           if (completed % 10 === 0) {
             console.log(
-              `  ✓ Completed ${completed} (${skipped} skipped, ${errors} errors)`
+              `  ✓ Completed ${completed} (${skipped} skipped, ${errors} errors)`,
             );
           }
         } catch (error) {
@@ -240,7 +278,7 @@ async function main() {
             "error",
             0,
             error.message,
-            0
+            0,
           );
           errors++;
         }
@@ -274,7 +312,7 @@ async function main() {
         MAX(hotel_count) as max_hotels,
         AVG(duration_ms) as avg_duration_ms
       FROM public.tbo_cache_warmup_log
-    `
+    `,
     );
 
     const s = stats.rows[0];
@@ -282,9 +320,13 @@ async function main() {
     console.log(`  Total attempts: ${s.total}`);
     console.log(`  Successful: ${s.success_count}`);
     console.log(`  Errors: ${s.error_count}`);
-    console.log(`  Avg hotels per search: ${parseFloat(s.avg_hotels).toFixed(0)}`);
+    console.log(
+      `  Avg hotels per search: ${parseFloat(s.avg_hotels).toFixed(0)}`,
+    );
     console.log(`  Max hotels: ${s.max_hotels}`);
-    console.log(`  Avg response time: ${parseFloat(s.avg_duration_ms).toFixed(0)}ms`);
+    console.log(
+      `  Avg response time: ${parseFloat(s.avg_duration_ms).toFixed(0)}ms`,
+    );
 
     console.log(`\n🎉 Cache pre-seeding complete!`);
     process.exit(0);
