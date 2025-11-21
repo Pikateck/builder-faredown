@@ -121,7 +121,7 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
         results,
         searchRequest,
         "precache_nightly",
-        searchResult.sessionMetadata || {},
+        sessionMetadata,
       );
 
       if (cached) {
