@@ -298,7 +298,6 @@ class TBOAdapter extends BaseSupplierAdapter {
     );
     return null;
   }
-
   /**
    * Check local city mappings first (pre-synced TBO data)
    * Avoids unnecessary API calls and uses pre-verified mappings

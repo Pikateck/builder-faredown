@@ -291,13 +291,12 @@ router.post("/search", async (req, res) => {
         unifiedResults,
         searchRequest,
         "tbo_search",
-        {},
+        {}, // sessionMetadata (if available from adapter)
       );
       console.log(`✅ Cached ${unifiedResults.length} hotels for TBO search`);
     } catch (cacheErr) {
       console.warn("⚠️ Failed to cache TBO search results:", cacheErr.message);
     }
-
     // Generate searchId for tracking
     const searchId = uuidv4();
 
