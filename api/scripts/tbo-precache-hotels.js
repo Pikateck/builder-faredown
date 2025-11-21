@@ -120,7 +120,8 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
       // This will populate hotel_search_cache and hotel_search_cache_results
       try {
         // Generate searchHash using the same logic as hotelApiCachingService
-        const searchHash = hotelApiCachingService.generateSearchHash(searchRequest);
+        const searchHash =
+          hotelApiCachingService.generateSearchHash(searchRequest);
 
         // Extract hotel IDs from results
         const hotelIds = results.map((hotel) => hotel.hotelId || hotel.code);
@@ -140,7 +141,10 @@ async function precacheCityHotels(city, daysAhead = 30, dryRun = false) {
           console.warn(`   ⚠️  Cache write may have failed for ${city.city}`);
         }
       } catch (cacheErr) {
-        console.warn(`   ⚠️  Error during caching for ${city.city}:`, cacheErr.message);
+        console.warn(
+          `   ⚠️  Error during caching for ${city.city}:`,
+          cacheErr.message,
+        );
       }
 
       // Also store normalized hotel metadata
