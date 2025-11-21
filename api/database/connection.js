@@ -329,6 +329,12 @@ class DatabaseConnection {
       await this.query(
         `CREATE INDEX IF NOT EXISTS idx_search_cache_nationality ON public.hotel_search_cache(guest_nationality)`,
       );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_trace_id ON public.hotel_search_cache(tbo_trace_id)`,
+      );
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_search_cache_supplier ON public.hotel_search_cache(supplier)`,
+      );
 
       // Create tbo_hotels_normalized table
       await this.query(`
