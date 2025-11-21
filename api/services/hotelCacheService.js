@@ -259,8 +259,8 @@ class HotelCacheService {
          ON CONFLICT (tbo_hotel_code) DO UPDATE SET
            last_synced_at = NOW(),
            tbo_response_blob = $21,
-           amenities = COALESCE($13, amenities),
-           images = COALESCE($15, images)`,
+           amenities = COALESCE($13, tbo_hotels_normalized.amenities),
+           images = COALESCE($15, tbo_hotels_normalized.images)`,
         [
           tboHotelCode,
           cityId,
