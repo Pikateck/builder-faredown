@@ -2021,12 +2021,25 @@ function HotelResultsContent() {
     switch (sortBy) {
       case "price-low":
         filtered.sort(
-          (a, b) =>
-            (a.totalPrice ||
+          (a, b) => {
+            const aPriceTotal = a.totalPrice ||
               (a.currentPrice || a.priceRange?.min || 0) *
-                Math.max(1, nights)) -
-            (b.totalPrice ||
-              (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)),
+                Math.max(1, nights);
+            const bPriceTotal = b.totalPrice ||
+              (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights);
+            return aPriceTotal - bPriceTotal;
+          },
+        );
+        // ✅ SORTING FIX: Log first 5 hotels after sorting to verify
+        console.log(
+          `💰 [PRICE-LOW SORT] First 5 sorted by price (lowest first):`,
+          filtered.slice(0, 5).map((h) => ({
+            name: h.name,
+            totalPrice: h.totalPrice,
+            currentPrice: h.currentPrice,
+            nights,
+            calculated: (h.currentPrice || h.priceRange?.min || 0) * nights,
+          })),
         );
         break;
       case "price-high":
