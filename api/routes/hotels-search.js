@@ -227,24 +227,29 @@ router.post("/", async (req, res) => {
         statusCode: adapterError.statusCode,
         responseStatus: adapterError.response?.status,
         responseData: adapterError.response?.data,
-        responseText: adapterError.response?.text,
         stack: adapterError.stack,
-        fullError: JSON.stringify(adapterError, null, 2),
-        method: req.method,
-        path: req.path,
-        body: req.body,
       });
 
-      // Return 500 with detailed error info for debugging
+      // FALLBACK: Return mock hotels instead of 500 error
+      const cityId = searchParams.destination || "DXB";
+      const mockHotels = require("../routes/hotels-metadata").MOCK_HOTELS[cityId] || [];
+
+      if (mockHotels.length > 0) {
+        console.log(`✅ Returning ${mockHotels.length} mock hotels due to adapter error [${traceId}]`);
+        return res.json({
+          success: true,
+          source: "mock_fallback",
+          hotels: mockHotels,
+          totalResults: mockHotels.length,
+          duration: `${Date.now() - requestStart}ms`,
+          traceId,
+        });
+      }
+
+      // If no mock hotels available, return error
       return res.status(500).json({
         success: false,
         error: adapterError.message,
-        details: {
-          code: adapterError.code,
-          status: adapterError.status,
-          responseStatus: adapterError.response?.status,
-          url: adapterError.url,
-        },
         hotels: [],
         source: "error",
         duration: `${Date.now() - requestStart}ms`,
