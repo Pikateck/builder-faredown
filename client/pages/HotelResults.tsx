@@ -1119,6 +1119,9 @@ function HotelResultsContent() {
 
       console.log("🏨 Fetching TBO hotels only for:", destCode);
 
+      // Track performance
+      const perfMarker = new ApiPerformanceMarker("hotel-search-page");
+
       // Fetch ONLY from TBO (no Hotelbeds) with applied filters
       const tboHotels = await fetchTBOHotels(
         destCode,
@@ -1127,10 +1130,12 @@ function HotelResultsContent() {
       );
 
       console.log(`✅ TBO Results: ${tboHotels.length} hotels found`);
+      perfMarker.end({ source: "cache" });
 
       if (append) {
         setHotels((prev) => {
           const merged = [...prev, ...tboHotels];
+          console.log(`📦 Merged hotels: ${merged.length} total (${tboHotels.length} added)`);
           // Update bounds with data
           const extract = (h: any) =>
             h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
@@ -1146,6 +1151,8 @@ function HotelResultsContent() {
         });
         setPage(pageToLoad);
       } else {
+        // CRITICAL: Set hotels immediately for instant cache-first render
+        console.log(`🎬 Setting ${tboHotels.length} hotels to state for instant render`);
         setHotels(tboHotels);
         setPage(pageToLoad);
         // Dynamic price bounds from TBO dataset
@@ -1173,6 +1180,14 @@ function HotelResultsContent() {
         (h: any) => (h as any)?.isLiveData === true,
       );
       setIsLiveData(hasLive);
+
+      // CRITICAL: Set loading to false to stop spinner immediately
+      if (!append) {
+        console.log("✅ Cache render complete, stopping loading spinner");
+        setLoading(false);
+      } else {
+        setLoadingMore(false);
+      }
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
