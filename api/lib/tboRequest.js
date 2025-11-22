@@ -3,10 +3,10 @@ const { agentFor, proxyMode } = require("./proxy");
 
 async function tboRequest(url, config = {}) {
   const agentCfg = agentFor(url);
-  
+
   // Create a new axios instance to avoid default JSON parsing which causes "Unexpected end of JSON input" errors
   const instance = axios.create();
-  
+
   const req = {
     url,
     method: "GET",
@@ -26,16 +26,21 @@ async function tboRequest(url, config = {}) {
     // Get response body as string
     let dataStr = response.data || "";
 
+    // Ensure dataStr is a string
+    if (typeof dataStr !== "string") {
+      dataStr = String(dataStr || "");
+    }
+
     console.log(`[tboRequest] Received ${response.status} with content-type: ${response.headers["content-type"]}, body length: ${dataStr.length}`);
 
     // Manually parse JSON if content-type indicates JSON
-    if (response.headers["content-type"]?.includes("application/json")) {
+    if (response.headers["content-type"]?.includes("application/json") || response.status >= 400) {
       if (!dataStr || dataStr.trim().length === 0) {
-        console.error("❌ Empty JSON response body from TBO API:", {
+        console.error("❌ Empty response body from TBO API:", {
           url,
           status: response.status,
           statusText: response.statusText,
-          headers: Object.keys(response.headers),
+          contentType: response.headers["content-type"],
         });
 
         // Return a safe error response
@@ -94,9 +99,17 @@ async function tboRequest(url, config = {}) {
       code: error.code,
       url,
     });
-    // Re-throw with context
-    error.url = url;
-    throw error;
+    // Return a safe error response instead of throwing
+    return {
+      data: {
+        __error: true,
+        message: `Request failed: ${error.message}`,
+        url,
+        errorCode: error.code,
+      },
+      status: error.response?.status || 500,
+      __requestError: true,
+    };
   }
 }
 
