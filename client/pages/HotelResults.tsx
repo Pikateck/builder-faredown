@@ -847,24 +847,26 @@ function HotelResultsContent() {
             ? [thumbnail, ...galleryImages]
             : galleryImages;
 
+          // ✅ FIX: Calculate total price for the stay
+          const currentPrice = h.minTotal || h.price?.offered || h.currentPrice || h.price || 0;
+          const totalPrice = currentPrice * Math.max(1, nights);
+
+          console.log(`📸 Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`);
+
           return {
             id: h.hotelId || h.id || `hotel-${i}`,
             name: h.name,
             location: h.location || h.address || destCode,
             locationTags: h.locationTags || [],
-            // Use real images from API, with proper fallback handling
-            images:
-              allImages.length > 0
-                ? transformHotelImages(allImages, h.name)
-                : transformHotelImages([], h.name),
+            // ✅ FIX: Pass raw images array to HotelCard for proper binding
+            images: allImages.length > 0 ? allImages : transformHotelImages([], h.name),
             rating: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
             reviewScore:
               h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
             reviews: h.reviewCount || 0,
             reviewCount: h.reviewCount || 0,
             // ✅ FIX: Use real prices from API (minTotal/maxTotal for mock data, price.offered for live)
-            currentPrice:
-              h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
+            currentPrice: currentPrice,
             originalPrice:
               h.maxTotal ||
               h.price?.published ||
@@ -872,6 +874,8 @@ function HotelResultsContent() {
               h.price?.offered ||
               h.price ||
               0,
+            // ✅ FIX: Add totalPrice for proper sorting
+            totalPrice: totalPrice,
             description: `Discover ${h.name}`,
             amenities: h.amenities || [],
             features: h.features || h.roomFeatures || [],
