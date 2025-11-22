@@ -165,8 +165,12 @@ export function HotelCard({
   // Helper functions to extract data from the hotel object
   const getHotelImages = (): string[] => {
     console.log(
-      `📸 [HotelCard] Getting images for ${hotel.name}: hotel.images =`,
-      hotel.images,
+      `📸 [HotelCard] Getting images for ${hotel.name}:`,
+      {
+        hasImages: !!hotel.images,
+        imageCount: hotel.images?.length || 0,
+        images: hotel.images,
+      },
     );
 
     if (hotel.images && hotel.images.length > 0) {
@@ -184,7 +188,8 @@ export function HotelCard({
 
       if (processedImages.length > 0) {
         console.log(
-          `✅ [HotelCard] ${hotel.name} has ${processedImages.length} real images`,
+          `✅ [HotelCard] ${hotel.name} has ${processedImages.length} REAL API images`,
+          processedImages.slice(0, 2),
         );
         return processedImages;
       }
@@ -192,7 +197,11 @@ export function HotelCard({
 
     // Enhanced fallback with hotel-specific images based on name/type
     console.warn(
-      `⚠️ [HotelCard] Using fallback images for hotel: ${hotel.name}`,
+      `⚠️ [HotelCard] NO API IMAGES - Using fallback for: ${hotel.name}`,
+      {
+        supplier: hotel.supplier,
+        supplierCode: hotel.supplierCode
+      },
     );
     const fallbackImages = [
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
