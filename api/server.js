@@ -467,6 +467,9 @@ app.use(
 app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
+// SIMPLE TEST ROUTE FOR DEBUGGING
+app.use("/api/simple-test", simpleTestRoutes);
+
 app.use("/api/flights", flightRoutes);
 app.use("/api/hotels-multi", hotelsMultiSupplierRoutes); // Multi-supplier (Hotelbeds + RateHawk)
 app.use("/api/hotels-legacy", hotelRoutes); // Legacy Hotelbeds-only route
