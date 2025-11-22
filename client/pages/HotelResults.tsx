@@ -1085,9 +1085,10 @@ function HotelResultsContent() {
         location: hotel.address
           ? `${hotel.address}, ${hotel.city || destination}`
           : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
+        // ✅ FIX: Pass raw images array, not transformed, for HotelCard to bind properly
         images:
           hotel.images && hotel.images.length > 0
-            ? transformHotelImages(hotel.images, hotel.name)
+            ? hotel.images
             : transformHotelImages([], hotel.name),
         rating: hotel.rating || hotel.reviewScore || hotel.starRating || 4.0,
         reviews: hotel.reviewCount || 0,
@@ -1098,6 +1099,8 @@ function HotelResultsContent() {
               )
             : 0,
         currentPrice: hotel.minTotal || hotel.price || 0,
+        // ✅ FIX: Add totalPrice for proper sorting
+        totalPrice: (hotel.minTotal || hotel.price || 0) * Math.max(1, nights),
         description: hotel.description || `Discover ${hotel.name}`,
         amenities: hotel.amenities || [],
         features: hotel.amenities?.slice(0, 3) || [],
