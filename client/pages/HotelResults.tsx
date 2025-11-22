@@ -1181,13 +1181,7 @@ function HotelResultsContent() {
       );
       setIsLiveData(hasLive);
 
-      // CRITICAL: Set loading to false to stop spinner immediately
-      if (!append) {
-        console.log("✅ Cache render complete, stopping loading spinner");
-        setLoading(false);
-      } else {
-        setLoadingMore(false);
-      }
+      console.log("✅ Hotels ready for render");
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
