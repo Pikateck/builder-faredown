@@ -23,7 +23,9 @@ console.log(
   "🚀 [DEPLOYMENT] App.tsx loaded - Cache-first + Images + Sorting fixes active",
 );
 console.log(`⏱️ Timestamp: ${new Date().toISOString()}`);
-console.log("✅ All fixes deployed: (1) Cache-first timing, (2) Image binding, (3) Price sorting");
+console.log(
+  "✅ All fixes deployed: (1) Cache-first timing, (2) Image binding, (3) Price sorting",
+);
 
 // Original pages
 import Index from "./pages/Index";
