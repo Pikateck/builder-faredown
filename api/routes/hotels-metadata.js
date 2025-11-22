@@ -1025,3 +1025,4 @@ router.get("/prices", async (req, res) => {
 });
 
 module.exports = router;
+module.exports.MOCK_HOTELS = MOCK_HOTELS;
