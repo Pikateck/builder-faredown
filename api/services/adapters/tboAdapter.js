@@ -224,6 +224,17 @@ class TBOAdapter extends BaseSupplierAdapter {
         },
       });
 
+      // Check if tboRequest encountered an error
+      if (response.data?.__error === true || response.__parseError || response.__requestError) {
+        const errorMsg = response.data?.message || "Unknown error";
+        this.logger.error("❌ TBO Auth Request Error", {
+          error: errorMsg,
+          status: response.status,
+          __error: response.data?.__error,
+        });
+        throw new Error(`Auth failed: ${errorMsg}`);
+      }
+
       const {
         TokenId,
         Error: ErrorResponse,
@@ -232,9 +243,14 @@ class TBOAdapter extends BaseSupplierAdapter {
       } = response.data || {};
 
       if (!TokenId || (ResponseStatus !== 1 && Status !== 1)) {
-        throw new Error(
-          `Auth failed: ${ErrorResponse?.ErrorMessage || ErrorResponse || "Unknown error"}`,
-        );
+        const errorMsg = ErrorResponse?.ErrorMessage || ErrorResponse || "Unknown error";
+        this.logger.error("❌ TBO Auth Response Error", {
+          tokenPresent: !!TokenId,
+          responseStatus: ResponseStatus,
+          status: Status,
+          error: errorMsg,
+        });
+        throw new Error(`Auth failed: ${errorMsg}`);
       }
 
       this.tokenId = TokenId;
@@ -251,6 +267,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         error: error.message,
         statusCode: error.response?.status,
         responseData: error.response?.data,
+        url: tokenUrl,
       });
 
       throw error;
