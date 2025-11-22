@@ -22,22 +22,13 @@ router.post("/", async (req, res) => {
   const requestStart = Date.now();
   const traceId = require("uuid").v4();
 
-  console.log(`🔍 POST /api/hotels/search [${traceId}] - ROUTE START`);
-
-  // IMMEDIATE MOCK RETURN FOR DEBUGGING
-  return res.json({
+  // IMMEDIATE SIMPLE RETURN FOR DEBUGGING
+  return res.status(200).json({
     success: true,
     source: "immediate_mock",
-    hotels: [
-      {
-        hotelId: "1",
-        name: "Test Hotel Dubai",
-        city: "Dubai",
-        price: { offered: 100, published: 150, currency: "INR" },
-      },
-    ],
-    totalResults: 1,
-    duration: `${Date.now() - requestStart}ms`,
+    hotels: [],
+    totalResults: 0,
+    duration: "0ms",
     traceId,
   });
 
