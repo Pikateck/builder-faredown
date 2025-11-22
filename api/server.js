@@ -668,6 +668,18 @@ app.use((err, req, res, next) => {
     });
   }
 
+  // ALWAYS log the full error for debugging, regardless of environment
+  console.error("🔴 UNHANDLED ERROR:", {
+    message: err.message,
+    stack: err.stack,
+    status: err.status,
+    code: err.code,
+    details: err.details,
+    path: req.path,
+    method: req.method,
+    nodeEnv: process.env.NODE_ENV,
+  });
+
   res.status(err.status || 500).json({
     error: "Internal server error",
     message:
