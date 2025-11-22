@@ -872,7 +872,7 @@ function HotelResultsContent() {
           const totalPrice = currentPrice * Math.max(1, nights);
 
           console.log(
-            `📸 Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`,
+            `���� Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`,
           );
 
           return {
@@ -1288,6 +1288,12 @@ function HotelResultsContent() {
           `🎬 Setting ${tboHotels.length} hotels to state for instant render`,
         );
         setHotels(tboHotels);
+        // ✅ CACHE-FIRST FIX: Set loading to false IMMEDIATELY after hotels are available
+        // This ensures the cached/first batch renders without waiting for the entire finally block
+        if (!append) {
+          setLoading(false);
+          console.log("✅ [CACHE-FIRST] Loading state set to false - hotels rendering immediately");
+        }
         setPage(pageToLoad);
         // Dynamic price bounds from TBO dataset
         const extract = (h: any) =>
@@ -1316,6 +1322,14 @@ function HotelResultsContent() {
       setIsLiveData(hasLive);
 
       console.log("✅ Hotels ready for render");
+      console.log(`📸 First 5 hotel prices [SORTING CHECK]:`,
+        tboHotels.slice(0, 5).map(h => ({
+          name: h.name,
+          totalPrice: h.totalPrice,
+          currentPrice: h.currentPrice,
+          nights: calculateNights(new Date(checkInDate), new Date(checkOutDate))
+        }))
+      );
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
@@ -1343,10 +1357,11 @@ function HotelResultsContent() {
         setTotalResults(fallback.length);
         setIsLiveData(false);
         setHasMore(false);
+        setLoading(false);
       }
     } finally {
       if (append) setLoadingMore(false);
-      if (!append) setLoading(false);
+      // Note: loading state is now set in the success path, not here for cache-first
     }
   };
 
