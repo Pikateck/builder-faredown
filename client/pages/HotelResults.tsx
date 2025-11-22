@@ -817,9 +817,11 @@ function HotelResultsContent() {
       }
 
       // Log cache source for transparency
+      const apiType = metadataData.source === "cache" ? "CACHE (instant)" : "LIVE API";
       console.log(
-        `✅ Results from ${metadataData.source === "cache" ? "CACHE (fast)" : "TBO API (fresh)"}`,
+        `✅ [API] Response source: ${apiType} with ${metadataData.hotels?.length || 0} hotels`,
       );
+      console.log(`✅ [API] meta.source = "${metadataData.source}"`);
       if (metadataData.cacheHit) {
         console.log(
           `📅 Cached at: ${new Date(metadataData.cachedAt).toLocaleTimeString()}`,
@@ -1023,7 +1025,7 @@ function HotelResultsContent() {
       }
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
-        console.log("����� Merging prices into hotels...");
+        console.log("������� Merging prices into hotels...");
         setHotels((prev) =>
           prev.map((h) => {
             const supplierId = h.supplier_id || h.id;
