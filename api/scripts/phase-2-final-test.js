@@ -170,8 +170,21 @@ async function testSearchEndpoint() {
     };
   } catch (err) {
     logError(`Search failed: ${err.message}`);
-    if (err.response?.data?.error) {
-      logInfo(`API Error: ${err.response.data.error}`);
+    if (err.response) {
+      logInfo(`HTTP Status: ${err.response.status}`);
+      logInfo(`Response Headers: ${JSON.stringify(err.response.headers)}`);
+      if (err.response.data) {
+        if (typeof err.response.data === 'string') {
+          logInfo(`Response Body (text): ${err.response.data.substring(0, 500)}`);
+        } else {
+          logInfo(`Response Body (JSON): ${JSON.stringify(err.response.data).substring(0, 500)}`);
+        }
+      }
+      if (err.response.data?.error) {
+        logInfo(`API Error: ${err.response.data.error}`);
+      }
+    } else if (err.request) {
+      logError(`No response received: ${err.request}`);
     }
     testMetrics.stepResults.search = { status: "failed", error: err.message };
     testMetrics.errors.push(`Search: ${err.message}`);
