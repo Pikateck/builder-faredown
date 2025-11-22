@@ -20,17 +20,27 @@ const db = require("../database/connection");
  */
 router.post("/", async (req, res) => {
   const requestStart = Date.now();
-  const traceId = require("uuid").v4();
+  let traceId;
+  try {
+    traceId = require("uuid").v4();
+  } catch (uuidErr) {
+    traceId = "uuid-error-" + Date.now();
+  }
 
   // IMMEDIATE SIMPLE RETURN FOR DEBUGGING
-  return res.status(200).json({
-    success: true,
-    source: "immediate_mock",
-    hotels: [],
-    totalResults: 0,
-    duration: "0ms",
-    traceId,
-  });
+  try {
+    return res.status(200).json({
+      success: true,
+      source: "immediate_mock",
+      hotels: [],
+      totalResults: 0,
+      duration: "0ms",
+      traceId,
+    });
+  } catch (responseErr) {
+    console.error("Error sending immediate response:", responseErr);
+    return res.status(500).send("Internal error: " + responseErr.message);
+  }
 
   try {
     try {
