@@ -48,7 +48,7 @@ router.post(["", "/"], async (req, res) => {
   const traceId = require("uuid").v4();
 
   try {
-    console.log(`🔍 POST /api/hotels/search [${traceId}]`, {
+    console.log(`�� POST /api/hotels/search [${traceId}]`, {
       bodyKeys: Object.keys(req.body || {}),
     });
 
@@ -159,28 +159,38 @@ router.post(["", "/"], async (req, res) => {
     console.log(`⚠️ CACHE MISS [${traceId}] - Calling TBO API`);
 
     // ============================================================
-    // Step 4: Cache miss - call TBO
+    // Step 4: Cache miss - call TBO OR return mock hotels
     // ============================================================
-    const adapter = supplierAdapterManager.getAdapter("TBO");
-    if (!adapter) {
-      throw new Error("TBO adapter not initialized");
-    }
-
-    const tboSearchParams = {
-      destination: searchParams.destination || searchParams.cityName || "Dubai",
-      checkIn: searchParams.checkIn,
-      checkOut: searchParams.checkOut,
-      countryCode: searchParams.countryCode || "AE",
-      guestNationality: searchParams.guestNationality || "IN",
-      rooms: searchParams.rooms || "1",
-      adults: searchParams.adults || "2",
-      children: searchParams.children || "0",
-      currency: searchParams.currency || "INR",
-      childAges: searchParams.childAges || [],
-    };
+    console.log(
+      `⏳ Attempting to call TBO adapter for [${traceId}]... (will fallback to mock if fails)`,
+    );
 
     let tboResponse = { hotels: [], sessionMetadata: {} };
+    let usedMockFallback = false;
+
     try {
+      if (!supplierAdapterManager) {
+        throw new Error("Adapter manager not loaded - using mock fallback");
+      }
+
+      const adapter = supplierAdapterManager.getAdapter("TBO");
+      if (!adapter) {
+        throw new Error("TBO adapter not initialized - using mock fallback");
+      }
+
+      const tboSearchParams = {
+        destination: searchParams.destination || searchParams.cityName || "Dubai",
+        checkIn: searchParams.checkIn,
+        checkOut: searchParams.checkOut,
+        countryCode: searchParams.countryCode || "AE",
+        guestNationality: searchParams.guestNationality || "IN",
+        rooms: searchParams.rooms || "1",
+        adults: searchParams.adults || "2",
+        children: searchParams.children || "0",
+        currency: searchParams.currency || "INR",
+        childAges: searchParams.childAges || [],
+      };
+
       const searchPromise = adapter.searchHotels(tboSearchParams);
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(
@@ -190,32 +200,41 @@ router.post(["", "/"], async (req, res) => {
       });
 
       tboResponse = await Promise.race([searchPromise, timeoutPromise]);
+      console.log(`✅ TBO call succeeded for [${traceId}]`);
     } catch (adapterError) {
-      console.error(`❌ TBO adapter error [${traceId}]:`, adapterError.message);
+      console.warn(
+        `⚠️ TBO adapter error [${traceId}]: ${adapterError.message}, using mock fallback`,
+      );
 
       // FALLBACK: Return mock hotels
+      usedMockFallback = true;
       const cityId = searchParams.destination || "DXB";
-      const mockHotels =
-        require("../routes/hotels-metadata").MOCK_HOTELS[cityId] || [];
 
-      if (mockHotels.length > 0) {
-        console.log(
-          `✅ Returning ${mockHotels.length} mock hotels due to adapter error [${traceId}]`,
-        );
-        return res.json({
-          success: true,
-          source: "mock_fallback",
-          hotels: mockHotels,
-          totalResults: mockHotels.length,
-          duration: `${Date.now() - requestStart}ms`,
-          traceId,
-        });
+      try {
+        const mockHotels =
+          require("../routes/hotels-metadata").MOCK_HOTELS[cityId] || [];
+
+        if (mockHotels.length > 0) {
+          console.log(
+            `✅ Returning ${mockHotels.length} mock hotels for ${cityId} [${traceId}]`,
+          );
+          return res.json({
+            success: true,
+            source: "mock_fallback",
+            hotels: mockHotels,
+            totalResults: mockHotels.length,
+            duration: `${Date.now() - requestStart}ms`,
+            traceId,
+          });
+        }
+      } catch (mockErr) {
+        console.error(`❌ Error loading mock hotels [${traceId}]:`, mockErr.message);
       }
 
       // If no mock hotels, return error
       return res.status(500).json({
         success: false,
-        error: adapterError.message,
+        error: `TBO API failed and no mock hotels available: ${adapterError.message}`,
         hotels: [],
         source: "error",
         duration: `${Date.now() - requestStart}ms`,
