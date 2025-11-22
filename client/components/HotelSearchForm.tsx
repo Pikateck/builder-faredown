@@ -166,7 +166,7 @@ export function HotelSearchForm({
 
         console.log(`✅ Loaded ${data.length} nationalities, default: ${nationality}`);
       } catch (error) {
-        console.error('❌ Error loading nationalities:', error);
+        console.error('�� Error loading nationalities:', error);
         // Fallback to minimal list if API fails
         setNationalities([
           { isoCode: 'IN', countryName: 'India' },
@@ -224,23 +224,21 @@ export function HotelSearchForm({
           })();
 
           const response = await fetch(
-            `${apiBaseUrl}/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
+            `${apiBaseUrl}/locations/search?q=${encodeURIComponent(inputValue)}&limit=15`,
           );
           if (response.ok) {
             const data = await response.json();
-            if (
-              data.success &&
-              Array.isArray(data.data) &&
-              data.data.length > 0
-            ) {
-              // Map TBO cities API results to SearchResult format
-              const results = data.data.map((item: any) => ({
-                id: item.code,
-                code: item.code,
+            // Handle both array format and wrapped format
+            const items = Array.isArray(data) ? data : data.items || [];
+            if (Array.isArray(items) && items.length > 0) {
+              // Map LocationSearchResult format to SearchResult format
+              const results = items.map((item: any) => ({
+                id: item.entityId || item.id,
+                code: item.displayCode || item.entityId || item.id,
                 name: item.name,
-                type: "city",
+                type: item.type || "city",
                 location: `${item.name}${item.countryName ? ", " + item.countryName : ""}`,
-                description: item.region || "City",
+                description: item.countryName || "Destination",
                 rating: undefined,
               }));
 
