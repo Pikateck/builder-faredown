@@ -19,7 +19,9 @@ async function tboRequest(url, config = {}) {
   };
 
   try {
-    console.log(`[tboRequest] Calling ${req.method || 'GET'} ${url} via ${tboVia()}`);
+    console.log(
+      `[tboRequest] Calling ${req.method || "GET"} ${url} via ${tboVia()}`,
+    );
 
     const response = await instance.request(req);
 
@@ -31,10 +33,15 @@ async function tboRequest(url, config = {}) {
       dataStr = String(dataStr || "");
     }
 
-    console.log(`[tboRequest] Received ${response.status} with content-type: ${response.headers["content-type"]}, body length: ${dataStr.length}`);
+    console.log(
+      `[tboRequest] Received ${response.status} with content-type: ${response.headers["content-type"]}, body length: ${dataStr.length}`,
+    );
 
     // Manually parse JSON if content-type indicates JSON
-    if (response.headers["content-type"]?.includes("application/json") || response.status >= 400) {
+    if (
+      response.headers["content-type"]?.includes("application/json") ||
+      response.status >= 400
+    ) {
       if (!dataStr || dataStr.trim().length === 0) {
         console.error("❌ Empty response body from TBO API:", {
           url,
