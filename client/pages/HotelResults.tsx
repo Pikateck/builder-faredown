@@ -855,24 +855,25 @@ function HotelResultsContent() {
               allImages.length > 0
                 ? transformHotelImages(allImages, h.name)
                 : transformHotelImages([], h.name),
-            rating: h.starRating || h.reviewScore || h.stars || 4.0,
-            reviewScore: h.starRating || h.reviewScore || h.stars || 4.0,
+            rating: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
+            reviewScore: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
             reviews: h.reviewCount || 0,
             reviewCount: h.reviewCount || 0,
-            currentPrice: h.price?.offered || h.currentPrice || 0,
+            // ✅ FIX: Use real prices from API (minTotal/maxTotal for mock data, price.offered for live)
+            currentPrice: h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
             originalPrice:
-              h.price?.published || h.originalPrice || h.price?.offered || 0,
+              h.maxTotal || h.price?.published || h.originalPrice || h.price?.offered || h.price || 0,
             description: `Discover ${h.name}`,
             amenities: h.amenities || [],
             features: h.features || h.roomFeatures || [],
             roomTypes:
-              h.rates && h.rates.length > 0
-                ? h.rates.map((r: any) => ({
-                    id: r.id || Math.random().toString(),
-                    name: r.roomType || r.description,
-                    type: r.roomType || r.description,
-                    bedType: r.beds || "",
-                    pricePerNight: r.price,
+              (h.rates || h.rooms) && (h.rates || h.rooms).length > 0
+                ? (h.rates || h.rooms).map((r: any) => ({
+                    id: r.id || r.roomId || Math.random().toString(),
+                    name: r.roomType || r.roomName || r.description,
+                    type: r.roomType || r.roomName || r.description,
+                    bedType: r.beds || r.bedType || "",
+                    pricePerNight: r.price?.base || r.pricePerNight || (r.price?.total || r.price || 0) / Math.max(1, nights),
                     isRefundable:
                       r.isRefundable !== undefined
                         ? r.isRefundable
@@ -880,6 +881,7 @@ function HotelResultsContent() {
                     cancellationPolicy: r.isRefundable
                       ? "Free cancellation"
                       : "Non-refundable",
+                    board: r.board || "Room Only",
                   }))
                 : [],
             roomType: h.roomType || "",
@@ -894,7 +896,7 @@ function HotelResultsContent() {
               country: "Unknown",
               postalCode: "00000",
             },
-            starRating: h.starRating || h.reviewScore || h.stars || 4,
+            starRating: h.starRating || h.reviewScore || h.stars || h.rating || 4,
             currency:
               h.price?.currency ||
               h.currency ||
@@ -904,9 +906,9 @@ function HotelResultsContent() {
             supplierCode: h.supplier?.toLowerCase() || "tbo",
             isLiveData: h.source === "tbo" || h.isLiveData !== false,
             priceRange: {
-              min: h.price?.offered || h.currentPrice || 0,
+              min: h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
               max:
-                h.price?.published || h.originalPrice || h.price?.offered || 0,
+                h.maxTotal || h.price?.published || h.originalPrice || h.price?.offered || h.price || 0,
             },
           };
         },
