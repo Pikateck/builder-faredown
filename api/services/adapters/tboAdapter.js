@@ -41,6 +41,8 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Authentication - Returns TokenId (valid 24 hours)
       hotelAuthUrl:
         process.env.TBO_AUTH_URL ||
+        (process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION &&
+          `${process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION}/rest/Authenticate`) ||
         "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
 
       // Static Data - GetDestinationSearchStaticData (Uses TokenId) - VERIFIED WORKING
