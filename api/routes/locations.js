@@ -118,22 +118,29 @@ function buildSearchQuery(type, searchText, limit) {
 
 /**
  * GET /api/locations/search
+ * Frontend autocomplete API (returns LocationSearchResult[])
  * Hybrid caching: Redis → DB → Lazy TBO Sync
+ *
  * Query params:
  *   - q (required): search text
- *   - type (optional): "all" | "city" | "hotel" | "country" (default: "all")
- *   - limit (optional): max results per type (default: 10, max: 25)
+ *   - type (optional): "all" | "city" | "hotel" (default: "all")
+ *   - limit (optional): max results (default: 10, max: 25)
  *
- * Returns:
- *   {
- *     items: [
- *       { kind: "city", id: "1", name: "Paris", country_id: "250" },
- *       { kind: "hotel", id: "123", name: "Hotel Paris", city_id: "1" },
- *       ...
- *     ],
- *     cached: boolean,
- *     syncing: boolean (if lazy sync triggered)
- *   }
+ * Returns LocationSearchResult[]:
+ *   [
+ *     {
+ *       id: "10448",
+ *       entityId: "10448",
+ *       type: "city",
+ *       name: "Dubai",
+ *       countryName: "United Arab Emirates",
+ *       countryCode: "AE",
+ *       displayCode: "DXB",
+ *       lat: 25.2048,
+ *       lng: 55.2708
+ *     },
+ *     ...
+ *   ]
  */
 router.get("/search", async (req, res) => {
   try {
@@ -143,11 +150,11 @@ router.get("/search", async (req, res) => {
 
     // Validation
     if (!qtext || qtext.length < 1) {
-      return res.json({ items: [], cached: false });
+      return res.json([]);
     }
 
     if (qtext.length < 2) {
-      return res.json({ items: [], cached: false });
+      return res.json([]);
     }
 
     const normalized = redis.normalize(qtext);
@@ -158,13 +165,9 @@ router.get("/search", async (req, res) => {
     const cachedResults = await redis.getJSON(cacheKey);
     if (cachedResults) {
       console.log(
-        `✅ Cache hit for "${qtext}" (${cachedResults.items.length} results)`,
+        `✅ Cache hit for "${qtext}" (${cachedResults.length} results)`,
       );
-      return res.json({
-        ...cachedResults,
-        cached: true,
-        source: "redis",
-      });
+      return res.json(cachedResults);
     }
 
     console.log(`❌ Cache miss for "${qtext}", checking DB...`);
@@ -173,62 +176,77 @@ router.get("/search", async (req, res) => {
     const typesToSearch = [];
     if (type === "all" || type === "city") typesToSearch.push("city");
     if (type === "all" || type === "hotel") typesToSearch.push("hotel");
-    if (type === "all" || type === "country") typesToSearch.push("country");
 
-    // STEP 3: Query database in parallel
-    const promises = typesToSearch.map(async (t) => {
-      const query = buildSearchQuery(t, qtext, limit);
-      if (!query) return [];
+    // STEP 3: Query cities with country info
+    let items = [];
 
+    if (typesToSearch.includes("city")) {
       try {
-        const result = await db.query(query.sql, query.params);
-        return result.rows;
-      } catch (error) {
-        console.error(`Search error for type ${t}:`, error.message);
-        return [];
-      }
-    });
+        const cityQuery = `
+          SELECT
+            c.supplier_id AS id,
+            c.supplier_id AS entity_id,
+            'city' AS type_val,
+            c.name,
+            cnt.name AS country_name,
+            cnt.code AS country_code,
+            COALESCE(c.code, SUBSTRING(c.name, 1, 3)) AS display_code,
+            c.lat,
+            c.lng
+          FROM tbo_cities c
+          LEFT JOIN tbo_countries cnt ON c.country_supplier_id = cnt.supplier_id
+          WHERE c.normalized_name LIKE $1 OR c.normalized_name LIKE $2
+          ORDER BY
+            CASE
+              WHEN c.normalized_name = $3 THEN 0
+              WHEN c.normalized_name LIKE $4 THEN 1
+              ELSE 2
+            END,
+            c.popularity DESC,
+            c.name ASC
+          LIMIT $5
+        `;
 
-    const results = await Promise.all(promises);
-    const items = results.flat();
+        const result = await db.query(cityQuery, [
+          `${qtext.toLowerCase()}%`,
+          `%${qtext.toLowerCase()}%`,
+          qtext.toLowerCase(),
+          `${qtext.toLowerCase()}%`,
+          limit,
+        ]);
+
+        items = items.concat(
+          (result.rows || []).map((row) => ({
+            id: row.id,
+            entityId: row.entity_id,
+            type: "city",
+            name: row.name,
+            countryName: row.country_name || "Unknown",
+            countryCode: row.country_code || "XX",
+            displayCode: row.display_code || row.id.substring(0, 3),
+            lat: row.lat ? parseFloat(row.lat) : undefined,
+            lng: row.lng ? parseFloat(row.lng) : undefined,
+          })),
+        );
+      } catch (error) {
+        console.error("City search error:", error.message);
+      }
+    }
 
     // STEP 4: Check if we have results
     if (items.length > 0) {
-      // Cache and return results
       console.log(`✅ DB hit for "${qtext}" (${items.length} results)`);
-      const responseData = {
-        items,
-        count: items.length,
-        query: qtext,
-        types: typesToSearch,
-      };
-      await redis.setJSON(cacheKey, responseData, REDIS_TTL);
-
-      return res.json({
-        ...responseData,
-        cached: false,
-        source: "database",
-      });
+      await redis.setJSON(cacheKey, items, REDIS_TTL);
+      return res.json(items);
     }
 
     // STEP 5: No results in DB, trigger lazy sync for this city
     console.log(`⚠️  No results in DB for "${qtext}", triggering lazy sync...`);
-
-    // Fire-and-forget lazy sync (city-specific)
     queueTargetedCityFetch(qtext).catch((e) => {
       console.warn(`Lazy sync failed for "${qtext}":`, e.message);
     });
 
-    res.json({
-      items: [],
-      count: 0,
-      query: qtext,
-      types: typesToSearch,
-      cached: false,
-      source: "none",
-      syncing: true,
-      message: `Fetching "${qtext}" from TBO in background. Please retry in a moment.`,
-    });
+    res.json([]);
   } catch (error) {
     console.error("Locations search error:", error.message);
     res.status(500).json({
