@@ -509,8 +509,18 @@ function HotelDetailsContent() {
               }
               const data = await response.json();
               console.log("✅ TBO Hotel data received:", data);
-              if (data.success && data.data) {
-                return data.data; // Return TBO UnifiedHotel format
+              // Handle both old format (data.data) and new format (data.hotel + data.rooms)
+              if (data.success) {
+                if (data.hotel) {
+                  // New format: return merged hotel with rooms for compatibility
+                  return {
+                    ...data.hotel,
+                    rooms: data.rooms || [],
+                  };
+                } else if (data.data) {
+                  // Old format fallback
+                  return data.data;
+                }
               }
             } else {
               const errorText = await response.text();
