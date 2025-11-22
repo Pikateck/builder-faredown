@@ -18,7 +18,7 @@ const db = require("../database/connection");
  * POST /api/hotels/search
  * Cache-first hotel search
  */
-router.post("/", async (req, res) => {
+router.post(["", "/"], async (req, res) => {
   const requestStart = Date.now();
   let traceId;
   try {
