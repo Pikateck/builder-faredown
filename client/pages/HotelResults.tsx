@@ -1179,8 +1179,8 @@ function HotelResultsContent() {
           postalCode: hotel.zipCode || "00000",
         },
         // ✅ FIX: Include real coordinates from API for maps
-        latitude: hotel.latitude || hotel.lat || 25.2048,  // Dubai default fallback
-        longitude: hotel.longitude || hotel.lng || 55.2708,  // Dubai default fallback
+        latitude: hotel.latitude || hotel.lat || 25.2048, // Dubai default fallback
+        longitude: hotel.longitude || hotel.lng || 55.2708, // Dubai default fallback
         starRating: hotel.rating || 4,
         reviewCount: hotel.reviewCount || 0,
         contact: {
@@ -1295,7 +1295,9 @@ function HotelResultsContent() {
         // This ensures the cached/first batch renders without waiting for the entire finally block
         if (!append) {
           setLoading(false);
-          console.log("✅ [CACHE-FIRST] Loading state set to false - hotels rendering immediately");
+          console.log(
+            "✅ [CACHE-FIRST] Loading state set to false - hotels rendering immediately",
+          );
         }
         setPage(pageToLoad);
         // Dynamic price bounds from TBO dataset
@@ -1325,13 +1327,17 @@ function HotelResultsContent() {
       setIsLiveData(hasLive);
 
       console.log("✅ Hotels ready for render");
-      console.log(`📸 First 5 hotel prices [SORTING CHECK]:`,
-        tboHotels.slice(0, 5).map(h => ({
+      console.log(
+        `📸 First 5 hotel prices [SORTING CHECK]:`,
+        tboHotels.slice(0, 5).map((h) => ({
           name: h.name,
           totalPrice: h.totalPrice,
           currentPrice: h.currentPrice,
-          nights: calculateNights(new Date(checkInDate), new Date(checkOutDate))
-        }))
+          nights: calculateNights(
+            new Date(checkInDate),
+            new Date(checkOutDate),
+          ),
+        })),
       );
     } catch (err) {
       if (err instanceof Error) {
@@ -2023,16 +2029,15 @@ function HotelResultsContent() {
     // Sort hotels
     switch (sortBy) {
       case "price-low":
-        filtered.sort(
-          (a, b) => {
-            const aPriceTotal = a.totalPrice ||
-              (a.currentPrice || a.priceRange?.min || 0) *
-                Math.max(1, nights);
-            const bPriceTotal = b.totalPrice ||
-              (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights);
-            return aPriceTotal - bPriceTotal;
-          },
-        );
+        filtered.sort((a, b) => {
+          const aPriceTotal =
+            a.totalPrice ||
+            (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights);
+          const bPriceTotal =
+            b.totalPrice ||
+            (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights);
+          return aPriceTotal - bPriceTotal;
+        });
         // ✅ SORTING FIX: Log first 5 hotels after sorting to verify
         console.log(
           `💰 [PRICE-LOW SORT] First 5 sorted by price (lowest first):`,

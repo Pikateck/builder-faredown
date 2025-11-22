@@ -164,14 +164,11 @@ export function HotelCard({
 
   // Helper functions to extract data from the hotel object
   const getHotelImages = (): string[] => {
-    console.log(
-      `📸 [HotelCard] Getting images for ${hotel.name}:`,
-      {
-        hasImages: !!hotel.images,
-        imageCount: hotel.images?.length || 0,
-        images: hotel.images,
-      },
-    );
+    console.log(`📸 [HotelCard] Getting images for ${hotel.name}:`, {
+      hasImages: !!hotel.images,
+      imageCount: hotel.images?.length || 0,
+      images: hotel.images,
+    });
 
     if (hotel.images && hotel.images.length > 0) {
       const processedImages = hotel.images
@@ -200,7 +197,7 @@ export function HotelCard({
       `⚠️ [HotelCard] NO API IMAGES - Using fallback for: ${hotel.name}`,
       {
         supplier: hotel.supplier,
-        supplierCode: hotel.supplierCode
+        supplierCode: hotel.supplierCode,
       },
     );
     const fallbackImages = [
