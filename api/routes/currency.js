@@ -534,13 +534,13 @@ router.get("/rates/history/:code", authenticateToken, (req, res) => {
   }
 });
 
-// GET /api/currency/rates - Get all currency exchange rates
+// GET /api/currency/rates - Get all currency exchange rates (comprehensive)
 router.get("/rates", (req, res) => {
   try {
     const rates = {};
     const rateDetails = [];
 
-    // Build rates object for easy lookup
+    // Build rates object for easy lookup and for frontend context
     currencies.forEach((currency) => {
       rates[currency.code] = {
         code: currency.code,
@@ -566,14 +566,21 @@ router.get("/rates", (req, res) => {
       });
     });
 
+    // Support multiple response formats for different clients
     res.json({
+      success: true,
       rates,
       rateDetails,
+      data: rateDetails, // Alternative key for compatibility
       baseCurrency: "INR",
       lastUpdated: new Date().toISOString(),
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch currency rates" });
+    console.error("Error fetching currency rates:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch currency rates",
+    });
   }
 });
 
