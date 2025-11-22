@@ -490,6 +490,7 @@ router.post("/", async (req, res) => {
       name: error.name,
       code: error.code,
       statusCode: error.statusCode,
+      isJsonError: error.message.includes("JSON"),
       response: error.response
         ? {
             status: error.response.status,
@@ -499,7 +500,7 @@ router.post("/", async (req, res) => {
       request: {
         method: req.method,
         path: req.path,
-        body: req.body,
+        bodyKeys: Object.keys(req.body || {}),
         headers: req.headers,
       },
     });
@@ -508,14 +509,25 @@ router.post("/", async (req, res) => {
     const statusCode = error.statusCode || 500;
     const errorMessage = error.message || "Unknown error occurred";
 
-    res.status(statusCode).json({
-      success: false,
-      error: errorMessage,
-      hotels: [],
-      source: "error",
-      duration: `${Date.now() - requestStart}ms`,
-      traceId,
-    });
+    try {
+      res.status(statusCode).json({
+        success: false,
+        error: errorMessage,
+        hotels: [],
+        source: "error",
+        duration: `${Date.now() - requestStart}ms`,
+        traceId,
+      });
+    } catch (jsonError) {
+      console.error(`❌ Failed to send error response [${traceId}]:`, {
+        jsonError: jsonError.message,
+        originalError: errorMessage,
+      });
+      // Send plain text error as fallback
+      res.status(statusCode).send(
+        `${statusCode}: ${errorMessage} (traceId: ${traceId})`,
+      );
+    }
   }
 });
 
