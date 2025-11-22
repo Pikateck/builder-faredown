@@ -560,6 +560,9 @@ function HotelResultsContent() {
   // Load and render hotels (with cache-first pattern)
   const loadHotels = async () => {
     try {
+      const startTime = performance.now();
+      console.log(`⏱️ [CACHE-FIRST] Starting hotel load at ${new Date().toLocaleTimeString()}`);
+
       setLoading(true);
       setError(null);
 
@@ -569,13 +572,17 @@ function HotelResultsContent() {
 
       // Fetch hotels
       const hotels = await fetchTBOHotels(destCode);
+      const apiTime = performance.now();
+      console.log(`⏱️ [CACHE-FIRST] API responded in ${(apiTime - startTime).toFixed(2)}ms`);
 
       // ✅ CACHE-FIRST: Render immediately
       if (hotels.length > 0) {
         console.log(
-          `✅ Rendering ${hotels.length} hotels immediately from cache`,
+          `✅ [CACHE-FIRST] Rendering ${hotels.length} hotels immediately`,
         );
         setHotels(hotels);
+        const renderTime = performance.now();
+        console.log(`⏱️ [CACHE-FIRST] setHotels called at ${(renderTime - startTime).toFixed(2)}ms`);
         setTotalResults(hotels.length);
 
         // Calculate price bounds from loaded hotels
