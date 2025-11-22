@@ -174,10 +174,14 @@ async function testSearchEndpoint() {
       logInfo(`HTTP Status: ${err.response.status}`);
       logInfo(`Response Headers: ${JSON.stringify(err.response.headers)}`);
       if (err.response.data) {
-        if (typeof err.response.data === 'string') {
-          logInfo(`Response Body (text): ${err.response.data.substring(0, 500)}`);
+        if (typeof err.response.data === "string") {
+          logInfo(
+            `Response Body (text): ${err.response.data.substring(0, 500)}`,
+          );
         } else {
-          logInfo(`Response Body (JSON): ${JSON.stringify(err.response.data).substring(0, 500)}`);
+          logInfo(
+            `Response Body (JSON): ${JSON.stringify(err.response.data).substring(0, 500)}`,
+          );
         }
       }
       if (err.response.data?.error) {
