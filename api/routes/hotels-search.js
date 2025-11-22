@@ -23,12 +23,15 @@ router.post("/", async (req, res) => {
   const traceId = require("uuid").v4();
 
   try {
-    // Log incoming request for debugging
-    console.log(`🔍 POST /api/hotels/search [${traceId}]`, {
-      bodyKeys: Object.keys(req.body || {}),
-      contentType: req.headers["content-type"],
-      body: req.body,
-    });
+    try {
+      // Log incoming request for debugging
+      console.log(`🔍 POST /api/hotels/search [${traceId}]`, {
+        bodyKeys: Object.keys(req.body || {}),
+        contentType: req.headers["content-type"],
+      });
+    } catch (logErr) {
+      console.error(`❌ Error logging request [${traceId}]:`, logErr.message);
+    }
 
     // Validate required fields
     const { cityId, destination, cityName, checkIn, checkOut } = req.body;
