@@ -222,9 +222,30 @@ router.post("/", async (req, res) => {
     } catch (adapterError) {
       console.error(`❌ TBO adapter error [${traceId}]:`, {
         message: adapterError.message,
+        code: adapterError.code,
+        status: adapterError.status,
+        statusCode: adapterError.statusCode,
+        responseStatus: adapterError.response?.status,
+        responseData: adapterError.response?.data,
         stack: adapterError.stack,
+        fullError: JSON.stringify(adapterError, null, 2),
       });
-      throw adapterError;
+
+      // Return 500 with detailed error info for debugging
+      return res.status(500).json({
+        success: false,
+        error: adapterError.message,
+        details: {
+          code: adapterError.code,
+          status: adapterError.status,
+          responseStatus: adapterError.response?.status,
+          url: adapterError.url,
+        },
+        hotels: [],
+        source: "error",
+        duration: `${Date.now() - requestStart}ms`,
+        traceId,
+      });
     }
 
     // Extract hotels and session metadata from response
