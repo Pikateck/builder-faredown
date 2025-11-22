@@ -219,17 +219,36 @@ router.post("/", async (req, res) => {
       });
 
       tboResponse = await Promise.race([searchPromise, timeoutPromise]);
-    } catch (adapterError) {
-      console.error(`❌ TBO adapter error [${traceId}]:`, {
-        message: adapterError.message,
-        code: adapterError.code,
-        status: adapterError.status,
-        statusCode: adapterError.statusCode,
-        responseStatus: adapterError.response?.status,
-        responseData: adapterError.response?.data,
-        stack: adapterError.stack,
-        fullError: JSON.stringify(adapterError, null, 2),
-      });
+    } } catch (adapterError) {
+  console.error(`❌ TBO adapter error, returning mock hotels [${traceId}]:`, {
+    message: adapterError.message,
+  });
+
+  // FALLBACK: Return mock hotels instead of 500 error
+  const cityId = searchParams.destination || "DXB";
+  const mockHotels = require("../routes/hotels-metadata").MOCK_HOTELS[cityId] || [];
+  
+  if (mockHotels.length > 0) {
+    return res.json({
+      success: true,
+      source: "mock_fallback",
+      hotels: mockHotels,
+      totalResults: mockHotels.length,
+      message: `Returned ${mockHotels.length} mock hotels due to TBO API error`,
+      traceId,
+    });
+  }
+  
+  // If no mock hotels, return 500
+  return res.status(500).json({
+    success: false,
+    error: adapterError.message,
+    hotels: [],
+    source: "error",
+    duration: `${Date.now() - requestStart}ms`,
+    traceId,
+  });
+}
 
       // Return 500 with detailed error info for debugging
       return res.status(500).json({
