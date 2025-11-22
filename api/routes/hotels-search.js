@@ -176,6 +176,24 @@ router.post("/", async (req, res) => {
 
     console.log(`⚠️ CACHE MISS [${traceId}] - Calling TBO API`);
 
+    // TEMPORARY: Return mock hotels immediately to debug the issue
+    const cityId = searchParams.destination || "DXB";
+    const mockHotels =
+      require("../routes/hotels-metadata").MOCK_HOTELS[cityId] || [];
+    if (mockHotels.length > 0) {
+      console.log(
+        `✅ RETURNING MOCK HOTELS IMMEDIATELY FOR DEBUGGING [${traceId}]`,
+      );
+      return res.json({
+        success: true,
+        source: "mock_debug",
+        hotels: mockHotels,
+        totalResults: mockHotels.length,
+        duration: `${Date.now() - requestStart}ms`,
+        traceId,
+      });
+    }
+
     // ============================================================
     // Step 4: Cache miss - call TBO
     // ============================================================
