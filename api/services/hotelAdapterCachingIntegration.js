@@ -61,7 +61,7 @@ function wrapAdapterRoomDetailsWithCaching(adapter, supplierCode = null) {
   const originalGetHotelDetails = adapter.getHotelDetails.bind(adapter);
 
   adapter.getHotelDetails = async function (hotelCode, searchParams) {
-    const { checkIn, checkOut } = searchParams;
+    const { checkIn, checkOut } = searchParams || {};
 
     return await hotelApiCachingService.executeRoomDetailsCall({
       supplierCode: supplier,
