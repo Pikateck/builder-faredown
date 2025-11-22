@@ -29,14 +29,15 @@ router.post(["", "/"], async (req, res) => {
 
   // IMMEDIATE SIMPLE RETURN FOR DEBUGGING
   try {
-    return res.status(200).json({
+    res.setHeader("Content-Type", "application/json");
+    return res.end(JSON.stringify({
       success: true,
       source: "immediate_mock",
       hotels: [],
       totalResults: 0,
       duration: "0ms",
-      traceId,
-    });
+      traceId: "test123",
+    }));
   } catch (responseErr) {
     console.error("Error sending immediate response:", responseErr);
     return res.status(500).send("Internal error: " + responseErr.message);
