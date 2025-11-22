@@ -246,11 +246,27 @@ router.get("/", async (req, res) => {
 
       const roomTypes = [
         { name: "Standard Room", base: 2000, boards: ["Room Only"] },
-        { name: "Deluxe Room", base: 3500, boards: ["Room Only", "Breakfast Included"] },
-        { name: "Suite", base: 5500, boards: ["Breakfast Included", "Half Board"] },
-        { name: "Ocean Suite", base: 7500, boards: ["Breakfast Included", "All Inclusive"] },
+        {
+          name: "Deluxe Room",
+          base: 3500,
+          boards: ["Room Only", "Breakfast Included"],
+        },
+        {
+          name: "Suite",
+          base: 5500,
+          boards: ["Breakfast Included", "Half Board"],
+        },
+        {
+          name: "Ocean Suite",
+          base: 7500,
+          boards: ["Breakfast Included", "All Inclusive"],
+        },
         { name: "Villa", base: 10000, boards: ["All Inclusive"] },
-        { name: "Twin Room", base: 2500, boards: ["Room Only", "Breakfast Included"] },
+        {
+          name: "Twin Room",
+          base: 2500,
+          boards: ["Room Only", "Breakfast Included"],
+        },
         { name: "Family Room", base: 4000, boards: ["Breakfast Included"] },
       ];
 
@@ -269,7 +285,10 @@ router.get("/", async (req, res) => {
         const reviewCount = 100 + (i % 900);
 
         const roomTypesForHotel = roomTypes
-          .slice(i % roomTypes.length, Math.min(i % roomTypes.length + 3, roomTypes.length))
+          .slice(
+            i % roomTypes.length,
+            Math.min((i % roomTypes.length) + 3, roomTypes.length),
+          )
           .concat(roomTypes[0])
           .slice(0, 2 + (i % 2));
 
@@ -297,10 +316,15 @@ router.get("/", async (req, res) => {
             roomId: `room-${i}-${idx}`,
             roomName: rt.name,
             roomDescription: `Spacious ${rt.name} with modern amenities`,
-            price: { total: rt.base + idx * 500, base: rt.base, taxes: Math.round(rt.base * 0.15) },
+            price: {
+              total: rt.base + idx * 500,
+              base: rt.base,
+              taxes: Math.round(rt.base * 0.15),
+            },
             board: rt.boards[idx % rt.boards.length],
             amenities: amenities.slice(0, 3),
-            cancellation: i % 3 !== 0 ? [] : [{ from: "now", to: "2024-11-01" }],
+            cancellation:
+              i % 3 !== 0 ? [] : [{ from: "now", to: "2024-11-01" }],
           })),
         });
       }

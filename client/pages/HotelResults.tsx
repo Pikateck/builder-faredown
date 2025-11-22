@@ -572,7 +572,9 @@ function HotelResultsContent() {
 
       // ✅ CACHE-FIRST: Render immediately
       if (hotels.length > 0) {
-        console.log(`✅ Rendering ${hotels.length} hotels immediately from cache`);
+        console.log(
+          `✅ Rendering ${hotels.length} hotels immediately from cache`,
+        );
         setHotels(hotels);
         setTotalResults(hotels.length);
 
@@ -856,13 +858,20 @@ function HotelResultsContent() {
                 ? transformHotelImages(allImages, h.name)
                 : transformHotelImages([], h.name),
             rating: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
-            reviewScore: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
+            reviewScore:
+              h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
             reviews: h.reviewCount || 0,
             reviewCount: h.reviewCount || 0,
             // ✅ FIX: Use real prices from API (minTotal/maxTotal for mock data, price.offered for live)
-            currentPrice: h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
+            currentPrice:
+              h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
             originalPrice:
-              h.maxTotal || h.price?.published || h.originalPrice || h.price?.offered || h.price || 0,
+              h.maxTotal ||
+              h.price?.published ||
+              h.originalPrice ||
+              h.price?.offered ||
+              h.price ||
+              0,
             description: `Discover ${h.name}`,
             amenities: h.amenities || [],
             features: h.features || h.roomFeatures || [],
@@ -873,7 +882,10 @@ function HotelResultsContent() {
                     name: r.roomType || r.roomName || r.description,
                     type: r.roomType || r.roomName || r.description,
                     bedType: r.beds || r.bedType || "",
-                    pricePerNight: r.price?.base || r.pricePerNight || (r.price?.total || r.price || 0) / Math.max(1, nights),
+                    pricePerNight:
+                      r.price?.base ||
+                      r.pricePerNight ||
+                      (r.price?.total || r.price || 0) / Math.max(1, nights),
                     isRefundable:
                       r.isRefundable !== undefined
                         ? r.isRefundable
@@ -896,7 +908,8 @@ function HotelResultsContent() {
               country: "Unknown",
               postalCode: "00000",
             },
-            starRating: h.starRating || h.reviewScore || h.stars || h.rating || 4,
+            starRating:
+              h.starRating || h.reviewScore || h.stars || h.rating || 4,
             currency:
               h.price?.currency ||
               h.currency ||
@@ -906,9 +919,19 @@ function HotelResultsContent() {
             supplierCode: h.supplier?.toLowerCase() || "tbo",
             isLiveData: h.source === "tbo" || h.isLiveData !== false,
             priceRange: {
-              min: h.minTotal || h.price?.offered || h.currentPrice || h.price || 0,
+              min:
+                h.minTotal ||
+                h.price?.offered ||
+                h.currentPrice ||
+                h.price ||
+                0,
               max:
-                h.maxTotal || h.price?.published || h.originalPrice || h.price?.offered || h.price || 0,
+                h.maxTotal ||
+                h.price?.published ||
+                h.originalPrice ||
+                h.price?.offered ||
+                h.price ||
+                0,
             },
           };
         },
@@ -1065,8 +1088,10 @@ function HotelResultsContent() {
         rating: hotel.rating || hotel.reviewScore || hotel.starRating || 4.0,
         reviews: hotel.reviewCount || 0,
         originalPrice:
-          hotel.maxTotal || (hotel.minTotal || hotel.price)
-            ? Math.round((hotel.maxTotal || (hotel.minTotal || hotel.price) * 1.15))
+          hotel.maxTotal || hotel.minTotal || hotel.price
+            ? Math.round(
+                hotel.maxTotal || (hotel.minTotal || hotel.price) * 1.15,
+              )
             : 0,
         currentPrice: hotel.minTotal || hotel.price || 0,
         description: hotel.description || `Discover ${hotel.name}`,
