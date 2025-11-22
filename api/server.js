@@ -80,6 +80,7 @@ const adminPromoRoutes = require("./routes/admin-promo.js");
 const pricingEngineRoutes = require("./routes/pricing-engine.js");
 const adminUsersVerifyRoutes = require("./routes/admin-users-verify.js");
 const adminUsersPublic = require("./routes/admin-users-public.js");
+const simpleTestRoutes = require("./routes/simple-test.js");
 const hotelsSearchRoutes = require("./routes/hotels-search.js");
 const hotelsBookingRoutes = require("./routes/hotels-booking.js");
 const adminSystemStatusRoutes = require("./routes/admin-system-status.js");
@@ -740,7 +741,7 @@ async function startServer() {
       initializeRetentionSchedule();
     } catch (scheduleError) {
       console.warn(
-        "⚠️ Failed to schedule system monitor retention",
+        "⚠��� Failed to schedule system monitor retention",
         scheduleError.message,
       );
     }
