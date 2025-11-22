@@ -3,6 +3,10 @@ const { agentFor, proxyMode } = require("./proxy");
 
 async function tboRequest(url, config = {}) {
   const agentCfg = agentFor(url);
+  
+  // Create a new axios instance to avoid default JSON parsing which causes "Unexpected end of JSON input" errors
+  const instance = axios.create();
+  
   const req = {
     url,
     method: "GET",
@@ -10,32 +14,39 @@ async function tboRequest(url, config = {}) {
     ...agentCfg,
     ...config,
     validateStatus: () => true, // Don't throw on any status code
-    responseType: "arraybuffer", // Get raw buffer, not auto-parsed
-    transformResponse: [(data) => data], // Disable all transformations
+    responseType: "text", // Get response as plain text, not auto-parsed
+    transformResponse: [(data) => data], // Disable transformations
   };
 
   try {
-    const response = await axios(req);
+    console.log(`[tboRequest] Calling ${req.method || 'GET'} ${url} via ${tboVia()}`);
 
-    // Convert buffer to string
-    let dataStr = "";
-    if (Buffer.isBuffer(response.data)) {
-      dataStr = response.data.toString("utf-8");
-    } else if (typeof response.data === "string") {
-      dataStr = response.data;
-    }
+    const response = await instance.request(req);
 
-    // Manually parse JSON if content-type is JSON
+    // Get response body as string
+    let dataStr = response.data || "";
+
+    console.log(`[tboRequest] Received ${response.status} with content-type: ${response.headers["content-type"]}, body length: ${dataStr.length}`);
+
+    // Manually parse JSON if content-type indicates JSON
     if (response.headers["content-type"]?.includes("application/json")) {
-      if (!dataStr || dataStr.length === 0) {
-        console.error("❌ Empty response body from TBO API:", {
+      if (!dataStr || dataStr.trim().length === 0) {
+        console.error("❌ Empty JSON response body from TBO API:", {
           url,
           status: response.status,
-          headers: response.headers,
+          statusText: response.statusText,
+          headers: Object.keys(response.headers),
         });
-        throw new Error(
-          `TBO API returned empty response (status ${response.status})`,
-        );
+
+        // Return a safe error response
+        response.data = {
+          __error: true,
+          message: `TBO API returned empty response (HTTP ${response.status})`,
+          url,
+          status: response.status,
+        };
+        response.__parseError = true;
+        return response;
       }
 
       try {
@@ -45,32 +56,45 @@ async function tboRequest(url, config = {}) {
           url,
           error: parseError.message,
           dataLength: dataStr.length,
-          dataSample: dataStr.substring(0, 300),
+          dataSample: dataStr.substring(0, 500),
           status: response.status,
+          statusText: response.statusText,
           contentType: response.headers["content-type"],
         });
-        throw new Error(
-          `TBO API returned invalid JSON: ${parseError.message}. Response: ${dataStr.substring(0, 200)}`,
-        );
+
+        // Return error details instead of throwing
+        response.data = {
+          __error: true,
+          message: `Failed to parse TBO response as JSON: ${parseError.message}`,
+          url,
+          bodyPreview: dataStr.substring(0, 200),
+          status: response.status,
+        };
+        response.__parseError = true;
+        return response;
       }
-    } else {
-      // Not JSON, return as string
-      response.data = dataStr;
     }
 
-    // Re-throw if status is not 2xx
+    // Log non-2xx status
     if (response.status < 200 || response.status >= 300) {
-      const error = new Error(
-        `TBO API returned ${response.status}: ${response.statusText}`,
-      );
-      error.response = response;
-      error.status = response.status;
-      throw error;
+      console.warn(`[tboRequest] Non-2xx status: ${response.status}`, {
+        url,
+        statusText: response.statusText,
+        dataPreview:
+          typeof response.data === "string"
+            ? response.data.substring(0, 100)
+            : JSON.stringify(response.data).substring(0, 100),
+      });
     }
 
     return response;
   } catch (error) {
-    // Add more context to the error
+    console.error("[tboRequest] Unexpected error:", {
+      message: error.message,
+      code: error.code,
+      url,
+    });
+    // Re-throw with context
     error.url = url;
     throw error;
   }
