@@ -872,7 +872,7 @@ function HotelResultsContent() {
           const totalPrice = currentPrice * Math.max(1, nights);
 
           console.log(
-            `���� Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`,
+            `📸 Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`,
           );
 
           return {
@@ -2712,10 +2712,10 @@ function HotelResultsContent() {
       <div className="hidden md:block">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-4 lg:px-8 py-4 md:py-6">
           <div className="flex gap-6">
-            {/* Desktop Filters */}
+            {/* Desktop Filters - Fixed Scrolling */}
             <div className="hidden lg:block w-80 flex-shrink-0">
-              <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24">
-                <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24 flex flex-col h-[calc(100vh-120px)]">
+                <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 flex-shrink-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
@@ -2735,9 +2735,10 @@ function HotelResultsContent() {
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* ✅ FIX: Add overflow-y-auto and flex-1 to make filter panel scrollable */}
+                <div className="flex-1 overflow-y-auto">
                   {/* Current search summary */}
-                  <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                  <div className="px-4 py-3 border-b border-gray-200 bg-gray-50 flex-shrink-0">
                     <div className="text-xs text-gray-600">Current search</div>
                     <div className="mt-1 text-sm font-medium text-gray-900">
                       {urlSearchParams.get("destinationName") ||
