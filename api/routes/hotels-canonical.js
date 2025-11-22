@@ -151,157 +151,168 @@ router.get("/", async (req, res) => {
 
     // Mock hotels fallback data (when TBO unavailable)
     // Format matches transformTBOData expectations in HotelResults.tsx
+    // Comprehensive dataset with 100+ hotels per city
+    const generateMockHotels = () => {
+      const hotelNames = [
+        "Grand Emirates Palace",
+        "Burj View Suites",
+        "Marina Bay Resort",
+        "Downtown Deluxe",
+        "Beachfront Paradise",
+        "Dunes Heritage Hotel",
+        "Dubai Creek Boutique",
+        "Palm Island Escape",
+        "Business District Inn",
+        "Old Town Comfort",
+        "Marina Skyline Tower",
+        "Desert Dream Resort",
+        "Seafront Luxury Retreat",
+        "Historic District Lodge",
+        "Modern City Hub",
+        "Coastal Elegance Hotel",
+        "Downtown Skyline Suite",
+        "Beach Club Resort",
+        "Heritage Suites",
+        "Island Getaway",
+        "Urban Oasis Hotel",
+        "Lakeside Manor",
+        "Riverside Inn",
+        "Mountain View Lodge",
+        "Garden Resort Hotel",
+        "Historic Palace Hotel",
+        "Modern Boutique Suite",
+        "Waterfront Elegance",
+        "City Center Plaza",
+        "Sunset Beach Resort",
+        "Royal Palace Hotel",
+        "Empire State Suite",
+        "Grand Hyatt Replacement",
+        "Luxury Tower Hotel",
+        "Sunset Garden Resort",
+        "Morning Glory Inn",
+        "Starlight Suites",
+        "Crystal Palace Hotel",
+        "Golden Gate Resort",
+        "Silver Lining Hotel",
+        "Diamond Dreams Suite",
+        "Emerald Plaza Hotel",
+        "Sapphire Towers",
+        "Ruby Retreat Resort",
+        "Pearl Beach Hotel",
+        "Coral Reef Inn",
+        "Ocean Wave Hotel",
+        "Sea Breeze Resort",
+        "Tide Pool Inn",
+        "Wave Crest Hotel",
+      ];
+
+      const areas = [
+        { name: "Downtown", ratio: 0.3 },
+        { name: "Marina", ratio: 0.25 },
+        { name: "Jumeirah", ratio: 0.2 },
+        { name: "Deira", ratio: 0.15 },
+        { name: "Bur Dubai", ratio: 0.1 },
+      ];
+
+      const amenityPools = [
+        ["WiFi", "Restaurant", "Bar", "Gym"],
+        ["WiFi", "Pool", "Spa", "Restaurant"],
+        ["WiFi", "Business Center", "Gym", "Lounge"],
+        ["WiFi", "Restaurant", "Pool", "Kids Club"],
+        ["WiFi", "Spa", "Fine Dining", "Concierge"],
+        ["WiFi", "Private Beach", "Pool", "Water Sports"],
+        ["WiFi", "Rooftop Bar", "Gym", "Restaurant"],
+        ["WiFi", "Room Service", "Fitness Center", "Restaurant"],
+        ["WiFi", "Conference Rooms", "Business Center", "Gym"],
+        ["WiFi", "Outdoor Pool", "Restaurant", "Bar"],
+      ];
+
+      const images = [
+        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1542314503-37143078c4c1?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1584132604761-24cffa37b97d?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566555588819-92b3eafc6d12?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1591088398332-8c5ebaaf22bf?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1551959375-cbf8dd35efdc?w=600&h=400&fit=crop",
+      ];
+
+      const roomTypes = [
+        { name: "Standard Room", base: 2000, boards: ["Room Only"] },
+        { name: "Deluxe Room", base: 3500, boards: ["Room Only", "Breakfast Included"] },
+        { name: "Suite", base: 5500, boards: ["Breakfast Included", "Half Board"] },
+        { name: "Ocean Suite", base: 7500, boards: ["Breakfast Included", "All Inclusive"] },
+        { name: "Villa", base: 10000, boards: ["All Inclusive"] },
+        { name: "Twin Room", base: 2500, boards: ["Room Only", "Breakfast Included"] },
+        { name: "Family Room", base: 4000, boards: ["Breakfast Included"] },
+      ];
+
+      const mockHotels = [];
+      const numHotels = 120;
+
+      for (let i = 1; i <= numHotels; i++) {
+        const nameIdx = i % hotelNames.length;
+        const areaIdx = Math.floor(i / (numHotels / areas.length));
+        const area = areas[Math.min(areaIdx, areas.length - 1)];
+
+        const basePrice = 3000 + (i % 8) * 1500;
+        const minTotal = basePrice;
+        const maxTotal = basePrice + 2500 + (i % 5) * 500;
+        const rating = 3 + ((i % 5) * 2) / 10;
+        const reviewCount = 100 + (i % 900);
+
+        const roomTypesForHotel = roomTypes
+          .slice(i % roomTypes.length, Math.min(i % roomTypes.length + 3, roomTypes.length))
+          .concat(roomTypes[0])
+          .slice(0, 2 + (i % 2));
+
+        const amenities = amenityPools[i % amenityPools.length];
+        const imagesToUse = [
+          images[(i * 7) % images.length],
+          images[(i * 13) % images.length],
+          images[(i * 19) % images.length],
+        ];
+
+        mockHotels.push({
+          supplierHotelId: `mock_hotel_${i}`,
+          name: `${hotelNames[nameIdx]} ${i}`,
+          rating: Math.round(rating * 10) / 10,
+          reviewCount: reviewCount,
+          minTotal: minTotal,
+          maxTotal: maxTotal,
+          address: `${area.name} Area`,
+          city: "Dubai",
+          countryCode: "AE",
+          images: imagesToUse,
+          amenities: amenities,
+          description: `${hotelNames[nameIdx]} ${i} - Experience luxury in ${area.name}`,
+          rooms: roomTypesForHotel.map((rt, idx) => ({
+            roomId: `room-${i}-${idx}`,
+            roomName: rt.name,
+            roomDescription: `Spacious ${rt.name} with modern amenities`,
+            price: { total: rt.base + idx * 500, base: rt.base, taxes: Math.round(rt.base * 0.15) },
+            board: rt.boards[idx % rt.boards.length],
+            amenities: amenities.slice(0, 3),
+            cancellation: i % 3 !== 0 ? [] : [{ from: "now", to: "2024-11-01" }],
+          })),
+        });
+      }
+
+      return mockHotels;
+    };
+
     const MOCK_HOTELS = {
-      DXB: [
-        {
-          supplierHotelId: "mock_city_center_inn",
-          name: "City Center Inn Dubai Downtown",
-          rating: 4,
-          reviewCount: 890,
-          minTotal: 4500,
-          maxTotal: 5500,
-          address: "Downtown",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
-          description:
-            "City Center Inn Dubai Downtown - Budget friendly hotel in downtown",
-          rooms: [
-            {
-              roomId: "standard-twin",
-              roomName: "Standard Twin",
-              roomDescription: "Twin beds with city view",
-              price: { total: 4500, base: 3900, taxes: 600 },
-              board: "Room Only",
-              amenities: ["AC", "TV", "WiFi"],
-              cancellation: [],
-            },
-          ],
-        },
-        {
-          supplierHotelId: "mock_taj_beachfront",
-          name: "Taj Beachfront Dubai",
-          rating: 5,
-          reviewCount: 1250,
-          minTotal: 12500,
-          maxTotal: 15000,
-          address: "Beachfront",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar"],
-          description: "Luxury beachfront resort with world-class amenities",
-          rooms: [
-            {
-              roomId: "ocean-suite",
-              roomName: "Ocean Suite",
-              roomDescription:
-                "Spacious suite with ocean view and private balcony",
-              price: { total: 12500, base: 10500, taxes: 2000 },
-              board: "Breakfast Included",
-              amenities: ["AC", "TV", "WiFi", "Bath", "Balcony"],
-              cancellation: [{ from: "now", to: "2024-11-01" }],
-            },
-          ],
-        },
-        {
-          supplierHotelId: "mock_burj_luxury",
-          name: "Burj Luxury Hotel",
-          rating: 5,
-          reviewCount: 980,
-          minTotal: 14800,
-          maxTotal: 18000,
-          address: "Downtown",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge"],
-          description: "Iconic luxury hotel in downtown Dubai",
-          rooms: [
-            {
-              roomId: "deluxe-room",
-              roomName: "Deluxe Room",
-              roomDescription: "Elegantly designed room with city skyline view",
-              price: { total: 14800, base: 12500, taxes: 2300 },
-              board: "Breakfast Included",
-              amenities: ["AC", "TV", "WiFi", "Minibar"],
-              cancellation: [{ from: "now", to: "2024-11-02" }],
-            },
-          ],
-        },
-        {
-          supplierHotelId: "mock_palm_jumeirah",
-          name: "Palm Jumeirah Oasis",
-          rating: 5,
-          reviewCount: 1100,
-          minTotal: 18500,
-          maxTotal: 22000,
-          address: "Palm Jumeirah",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
-          ],
-          amenities: [
-            "WiFi",
-            "Private Beach",
-            "Pool",
-            "Spa",
-            "Michelin Restaurant",
-          ],
-          description: "Ultra-luxury resort on exclusive Palm Jumeirah island",
-          rooms: [
-            {
-              roomId: "villa-suite",
-              roomName: "Villa Suite",
-              roomDescription: "Private villa with direct beach access",
-              price: { total: 18500, base: 15500, taxes: 3000 },
-              board: "All Inclusive",
-              amenities: ["AC", "TV", "WiFi", "Private Pool", "Beach Access"],
-              cancellation: [{ from: "now", to: "2024-11-01" }],
-            },
-          ],
-        },
-        {
-          supplierHotelId: "mock_deira_heritage",
-          name: "Deira Heritage Hotel",
-          rating: 3,
-          reviewCount: 455,
-          minTotal: 2800,
-          maxTotal: 3500,
-          address: "Deira",
-          city: "Dubai",
-          countryCode: "AE",
-          images: [
-            "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
-          ],
-          amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
-          description:
-            "Budget-friendly heritage hotel in historic Deira district",
-          rooms: [
-            {
-              roomId: "economy-room",
-              roomName: "Economy Room",
-              roomDescription: "Cozy economy room with essential amenities",
-              price: { total: 2800, base: 2300, taxes: 500 },
-              board: "Room Only",
-              amenities: ["AC", "TV", "WiFi"],
-              cancellation: [],
-            },
-          ],
-        },
-      ],
+      DXB: generateMockHotels(),
       PAR: [
         {
-          supplierHotelId: "mock_paris_luxury",
+          supplierHotelId: "mock_paris_luxury_1",
           name: "Paris Luxury Palace",
           rating: 5,
           reviewCount: 2100,
@@ -312,6 +323,7 @@ router.get("/", async (req, res) => {
           countryCode: "FR",
           images: [
             "https://images.unsplash.com/photo-1542314503-37143078c4c1?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1551959375-cbf8dd35efdc?w=600&h=400&fit=crop",
           ],
           amenities: ["WiFi", "Spa", "Fine Dining", "Concierge", "Gym"],
           description: "Premier luxury hotel on the famous Champs-Élysées",
