@@ -201,7 +201,8 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
             description: row.description || "",
             images:
               (row.images_json && JSON.parse(row.images_json)) ||
-              (row.images_json || []),
+              row.images_json ||
+              [],
             amenities:
               (row.amenities_json && JSON.parse(row.amenities_json)) || [],
             nearbyLandmarks: [],
@@ -214,11 +215,14 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
               name: r.roomName || "Standard Room",
               isCheapest: false,
               boardType: r.board || "Room Only",
-              isBreakfastIncluded: (r.board || "").toLowerCase().includes("breakfast"),
+              isBreakfastIncluded: (r.board || "")
+                .toLowerCase()
+                .includes("breakfast"),
               isRefundable: true,
               totalPrice: parseFloat(r.price?.total) || 0,
               perNightPrice:
-                parseFloat(r.price?.total) / Math.max(1, parseInt(r.occupants?.adults) || 1) || 0,
+                parseFloat(r.price?.total) /
+                  Math.max(1, parseInt(r.occupants?.adults) || 1) || 0,
               currency: r.price?.currency || "INR",
               bedType: r.roomName,
               occupancy: r.occupants,
@@ -230,7 +234,7 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
 
           source = "cache";
           console.log(
-            `✅ Loaded hotel details from cache [${traceId}]: ${rooms.length} rooms`
+            `✅ Loaded hotel details from cache [${traceId}]: ${rooms.length} rooms`,
           );
         }
       } catch (dbErr) {
@@ -256,7 +260,9 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
             // Map to HotelDetails format
             hotel = {
               hotelId: String(transformedHotel.hotelId || supplierHotelId),
-              supplierHotelCode: String(transformedHotel.hotelId || supplierHotelId),
+              supplierHotelCode: String(
+                transformedHotel.hotelId || supplierHotelId,
+              ),
               name: transformedHotel.name || "Hotel",
               starRating: transformedHotel.starRating || 3,
               address: transformedHotel.address,
@@ -294,7 +300,7 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
 
             source = "live";
             console.log(
-              `✅ Loaded hotel details from TBO [${traceId}]: ${rooms.length} rooms`
+              `✅ Loaded hotel details from TBO [${traceId}]: ${rooms.length} rooms`,
             );
           }
         }

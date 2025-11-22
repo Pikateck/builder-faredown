@@ -35,7 +35,9 @@ async function testHotelSearch() {
     console.log(`  Content-Type: ${response.headers["content-type"]}`);
     console.log(`  Body Length: ${response.data.length}`);
     console.log(`  First 500 chars:\n${response.data.substring(0, 500)}`);
-    console.log(`\n  Last 500 chars:\n${response.data.substring(Math.max(0, response.data.length - 500))}`);
+    console.log(
+      `\n  Last 500 chars:\n${response.data.substring(Math.max(0, response.data.length - 500))}`,
+    );
 
     // Try to parse it
     try {
@@ -45,9 +47,7 @@ async function testHotelSearch() {
       console.log(`  Error: ${parsed.error}`);
       console.log(`  Source: ${parsed.source}`);
     } catch (parseErr) {
-      console.log(
-        `\n❌ Response is NOT valid JSON: ${parseErr.message}`,
-      );
+      console.log(`\n❌ Response is NOT valid JSON: ${parseErr.message}`);
     }
   } catch (error) {
     console.error("❌ Request failed:", error.message);

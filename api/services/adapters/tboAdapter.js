@@ -776,7 +776,11 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       // ✅ Check for errors from tboRequest (JSON parse errors, empty responses, etc.)
-      if (response.__error || response.__parseError || response.__requestError) {
+      if (
+        response.__error ||
+        response.__parseError ||
+        response.__requestError
+      ) {
         this.logger.error("❌ TBO Request Failed - Error in tboRequest layer", {
           message: response.data?.message,
           url: response.data?.url,

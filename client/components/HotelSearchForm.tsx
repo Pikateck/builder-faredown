@@ -126,7 +126,9 @@ export function HotelSearchForm({
 
   // Nationality state
   const { user } = useAuth() || { user: null };
-  const [nationality, setNationality] = useState<string>(initialNationality || 'IN');
+  const [nationality, setNationality] = useState<string>(
+    initialNationality || "IN",
+  );
   const [nationalities, setNationalities] = useState<Nationality[]>([]);
   const [isNationalityLoading, setIsNationalityLoading] = useState(true);
 
@@ -164,19 +166,21 @@ export function HotelSearchForm({
           setNationality(defaultNat);
         }
 
-        console.log(`✅ Loaded ${data.length} nationalities, default: ${nationality}`);
+        console.log(
+          `✅ Loaded ${data.length} nationalities, default: ${nationality}`,
+        );
       } catch (error) {
-        console.error('�� Error loading nationalities:', error);
+        console.error("�� Error loading nationalities:", error);
         // Fallback to minimal list if API fails
         setNationalities([
-          { isoCode: 'IN', countryName: 'India' },
-          { isoCode: 'AE', countryName: 'United Arab Emirates' },
-          { isoCode: 'GB', countryName: 'United Kingdom' },
-          { isoCode: 'US', countryName: 'United States' },
-          { isoCode: 'SG', countryName: 'Singapore' },
-          { isoCode: 'AU', countryName: 'Australia' },
+          { isoCode: "IN", countryName: "India" },
+          { isoCode: "AE", countryName: "United Arab Emirates" },
+          { isoCode: "GB", countryName: "United Kingdom" },
+          { isoCode: "US", countryName: "United States" },
+          { isoCode: "SG", countryName: "Singapore" },
+          { isoCode: "AU", countryName: "Australia" },
         ]);
-        setNationality('IN');
+        setNationality("IN");
       } finally {
         setIsNationalityLoading(false);
       }
@@ -797,214 +801,219 @@ export function HotelSearchForm({
           </div>
 
           {/* Guests & Rooms + Nationality Container */}
-        <div className="flex-1 lg:max-w-[280px] flex flex-col gap-2">
-          {/* Guests & Rooms */}
-          <div className="relative">
-            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-              Guests & Rooms
-            </label>
-            <Popover
-              open={isGuestPopoverOpen}
-              onOpenChange={setIsGuestPopoverOpen}
-            >
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="text-xs sm:text-sm overflow-hidden">
-                    <span className="hidden lg:inline">
-                      {guests.adults} adults, {guests.children} children,{" "}
-                      {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
-                    </span>
-                    <span className="hidden md:inline lg:hidden">
-                      {guests.adults + guests.children} guests, {guests.rooms}{" "}
-                      room{guests.rooms > 1 ? "s" : ""}
-                    </span>
-                    <span className="hidden sm:inline md:hidden">
-                      {guests.adults + guests.children} guests, {guests.rooms}rm
-                      {guests.rooms > 1 ? "s" : ""}
-                    </span>
-                    <span className="sm:hidden">
-                      {guests.rooms}rm �� {guests.adults + guests.children}ppl
-                    </span>
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 sm:w-96" align="start">
-                <div className="space-y-4">
-                  {/* Adults */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Adults</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("adults", "decrement")}
-                        disabled={guests.adults <= 1}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {guests.adults}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("adults", "increment")}
-                        disabled={guests.adults >= 16}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Children */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Children</div>
-                      <div className="text-sm text-gray-500">Ages 0-17</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() =>
-                          updateGuestCount("children", "decrement")
-                        }
-                        disabled={guests.children <= 0}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {guests.children}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() =>
-                          updateGuestCount("children", "increment")
-                        }
-                        disabled={guests.children >= 16}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Children Ages */}
-                  {guests.children > 0 && (
-                    <div className="space-y-2">
-                      {guests.childrenAges.map((age, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between"
-                        >
-                          <span className="text-sm">
-                            Age of child {index + 1}
-                          </span>
-                          <select
-                            value={age}
-                            onChange={(e) =>
-                              updateChildAge(index, parseInt(e.target.value))
-                            }
-                            className="border rounded px-2 py-1 text-sm"
-                          >
-                            {childAgeOptions.map((ageOption) => (
-                              <option key={ageOption} value={ageOption}>
-                                {ageOption} years old
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Rooms */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Rooms</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("rooms", "decrement")}
-                        disabled={guests.rooms <= 1}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {guests.rooms}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("rooms", "increment")}
-                        disabled={guests.rooms >= 8}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
+          <div className="flex-1 lg:max-w-[280px] flex flex-col gap-2">
+            {/* Guests & Rooms */}
+            <div className="relative">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Guests & Rooms
+              </label>
+              <Popover
+                open={isGuestPopoverOpen}
+                onOpenChange={setIsGuestPopoverOpen}
+              >
+                <PopoverTrigger asChild>
                   <Button
-                    onClick={() => setIsGuestPopoverOpen(false)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
                   >
-                    Done
+                    <Users className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="text-xs sm:text-sm overflow-hidden">
+                      <span className="hidden lg:inline">
+                        {guests.adults} adults, {guests.children} children,{" "}
+                        {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                      </span>
+                      <span className="hidden md:inline lg:hidden">
+                        {guests.adults + guests.children} guests, {guests.rooms}{" "}
+                        room{guests.rooms > 1 ? "s" : ""}
+                      </span>
+                      <span className="hidden sm:inline md:hidden">
+                        {guests.adults + guests.children} guests, {guests.rooms}
+                        rm
+                        {guests.rooms > 1 ? "s" : ""}
+                      </span>
+                      <span className="sm:hidden">
+                        {guests.rooms}rm �� {guests.adults + guests.children}ppl
+                      </span>
+                    </span>
                   </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 sm:w-96" align="start">
+                  <div className="space-y-4">
+                    {/* Adults */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Adults</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() =>
+                            updateGuestCount("adults", "decrement")
+                          }
+                          disabled={guests.adults <= 1}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {guests.adults}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() =>
+                            updateGuestCount("adults", "increment")
+                          }
+                          disabled={guests.adults >= 16}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Children */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Children</div>
+                        <div className="text-sm text-gray-500">Ages 0-17</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() =>
+                            updateGuestCount("children", "decrement")
+                          }
+                          disabled={guests.children <= 0}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {guests.children}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() =>
+                            updateGuestCount("children", "increment")
+                          }
+                          disabled={guests.children >= 16}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Children Ages */}
+                    {guests.children > 0 && (
+                      <div className="space-y-2">
+                        {guests.childrenAges.map((age, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between"
+                          >
+                            <span className="text-sm">
+                              Age of child {index + 1}
+                            </span>
+                            <select
+                              value={age}
+                              onChange={(e) =>
+                                updateChildAge(index, parseInt(e.target.value))
+                              }
+                              className="border rounded px-2 py-1 text-sm"
+                            >
+                              {childAgeOptions.map((ageOption) => (
+                                <option key={ageOption} value={ageOption}>
+                                  {ageOption} years old
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Rooms */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Rooms</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() => updateGuestCount("rooms", "decrement")}
+                          disabled={guests.rooms <= 1}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {guests.rooms}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                          onClick={() => updateGuestCount("rooms", "increment")}
+                          disabled={guests.rooms >= 8}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => setIsGuestPopoverOpen(false)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Done
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Nationality */}
+            <div className="relative">
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Guest Nationality
+              </label>
+              <Select
+                value={nationality}
+                onValueChange={setNationality}
+                disabled={isNationalityLoading}
+              >
+                <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
+                  <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <SelectValue placeholder="Select nationality" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[300px] overflow-y-auto">
+                  {nationalities.map((n) => (
+                    <SelectItem key={n.isoCode} value={n.isoCode}>
+                      {n.countryName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
-          {/* Nationality */}
-          <div className="relative">
-            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-              Guest Nationality
-            </label>
-            <Select
-              value={nationality}
-              onValueChange={setNationality}
-              disabled={isNationalityLoading}
+          {/* Search Button */}
+          <div className="flex-shrink-0 w-full sm:w-auto">
+            <Button
+              onClick={handleSearch}
+              className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              title="Search hotels"
             >
-              <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
-                <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
-                <SelectValue placeholder="Select nationality" />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px] overflow-y-auto">
-                {nationalities.map((n) => (
-                  <SelectItem key={n.isoCode} value={n.isoCode}>
-                    {n.countryName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-sm sm:text-base">Search</span>
+            </Button>
           </div>
-        </div>
-
-        {/* Search Button */}
-        <div className="flex-shrink-0 w-full sm:w-auto">
-          <Button
-            onClick={handleSearch}
-            className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
-            title="Search hotels"
-          >
-            <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-sm sm:text-base">Search</span>
-          </Button>
-        </div>
         </div>
       </div>
     </>

@@ -6,21 +6,17 @@ const { v4: uuidv4 } = require("uuid");
  * Transform raw hotel data to HotelSummary (frontend contract)
  */
 function transformToHotelSummary(hotel, context = {}) {
-  const {
-    destination = "Dubai",
-    currency = "INR",
-    nights = 1,
-  } = context;
+  const { destination = "Dubai", currency = "INR", nights = 1 } = context;
 
   // Handle TBO format
   if (hotel.hotelId || hotel.HotelCode || hotel.HotelId) {
-    const total = (hotel.price?.total) || (hotel.TotalPrice) || 0;
+    const total = hotel.price?.total || hotel.TotalPrice || 0;
     const perNight = nights > 0 ? total / nights : total;
 
     return {
       hotelId: String(hotel.hotelId || hotel.HotelCode || hotel.HotelId),
       supplierHotelCode: String(
-        hotel.hotelCode || hotel.HotelCode || hotel.hotelId || hotel.HotelId
+        hotel.hotelCode || hotel.HotelCode || hotel.hotelId || hotel.HotelId,
       ),
       name: hotel.name || hotel.HotelName || "Hotel",
       starRating: hotel.starRating || hotel.StarRating || 3,
@@ -163,7 +159,8 @@ router.post(["", "/"], async (req, res) => {
     if (!cityIdentifier || !checkInStr || !checkOutStr) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields (cityId/destination, checkIn, checkOut)",
+        error:
+          "Missing required fields (cityId/destination, checkIn, checkOut)",
         traceId,
       });
     }
@@ -173,9 +170,7 @@ router.post(["", "/"], async (req, res) => {
     const checkOutDate_obj = new Date(checkOutStr);
     const nights = Math.max(
       1,
-      Math.floor(
-        (checkOutDate_obj - checkInDate_obj) / (1000 * 60 * 60 * 24)
-      )
+      Math.floor((checkOutDate_obj - checkInDate_obj) / (1000 * 60 * 60 * 24)),
     );
 
     let hotels = [];
@@ -200,26 +195,31 @@ router.post(["", "/"], async (req, res) => {
         const cachedHotels =
           await hotelCacheService.getCachedHotels(searchHash);
         console.log(
-          `✅ Cache hit: ${cachedHotels.length} hotels from cache [${traceId}]`
+          `✅ Cache hit: ${cachedHotels.length} hotels from cache [${traceId}]`,
         );
 
         hotels = cachedHotels
-          .map((h) => transformToHotelSummary(h, { destination: cityIdentifier, currency, nights }))
+          .map((h) =>
+            transformToHotelSummary(h, {
+              destination: cityIdentifier,
+              currency,
+              nights,
+            }),
+          )
           .filter(Boolean);
 
         source = "cache";
       }
     } catch (cacheErr) {
       console.warn(
-        `⚠️  Cache service unavailable [${traceId}]: ${cacheErr.message}`
+        `⚠️  Cache service unavailable [${traceId}]: ${cacheErr.message}`,
       );
     }
 
     // STEP 2: Try TBO adapter if no cache hit
     if (hotels.length === 0) {
       try {
-        const supplierAdapterManager =
-          require("../services/adapters/supplierAdapterManager");
+        const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
         const adapter = supplierAdapterManager.getAdapter("TBO");
 
         if (adapter) {
@@ -241,18 +241,24 @@ router.post(["", "/"], async (req, res) => {
           const tboHotels = tboResponse.hotels || [];
 
           console.log(
-            `✅ TBO returned ${tboHotels.length} hotels [${traceId}]`
+            `✅ TBO returned ${tboHotels.length} hotels [${traceId}]`,
           );
 
           hotels = tboHotels
-            .map((h) => transformToHotelSummary(h, { destination: cityIdentifier, currency, nights }))
+            .map((h) =>
+              transformToHotelSummary(h, {
+                destination: cityIdentifier,
+                currency,
+                nights,
+              }),
+            )
             .filter(Boolean);
 
           source = "live";
         }
       } catch (tboErr) {
         console.warn(
-          `⚠️  TBO service unavailable [${traceId}]: ${tboErr.message}`
+          `⚠️  TBO service unavailable [${traceId}]: ${tboErr.message}`,
         );
       }
     }
@@ -266,17 +272,23 @@ router.post(["", "/"], async (req, res) => {
 
         if (mockHotels.length > 0) {
           console.log(
-            `🔄 Using mock fallback: ${mockHotels.length} hotels [${traceId}]`
+            `🔄 Using mock fallback: ${mockHotels.length} hotels [${traceId}]`,
           );
           hotels = mockHotels
-            .map((h) => transformToHotelSummary(h, { destination: cityIdentifier, currency, nights }))
+            .map((h) =>
+              transformToHotelSummary(h, {
+                destination: cityIdentifier,
+                currency,
+                nights,
+              }),
+            )
             .filter(Boolean);
 
           source = "mock";
         }
       } catch (mockErr) {
         console.warn(
-          `⚠️  Mock hotels unavailable [${traceId}]: ${mockErr.message}`
+          `⚠️  Mock hotels unavailable [${traceId}]: ${mockErr.message}`,
         );
       }
     }

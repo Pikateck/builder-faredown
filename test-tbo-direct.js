@@ -11,10 +11,9 @@ async function testTBO() {
     // Test 1: Try a mock endpoint or health check
     console.log("1️⃣ Testing Health Check...");
     try {
-      const healthResponse = await axios.get(
-        `${RENDER_URL}/health`,
-        { timeout: 5000 },
-      );
+      const healthResponse = await axios.get(`${RENDER_URL}/health`, {
+        timeout: 5000,
+      });
       console.log(`✅ Health: ${healthResponse.status}`);
     } catch (error) {
       console.log(`⚠️ Health check not available`);
@@ -30,7 +29,9 @@ async function testTBO() {
       console.log(`✅ Destinations: ${destResponse.status}`);
       console.log(`   Count: ${destResponse.data.length || 0}`);
     } catch (error) {
-      console.log(`❌ Destinations failed: ${error.response?.status || error.message}`);
+      console.log(
+        `❌ Destinations failed: ${error.response?.status || error.message}`,
+      );
     }
 
     // Test 3: Try admin-TBO routes
@@ -73,7 +74,9 @@ async function testTBO() {
       console.log(`   Source: ${mockResponse.data.source}`);
       console.log(`   Hotels: ${mockResponse.data.hotels?.length || 0}`);
     } catch (error) {
-      console.log(`❌ Hotel Search failed: ${error.response?.status || error.message}`);
+      console.log(
+        `❌ Hotel Search failed: ${error.response?.status || error.message}`,
+      );
       if (error.response?.data?.error) {
         console.log(`   Error: ${error.response.data.error}`);
       }

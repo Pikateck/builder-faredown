@@ -670,13 +670,16 @@ function HotelResultsContent() {
 
       let metadataResponse;
       try {
-        console.log("📡 Attempting cache-backed search (cache-first pattern):", {
-          url: apiUrl,
-          apiBaseUrl,
-          currentOrigin:
-            typeof window !== "undefined" ? window.location.origin : "N/A",
-          envViteUrl: import.meta.env.VITE_API_BASE_URL,
-        });
+        console.log(
+          "📡 Attempting cache-backed search (cache-first pattern):",
+          {
+            url: apiUrl,
+            apiBaseUrl,
+            currentOrigin:
+              typeof window !== "undefined" ? window.location.origin : "N/A",
+            envViteUrl: import.meta.env.VITE_API_BASE_URL,
+          },
+        );
 
         // Attempt fetch with timeout
         const controller = new AbortController();

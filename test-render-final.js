@@ -38,9 +38,7 @@ async function testEndpoints() {
     console.error("❌ Hotel Search Failed:");
     console.error(`   Status: ${error.response?.status}`);
     console.error(`   Error: ${error.message}`);
-    console.error(
-      `   Data: ${JSON.stringify(error.response?.data, null, 2)}`,
-    );
+    console.error(`   Data: ${JSON.stringify(error.response?.data, null, 2)}`);
     console.log();
   }
 
@@ -59,15 +57,15 @@ async function testEndpoints() {
     console.log(
       `   INR Rate: ${currencyResponse.data.rates.INR?.exchangeRate}`,
     );
-    console.log(`   USD Rate: ${currencyResponse.data.rates.USD?.exchangeRate}`);
+    console.log(
+      `   USD Rate: ${currencyResponse.data.rates.USD?.exchangeRate}`,
+    );
     console.log();
   } catch (error) {
     console.error("❌ Currency Rates Failed:");
     console.error(`   Status: ${error.response?.status}`);
     console.error(`   Error: ${error.message}`);
-    console.error(
-      `   Data: ${JSON.stringify(error.response?.data, null, 2)}`,
-    );
+    console.error(`   Data: ${JSON.stringify(error.response?.data, null, 2)}`);
     console.log();
   }
 
@@ -80,9 +78,7 @@ async function testEndpoints() {
     );
 
     console.log("✅ Active Currencies Success");
-    console.log(
-      `   Count: ${activeCurrencyResponse.data.length}`,
-    );
+    console.log(`   Count: ${activeCurrencyResponse.data.length}`);
     activeCurrencyResponse.data.forEach((curr) => {
       console.log(
         `   - ${curr.code}: ${curr.name} (${curr.symbol}) @ ${curr.exchangeRate}`,
