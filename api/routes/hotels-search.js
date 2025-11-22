@@ -263,13 +263,24 @@ router.post("/", async (req, res) => {
     // Extract hotels and session metadata from response
     console.log("[ROUTE] TBO Response received", {
       isArray: Array.isArray(tboResponse),
-      hasHotels: !!tboResponse.hotels,
-      hasResults: !!tboResponse.results,
-      hotelsLength: tboResponse.hotels?.length,
-      resultsLength: tboResponse.results?.length,
-      hasSessionMetadata: !!tboResponse.sessionMetadata,
+      hasHotels: !!tboResponse?.hotels,
+      hasResults: !!tboResponse?.results,
+      hotelsLength: tboResponse?.hotels?.length,
+      resultsLength: tboResponse?.results?.length,
+      hasSessionMetadata: !!tboResponse?.sessionMetadata,
       responseKeys: Object.keys(tboResponse || {}),
+      tboResponseType: typeof tboResponse,
     });
+
+    // ✅ Validate tboResponse structure
+    if (!tboResponse || typeof tboResponse !== "object") {
+      console.error("❌ Invalid tboResponse structure", {
+        type: typeof tboResponse,
+        isNull: tboResponse === null,
+        value: String(tboResponse).substring(0, 100),
+      });
+      throw new Error(`Invalid TBO response structure: ${typeof tboResponse}`);
+    }
 
     // ✅ Handle both cache format (results) and adapter format (hotels)
     // Cache wraps adapter response: { results: { hotels: [...], sessionMetadata: {...} } }
@@ -286,8 +297,18 @@ router.post("/", async (req, res) => {
       sessionMetadata = tboResponse.results.sessionMetadata || {};
     } else {
       // Direct adapter format: { hotels: [...], sessionMetadata: {...} }
-      tboHotels = tboResponse.hotels || [];
+      tboHotels = Array.isArray(tboResponse.hotels)
+        ? tboResponse.hotels
+        : [];
       sessionMetadata = tboResponse.sessionMetadata || {};
+    }
+
+    if (!Array.isArray(tboHotels)) {
+      console.error("❌ tboHotels is not an array", {
+        type: typeof tboHotels,
+        value: String(tboHotels).substring(0, 100),
+      });
+      tboHotels = [];
     }
 
     console.log("[ROUTE] Extracted hotels", {
