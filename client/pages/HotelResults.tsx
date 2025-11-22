@@ -1293,11 +1293,6 @@ function HotelResultsContent() {
     }
   };
 
-  const loadHotels = async () => {
-    setHasMore(true);
-    await fetchHotelsPage(1, false);
-  };
-
   // Transform Hotelbeds API data to frontend format
   const transformHotelbedsData = (hotelbedsData: any[]): Hotel[] => {
     return hotelbedsData.map((hotel, index) => {
