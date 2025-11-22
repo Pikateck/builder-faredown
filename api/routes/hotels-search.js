@@ -120,7 +120,13 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 3: Check cache for fresh results
     // ============================================================
-    const cachedSearch = await hotelCacheService.getCachedSearch(searchHash);
+    let cachedSearch;
+    try {
+      cachedSearch = await hotelCacheService.getCachedSearch(searchHash);
+    } catch (cacheErr) {
+      console.error(`❌ Error getting cached search [${traceId}]:`, cacheErr.message);
+      cachedSearch = null;
+    }
 
     if (cachedSearch && cachedSearch.is_fresh) {
       console.log(
