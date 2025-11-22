@@ -775,6 +775,25 @@ class TBOAdapter extends BaseSupplierAdapter {
         timeout: this.config.searchTimeout || 90000, // Use extended timeout for search
       });
 
+      // ✅ Check for errors from tboRequest (JSON parse errors, empty responses, etc.)
+      if (response.__error || response.__parseError || response.__requestError) {
+        this.logger.error("❌ TBO Request Failed - Error in tboRequest layer", {
+          message: response.data?.message,
+          url: response.data?.url,
+          bodyPreview: response.data?.bodyPreview,
+          status: response.status,
+        });
+        return {
+          hotels: [],
+          sessionMetadata: {
+            traceId: null,
+            tokenId: tokenId,
+            destinationId: cityId,
+            supplierResponseFull: response.data,
+          },
+        };
+      }
+
       // ✅ Response can be wrapped in HotelSearchResult or direct
       const searchResult = response.data?.HotelSearchResult || response.data;
 
