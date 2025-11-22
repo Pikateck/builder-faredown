@@ -219,7 +219,7 @@ router.post("/", async (req, res) => {
       });
 
       tboResponse = await Promise.race([searchPromise, timeoutPromise]);
-    } } catch (adapterError) {
+    } catch (adapterError) {
   console.error(`❌ TBO adapter error, returning mock hotels [${traceId}]:`, {
     message: adapterError.message,
   });
