@@ -664,9 +664,13 @@ function HotelResultsContent() {
 
       console.log(`📡 API Call: ${apiUrl}`, searchPayload);
 
+      // CACHE-FIRST PATTERN: Load from cache instantly, then refresh live in background
+      setLoading(true);
+      setError(null);
+
       let metadataResponse;
       try {
-        console.log("📡 Attempting cache-backed search with config:", {
+        console.log("📡 Attempting cache-backed search (cache-first pattern):", {
           url: apiUrl,
           apiBaseUrl,
           currentOrigin:
