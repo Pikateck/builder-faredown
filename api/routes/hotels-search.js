@@ -179,11 +179,13 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 4: Cache miss - call TBO
     // ============================================================
+    console.log(`🔄 Step 4 [${traceId}]: Getting TBO adapter...`);
     const adapter = supplierAdapterManager.getAdapter("TBO");
     if (!adapter) {
       console.error("❌ TBO adapter not initialized [${traceId}]");
       throw new Error("TBO adapter not initialized");
     }
+    console.log(`✅ Got adapter [${traceId}]`);
 
     // Call TBO search with timeout
     // Map parameters to TBO adapter format
@@ -209,7 +211,9 @@ router.post("/", async (req, res) => {
 
     let tboResponse = { hotels: [], sessionMetadata: {} };
     try {
+      console.log(`⏳ Calling searchHotels [${traceId}]...`);
       const searchPromise = adapter.searchHotels(tboSearchParams);
+      console.log(`✅ searchHotels promise created [${traceId}]`);
 
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(
@@ -217,8 +221,15 @@ router.post("/", async (req, res) => {
           90000,
         );
       });
+      console.log(`✅ timeout promise created [${traceId}]`);
 
+      console.log(`⏳ Waiting for Promise.race [${traceId}]...`);
       tboResponse = await Promise.race([searchPromise, timeoutPromise]);
+      console.log(`✅ Got tboResponse [${traceId}]:`, {
+        isObject: typeof tboResponse === "object",
+        hasHotels: !!tboResponse?.hotels,
+        hotelCount: tboResponse?.hotels?.length || 0,
+      });
     } catch (adapterError) {
       console.error(`❌ TBO adapter error [${traceId}]:`, {
         message: adapterError.message,
