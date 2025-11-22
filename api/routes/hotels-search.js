@@ -394,30 +394,46 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 7: Return results
     // ============================================================
-    const responseHotels = tboHotels.map((h) => ({
-      hotelId: String(h.hotelId || h.HotelCode || h.HotelId),
-      name: h.name || h.HotelName || "Hotel",
-      city: searchParams.destination || searchParams.City,
-      countryCode: searchParams.countryCode || "AE",
-      starRating: parseFloat(h.starRating) || 3,
-      address: h.location || h.HotelAddress || "",
-      location: h.location || h.HotelAddress || "",
-      latitude: h.latitude,
-      longitude: h.longitude,
-      amenities: h.amenities || [],
-      facilities: h.facilities || [],
-      images: h.images || [],
-      mainImage: h.mainImage,
-      phone: h.phone,
-      email: h.email,
-      website: h.website,
-      price: {
-        offered: h.price || h.OfferedPrice || 0,
-        published: h.originalPrice || h.PublishedPrice || 0,
-        currency: h.currency || searchParams.currency || "INR",
-      },
-      source: "tbo",
-    }));
+    const responseHotels = tboHotels.map((h) => {
+      // Safely parse JSON arrays if they're strings
+      const parseJsonArray = (value) => {
+        if (Array.isArray(value)) return value;
+        if (typeof value === "string") {
+          try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        }
+        return [];
+      };
+
+      return {
+        hotelId: String(h.hotelId || h.HotelCode || h.HotelId),
+        name: h.name || h.HotelName || "Hotel",
+        city: searchParams.destination || searchParams.City,
+        countryCode: searchParams.countryCode || "AE",
+        starRating: parseFloat(h.starRating) || 3,
+        address: h.location || h.HotelAddress || "",
+        location: h.location || h.HotelAddress || "",
+        latitude: h.latitude,
+        longitude: h.longitude,
+        amenities: parseJsonArray(h.amenities),
+        facilities: parseJsonArray(h.facilities),
+        images: parseJsonArray(h.images),
+        mainImage: h.mainImage,
+        phone: h.phone,
+        email: h.email,
+        website: h.website,
+        price: {
+          offered: h.price || h.OfferedPrice || 0,
+          published: h.originalPrice || h.PublishedPrice || 0,
+          currency: h.currency || searchParams.currency || "INR",
+        },
+        source: "tbo",
+      };
+    });
 
     const duration = Date.now() - requestStart;
     console.log(`✅ Search completed in ${duration}ms [${traceId}]`);
