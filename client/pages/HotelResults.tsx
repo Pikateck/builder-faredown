@@ -499,7 +499,7 @@ function HotelResultsContent() {
     );
 
     try {
-      // Build API URL with proper fallback
+      // ✅ FIX: Use correct /api/hotels/search POST endpoint
       const apiBaseUrl =
         import.meta.env.VITE_API_BASE_URL ||
         "https://builder-faredown-pricing.onrender.com/api";
@@ -513,11 +513,37 @@ function HotelResultsContent() {
       };
       const countryCode = countryCodeMap[cityCode] || "AE";
 
-      const apiUrl = `${apiBaseUrl}/hotels?cityId=${cityCode}&countryCode=${countryCode}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`;
+      const checkInStr = checkInDate.toISOString().split("T")[0];
+      const checkOutStr = checkOutDate.toISOString().split("T")[0];
 
-      console.log(`🌐 Fetching from backend: ${apiUrl}`);
+      const apiUrl = `${apiBaseUrl}/hotels/search`;
+      const searchPayload = {
+        cityId: cityCode,
+        destination: destinationName || cityCode || "Dubai",
+        cityName: destinationName || cityCode || "Dubai",
+        countryCode: countryCode,
+        checkIn: checkInStr,
+        checkOut: checkOutStr,
+        rooms: "1",
+        adults: adults.toString(),
+        children: children.toString(),
+        currency: selectedCurrency?.code || "INR",
+      };
 
-      const response = await fetch(apiUrl);
+      console.log(`🌐 Fetching from backend (mock fallback):`, {
+        url: apiUrl,
+        payload: searchPayload,
+      });
+
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(searchPayload),
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error(`Backend returned ${response.status}`);
@@ -847,7 +873,7 @@ function HotelResultsContent() {
         metadataData.hotels.length === 0
       ) {
         console.warn("⚠️ No metadata hotels found from API");
-        console.warn("��️ API response:", metadataData);
+        console.warn("���️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
         // CRITICAL: Load mock hotels immediately
         const mockHotels = loadMockHotels();
