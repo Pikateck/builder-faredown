@@ -32,7 +32,7 @@ export interface ApiLogContext {
 export function logApiMeta(
   label: string,
   meta?: ApiMeta,
-  extra: Record<string, unknown> = {}
+  extra: Record<string, unknown> = {},
 ): void {
   const src: ApiSource = meta?.source ?? "unknown";
   const timestamp = new Date().toLocaleTimeString("en-US", {
@@ -99,7 +99,7 @@ export function logApiMeta(
 export function logHotelSearchResponse(
   count: number,
   meta?: ApiMeta,
-  prices?: { min: number; max: number }
+  prices?: { min: number; max: number },
 ): void {
   logApiMeta("hotel-search", meta, {
     hotelCount: count,
@@ -122,7 +122,7 @@ export function logHotelDetailsResponse(
     imageCount?: number;
     hasCoords?: boolean;
     hasAmenities?: boolean;
-  }
+  },
 ): void {
   logApiMeta("hotel-details", meta, {
     hotelId,
@@ -139,7 +139,7 @@ export function logHotelDetailsResponse(
 export function logLocationSearchResponse(
   query: string,
   results: number,
-  meta?: ApiMeta
+  meta?: ApiMeta,
 ): void {
   logApiMeta("location-search", meta, {
     query,
@@ -154,7 +154,7 @@ export function logLocationSearchResponse(
 export function logApiError(
   label: string,
   error: Error | string,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ): void {
   const errorMessage =
     typeof error === "string" ? error : error?.message || "Unknown error";
@@ -163,7 +163,7 @@ export function logApiError(
     `%c[FD][${label}] ERROR`,
     "color: #dc3545; font-weight: bold;",
     errorMessage,
-    context || ""
+    context || "",
   );
 }
 
@@ -193,7 +193,7 @@ export class ApiPerformanceMarker {
 
     console.log(
       `%c⏱️ [${this.label}] ${src.toUpperCase()} took ${duration.toFixed(1)}ms`,
-      `color: ${colorMap[src]}; font-weight: bold;`
+      `color: ${colorMap[src]}; font-weight: bold;`,
     );
 
     return duration;

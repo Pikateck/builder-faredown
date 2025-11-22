@@ -62,7 +62,10 @@ import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { HotelCardSkeleton } from "@/components/HotelCardSkeleton";
-import { logHotelSearchResponse, ApiPerformanceMarker } from "@/utils/fdApiLogger";
+import {
+  logHotelSearchResponse,
+  ApiPerformanceMarker,
+} from "@/utils/fdApiLogger";
 
 // Use the Hotel type from hotelsService for consistency
 interface Hotel extends HotelType {
@@ -441,7 +444,10 @@ function HotelResultsContent() {
   }, [selectedFilters.hotelName]);
 
   // Helper function to transform hotel images - handle both real URLs and fallbacks
-  const transformHotelImages = (images: any[], hotelName: string = "Hotel"): string[] => {
+  const transformHotelImages = (
+    images: any[],
+    hotelName: string = "Hotel",
+  ): string[] => {
     // FIRST: Try to use real images from API response
     if (images && Array.isArray(images) && images.length > 0) {
       const processedImages = images
@@ -463,13 +469,17 @@ function HotelResultsContent() {
         .filter(Boolean) as string[];
 
       if (processedImages.length > 0) {
-        console.log(`✅ Using real images for ${hotelName}: ${processedImages.length} images`);
+        console.log(
+          `✅ Using real images for ${hotelName}: ${processedImages.length} images`,
+        );
         return processedImages.slice(0, 6); // Limit to 6 images max
       }
     }
 
     // FALLBACK ONLY if no real images available
-    console.warn(`⚠️ No real images found for ${hotelName}, using placeholder gallery`);
+    console.warn(
+      `⚠️ No real images found for ${hotelName}, using placeholder gallery`,
+    );
     return [
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
       "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
@@ -784,8 +794,11 @@ function HotelResultsContent() {
         (h: any, i: number) => {
           // Get thumbnail or use images array - prefer thumbnail for list view
           const thumbnail = h.thumbnail || (h.images?.[0] ?? null);
-          const galleryImages = h.images && Array.isArray(h.images) ? h.images : [];
-          const allImages = thumbnail ? [thumbnail, ...galleryImages] : galleryImages;
+          const galleryImages =
+            h.images && Array.isArray(h.images) ? h.images : [];
+          const allImages = thumbnail
+            ? [thumbnail, ...galleryImages]
+            : galleryImages;
 
           return {
             id: h.hotelId || h.id || `hotel-${i}`,
@@ -793,7 +806,10 @@ function HotelResultsContent() {
             location: h.location || h.address || destCode,
             locationTags: h.locationTags || [],
             // Use real images from API, with proper fallback handling
-            images: allImages.length > 0 ? transformHotelImages(allImages, h.name) : transformHotelImages([], h.name),
+            images:
+              allImages.length > 0
+                ? transformHotelImages(allImages, h.name)
+                : transformHotelImages([], h.name),
             rating: h.starRating || h.reviewScore || h.stars || 4.0,
             reviewScore: h.starRating || h.reviewScore || h.stars || 4.0,
             reviews: h.reviewCount || 0,
@@ -835,13 +851,17 @@ function HotelResultsContent() {
             },
             starRating: h.starRating || h.reviewScore || h.stars || 4,
             currency:
-              h.price?.currency || h.currency || selectedCurrency?.code || "INR",
+              h.price?.currency ||
+              h.currency ||
+              selectedCurrency?.code ||
+              "INR",
             supplier: h.source || h.supplier || "TBO",
             supplierCode: h.supplier?.toLowerCase() || "tbo",
             isLiveData: h.source === "tbo" || h.isLiveData !== false,
             priceRange: {
               min: h.price?.offered || h.currentPrice || 0,
-              max: h.price?.published || h.originalPrice || h.price?.offered || 0,
+              max:
+                h.price?.published || h.originalPrice || h.price?.offered || 0,
             },
           };
         },
@@ -850,14 +870,20 @@ function HotelResultsContent() {
       console.log("✅ Metadata loaded:", metadataHotels.length, "hotels");
 
       // Log search response with diagnostic info
-      const priceValues = metadataHotels.map(h => h.currentPrice || 0).filter(p => p > 0);
+      const priceValues = metadataHotels
+        .map((h) => h.currentPrice || 0)
+        .filter((p) => p > 0);
       const minPrice = priceValues.length > 0 ? Math.min(...priceValues) : 0;
       const maxPrice = priceValues.length > 0 ? Math.max(...priceValues) : 0;
 
-      logHotelSearchResponse(metadataHotels.length, metadataData.meta || { source: metadataData.source }, {
-        min: minPrice,
-        max: maxPrice,
-      });
+      logHotelSearchResponse(
+        metadataHotels.length,
+        metadataData.meta || { source: metadataData.source },
+        {
+          min: minPrice,
+          max: maxPrice,
+        },
+      );
 
       // STEP 2: Fetch live prices in parallel (non-blocking)
       fetchLivePrices(destCode, metadataHotels)
@@ -1135,7 +1161,9 @@ function HotelResultsContent() {
       if (append) {
         setHotels((prev) => {
           const merged = [...prev, ...tboHotels];
-          console.log(`📦 Merged hotels: ${merged.length} total (${tboHotels.length} added)`);
+          console.log(
+            `📦 Merged hotels: ${merged.length} total (${tboHotels.length} added)`,
+          );
           // Update bounds with data
           const extract = (h: any) =>
             h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
@@ -1152,7 +1180,9 @@ function HotelResultsContent() {
         setPage(pageToLoad);
       } else {
         // CRITICAL: Set hotels immediately for instant cache-first render
-        console.log(`🎬 Setting ${tboHotels.length} hotels to state for instant render`);
+        console.log(
+          `🎬 Setting ${tboHotels.length} hotels to state for instant render`,
+        );
         setHotels(tboHotels);
         setPage(pageToLoad);
         // Dynamic price bounds from TBO dataset

@@ -1019,7 +1019,9 @@ router.get("/prices", async (req, res) => {
     // This /prices endpoint is for optional live price refresh.
     // For now, return gracefully indicating prices are available from cache.
 
-    console.log(`✅ /prices endpoint - returning success (use /search cache for prices)`);
+    console.log(
+      `✅ /prices endpoint - returning success (use /search cache for prices)`,
+    );
 
     return res.json({
       success: true,
@@ -1027,7 +1029,8 @@ router.get("/prices", async (req, res) => {
       prices: {},
       count: 0,
       source: "ready",
-      message: "Prices available via /search endpoint cache. Live refresh ready.",
+      message:
+        "Prices available via /search endpoint cache. Live refresh ready.",
     });
   } catch (error) {
     console.error("❌ /api/hotels/prices ERROR:", error.message);
