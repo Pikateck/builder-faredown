@@ -443,6 +443,18 @@ router.post("/", async (req, res) => {
       message: error.message,
       stack: error.stack,
       name: error.name,
+      code: error.code,
+      statusCode: error.statusCode,
+      response: error.response ? {
+        status: error.response.status,
+        data: error.response.data,
+      } : undefined,
+      request: {
+        method: req.method,
+        path: req.path,
+        body: req.body,
+        headers: req.headers,
+      },
     });
 
     // Fallback: return error response
