@@ -601,6 +601,7 @@ function HotelResultsContent() {
       }
 
       setLoading(false);
+      console.log(`✅ [CACHE-FIRST] Loading spinner disabled at ${new Date().toLocaleTimeString()}`);
       setIsLiveData(false);
     } catch (error) {
       console.error("❌ Error loading hotels:", error);
@@ -1025,7 +1026,7 @@ function HotelResultsContent() {
       }
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
-        console.log("������� Merging prices into hotels...");
+        console.log("����� Merging prices into hotels...");
         setHotels((prev) =>
           prev.map((h) => {
             const supplierId = h.supplier_id || h.id;
