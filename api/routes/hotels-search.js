@@ -106,10 +106,16 @@ router.post("/", async (req, res) => {
     // ============================================================
     // Step 2: Generate search hash
     // ============================================================
-    const searchHash = hotelCacheService.generateSearchHash(searchParams);
-    console.log(
-      `🔍 Hotel search [${traceId}] - Hash: ${searchHash.substring(0, 16)}...`,
-    );
+    let searchHash;
+    try {
+      searchHash = hotelCacheService.generateSearchHash(searchParams);
+      console.log(
+        `🔍 Hotel search [${traceId}] - Hash: ${searchHash.substring(0, 16)}...`,
+      );
+    } catch (hashErr) {
+      console.error(`❌ Error generating search hash [${traceId}]:`, hashErr.message);
+      throw hashErr;
+    }
 
     // ============================================================
     // Step 3: Check cache for fresh results
