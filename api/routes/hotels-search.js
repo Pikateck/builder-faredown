@@ -10,10 +10,34 @@
 
 const express = require("express");
 const router = express.Router();
-const hotelCacheService = require("../services/hotelCacheService");
-const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
-const { resolveGuestNationality } = require("../utils/nationalityResolver");
-const db = require("../database/connection");
+
+let hotelCacheService, supplierAdapterManager, resolveGuestNationality, db;
+
+// Load dependencies with error handling
+try {
+  hotelCacheService = require("../services/hotelCacheService");
+} catch (err) {
+  console.error("Failed to load hotelCacheService:", err.message);
+}
+
+try {
+  supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+} catch (err) {
+  console.error("Failed to load supplierAdapterManager:", err.message);
+}
+
+try {
+  const nationalityResolver = require("../utils/nationalityResolver");
+  resolveGuestNationality = nationalityResolver.resolveGuestNationality;
+} catch (err) {
+  console.error("Failed to load resolveGuestNationality:", err.message);
+}
+
+try {
+  db = require("../database/connection");
+} catch (err) {
+  console.error("Failed to load database connection:", err.message);
+}
 
 /**
  * POST /api/hotels/search
