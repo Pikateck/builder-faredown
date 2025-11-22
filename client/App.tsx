@@ -18,9 +18,12 @@ import { useViewportClass } from "./hooks/useViewportClass";
 // DEPLOYMENT TEST - Ready to push
 
 // DEPLOYMENT TEST - Zubin verification marker
+// Build: Cache-first rendering, image binding, and price sorting fixes deployed
 console.log(
-  "🚀 [DEPLOYMENT TEST] App.tsx loaded - Netlify/Render build verification",
+  "🚀 [DEPLOYMENT] App.tsx loaded - Cache-first + Images + Sorting fixes active",
 );
+console.log(`⏱️ Timestamp: ${new Date().toISOString()}`);
+console.log("✅ All fixes deployed: (1) Cache-first timing, (2) Image binding, (3) Price sorting");
 
 // Original pages
 import Index from "./pages/Index";
