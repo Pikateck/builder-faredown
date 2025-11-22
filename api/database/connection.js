@@ -613,6 +613,14 @@ class DatabaseConnection {
         )
       `);
 
+      // Ensure name column exists (for existing tables that may be missing it)
+      await this.query(
+        `ALTER TABLE IF EXISTS public.hotels_master_inventory
+         ADD COLUMN IF NOT EXISTS name VARCHAR(255)`,
+      ).catch(() => {
+        // Ignore if table doesn't exist yet
+      });
+
       // Create indexes for hotels_master_inventory
       await this.query(
         `CREATE UNIQUE INDEX IF NOT EXISTS idx_hotels_supplier_code_unique ON public.hotels_master_inventory(supplier_code, supplier_hotel_code)`,
@@ -629,9 +637,18 @@ class DatabaseConnection {
       await this.query(
         `CREATE INDEX IF NOT EXISTS idx_hotels_sync_status ON public.hotels_master_inventory(sync_status, last_synced_at DESC)`,
       );
-      await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_hotels_name_search ON public.hotels_master_inventory USING GIN(to_tsvector('english', name))`,
-      );
+
+      // Create name search index with error handling
+      try {
+        await this.query(
+          `CREATE INDEX IF NOT EXISTS idx_hotels_name_search ON public.hotels_master_inventory USING GIN(to_tsvector('english', name))`,
+        );
+      } catch (indexError) {
+        console.warn(
+          "⚠️  Could not create name search index (column may not exist):",
+          indexError.message,
+        );
+      }
 
       console.log("✅ Hotel cache tables ensured successfully");
     } catch (error) {
