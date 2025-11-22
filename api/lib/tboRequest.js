@@ -10,41 +10,34 @@ async function tboRequest(url, config = {}) {
     ...agentCfg,
     ...config,
     validateStatus: () => true, // Don't throw on any status code
-    transformResponse: [
-      // First, try to parse as JSON if Content-Type is application/json
-      function(data, headers) {
-        const contentType = headers['content-type'] || '';
-        if (contentType.includes('application/json') && data) {
-          try {
-            return typeof data === 'string' ? JSON.parse(data) : data;
-          } catch (e) {
-            console.error('❌ JSON Parse Error in tboRequest:', {
-              url,
-              error: e.message,
-              dataLength: data ? data.length : 0,
-              dataSample: typeof data === 'string' ? data.substring(0, 200) : 'not a string',
-            });
-            // Return the raw data if JSON parsing fails
-            return {
-              __parseError: true,
-              originalData: typeof data === 'string' ? data.substring(0, 500) : data,
-              error: e.message
-            };
-          }
-        }
-        return data;
-      }
-    ]
+    responseType: 'text', // Get raw text response
   };
 
   try {
     const response = await axios(req);
 
-    // Check if we got a JSON parse error
-    if (response.data?.__parseError) {
-      throw new Error(
-        `TBO API returned invalid JSON: ${response.data.error}. Response: ${response.data.originalData}`
-      );
+    // Manually parse JSON if needed
+    if (response.headers['content-type']?.includes('application/json')) {
+      try {
+        response.data = JSON.parse(response.data);
+      } catch (parseError) {
+        console.error('❌ JSON Parse Error in tboRequest:', {
+          url,
+          error: parseError.message,
+          dataLength: response.data ? response.data.length : 0,
+          dataSample: response.data ? response.data.substring(0, 200) : 'empty response',
+          status: response.status,
+          headers: response.headers,
+        });
+        // Return error details instead of throwing
+        response.data = {
+          __parseError: true,
+          originalData: response.data ? response.data.substring(0, 500) : 'empty',
+          error: parseError.message,
+          url,
+          status: response.status,
+        };
+      }
     }
 
     // Re-throw if status is not 2xx
