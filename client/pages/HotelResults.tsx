@@ -557,6 +557,51 @@ function HotelResultsContent() {
     }
   };
 
+  // Load and render hotels (with cache-first pattern)
+  const loadHotels = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const destCode = destination || "DXB";
+      const adultsCount = parseInt(adults) || 2;
+      const childrenCount = parseInt(children) || 0;
+
+      // Fetch hotels
+      const hotels = await fetchTBOHotels(destCode);
+
+      // ✅ CACHE-FIRST: Render immediately
+      if (hotels.length > 0) {
+        console.log(`✅ Rendering ${hotels.length} hotels immediately from cache`);
+        setHotels(hotels);
+        setTotalResults(hotels.length);
+
+        // Calculate price bounds from loaded hotels
+        const prices = hotels
+          .map((h) => h.currentPrice || 0)
+          .filter((p) => p > 0);
+        if (prices.length > 0) {
+          const min = Math.min(...prices);
+          const max = Math.max(...prices);
+          setPriceBounds({ min: Math.floor(min), max: Math.ceil(max) });
+        }
+
+        setError(null);
+      } else {
+        setError("No hotels found. Please try a different search.");
+      }
+
+      setLoading(false);
+      setIsLiveData(false);
+    } catch (error) {
+      console.error("❌ Error loading hotels:", error);
+      setError("Unable to load hotels. Please try again.");
+      setHotels([]);
+      setLoading(false);
+      setIsLiveData(false);
+    }
+  };
+
   // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
   const fetchTBOHotels = async (
     destCode: string,
@@ -942,7 +987,7 @@ function HotelResultsContent() {
       }
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
-        console.log("���� Merging prices into hotels...");
+        console.log("����� Merging prices into hotels...");
         setHotels((prev) =>
           prev.map((h) => {
             const supplierId = h.supplier_id || h.id;
