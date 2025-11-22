@@ -1060,13 +1060,13 @@ function HotelResultsContent() {
           : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
         images:
           hotel.images && hotel.images.length > 0
-            ? hotel.images
-            : transformHotelImages([]),
+            ? transformHotelImages(hotel.images, hotel.name)
+            : transformHotelImages([], hotel.name),
         rating: hotel.rating || hotel.reviewScore || hotel.starRating || 4.0,
         reviews: hotel.reviewCount || 0,
         originalPrice:
-          hotel.minTotal || hotel.price
-            ? Math.round((hotel.minTotal || hotel.price) * 1.15)
+          hotel.maxTotal || (hotel.minTotal || hotel.price)
+            ? Math.round((hotel.maxTotal || (hotel.minTotal || hotel.price) * 1.15))
             : 0,
         currentPrice: hotel.minTotal || hotel.price || 0,
         description: hotel.description || `Discover ${hotel.name}`,
@@ -1075,7 +1075,7 @@ function HotelResultsContent() {
         roomTypes: roomsArray.map((room: any) => ({
           id:
             room.roomId ||
-            `room-${hotel.supplierHotelId}-(room.roomName || room.roomType)`,
+            `room-${hotel.supplierHotelId}-${room.roomName || room.roomType}`,
           name:
             room.roomName ||
             room.roomType ||
@@ -1090,7 +1090,7 @@ function HotelResultsContent() {
             0,
           pricePerNight:
             room.price?.base ||
-            (room.price?.total || room.price || 0) / nights ||
+            (room.price?.total || room.price || 0) / Math.max(1, nights) ||
             0,
           tax: room.price?.taxes || 0,
           board: room.board || "Room Only",
@@ -1425,7 +1425,7 @@ function HotelResultsContent() {
         },
         {
           name: "Deluxe Suite",
-          price: 1100, // ₹1100 per night (upgrade option)
+          price: 1100, // ���1100 per night (upgrade option)
           features: ["Living Area", "Ocean View", "Mini Bar"],
         },
         {
