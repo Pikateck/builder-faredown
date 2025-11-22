@@ -779,72 +779,85 @@ function HotelResultsContent() {
         return mockHotels;
       }
 
-      // Convert metadata to Hotel format
+      // CRITICAL: Convert metadata to Hotel format WITH REAL IMAGES
       const metadataHotels: Hotel[] = metadataData.hotels.map(
-        (h: any, i: number) => ({
-          id: h.hotelId || h.id || `hotel-${i}`,
-          name: h.name,
-          location: h.location || h.address || destCode,
-          locationTags: h.locationTags || [],
-          images:
-            h.images && h.images.length > 0
-              ? h.images
-              : h.image
-                ? [h.image]
+        (h: any, i: number) => {
+          // Get thumbnail or use images array - prefer thumbnail for list view
+          const thumbnail = h.thumbnail || (h.images?.[0] ?? null);
+          const galleryImages = h.images && Array.isArray(h.images) ? h.images : [];
+          const allImages = thumbnail ? [thumbnail, ...galleryImages] : galleryImages;
+
+          return {
+            id: h.hotelId || h.id || `hotel-${i}`,
+            name: h.name,
+            location: h.location || h.address || destCode,
+            locationTags: h.locationTags || [],
+            // Use real images from API, with proper fallback handling
+            images: allImages.length > 0 ? transformHotelImages(allImages, h.name) : transformHotelImages([], h.name),
+            rating: h.starRating || h.reviewScore || h.stars || 4.0,
+            reviewScore: h.starRating || h.reviewScore || h.stars || 4.0,
+            reviews: h.reviewCount || 0,
+            reviewCount: h.reviewCount || 0,
+            currentPrice: h.price?.offered || h.currentPrice || 0,
+            originalPrice:
+              h.price?.published || h.originalPrice || h.price?.offered || 0,
+            description: `Discover ${h.name}`,
+            amenities: h.amenities || [],
+            features: h.features || h.roomFeatures || [],
+            roomTypes:
+              h.rates && h.rates.length > 0
+                ? h.rates.map((r: any) => ({
+                    id: r.id || Math.random().toString(),
+                    name: r.roomType || r.description,
+                    type: r.roomType || r.description,
+                    bedType: r.beds || "",
+                    pricePerNight: r.price,
+                    isRefundable:
+                      r.isRefundable !== undefined
+                        ? r.isRefundable
+                        : h.isRefundable,
+                    cancellationPolicy: r.isRefundable
+                      ? "Free cancellation"
+                      : "Non-refundable",
+                  }))
                 : [],
-          rating: h.starRating || h.reviewScore || h.stars || 4.0,
-          reviewScore: h.starRating || h.reviewScore || h.stars || 4.0,
-          reviews: h.reviewCount || 0,
-          reviewCount: h.reviewCount || 0,
-          currentPrice: h.price?.offered || h.currentPrice || 0,
-          originalPrice:
-            h.price?.published || h.originalPrice || h.price?.offered || 0,
-          description: `Discover ${h.name}`,
-          amenities: h.amenities || [],
-          features: h.features || h.roomFeatures || [],
-          roomTypes:
-            h.rates && h.rates.length > 0
-              ? h.rates.map((r: any) => ({
-                  id: r.id || Math.random().toString(),
-                  name: r.roomType || r.description,
-                  type: r.roomType || r.description,
-                  bedType: r.beds || "",
-                  pricePerNight: r.price,
-                  isRefundable:
-                    r.isRefundable !== undefined
-                      ? r.isRefundable
-                      : h.isRefundable,
-                  cancellationPolicy: r.isRefundable
-                    ? "Free cancellation"
-                    : "Non-refundable",
-                }))
-              : [],
-          roomType: h.roomType || "",
-          roomFeatures: h.roomFeatures || [],
-          isRefundable: h.isRefundable || false,
-          breakfastIncluded: h.breakfastIncluded || false,
-          freeCancellation: h.freeCancellation || false,
-          payAtProperty: h.payAtProperty || false,
-          address: {
-            street: "",
-            city: destCode,
-            country: "Unknown",
-            postalCode: "00000",
-          },
-          starRating: h.starRating || h.reviewScore || h.stars || 4,
-          currency:
-            h.price?.currency || h.currency || selectedCurrency?.code || "INR",
-          supplier: h.source || h.supplier || "TBO",
-          supplierCode: h.supplier?.toLowerCase() || "tbo",
-          isLiveData: h.source === "tbo" || h.isLiveData !== false,
-          priceRange: {
-            min: h.price?.offered || h.currentPrice || 0,
-            max: h.price?.published || h.originalPrice || h.price?.offered || 0,
-          },
-        }),
+            roomType: h.roomType || "",
+            roomFeatures: h.roomFeatures || [],
+            isRefundable: h.isRefundable || false,
+            breakfastIncluded: h.breakfastIncluded || false,
+            freeCancellation: h.freeCancellation || false,
+            payAtProperty: h.payAtProperty || false,
+            address: {
+              street: "",
+              city: destCode,
+              country: "Unknown",
+              postalCode: "00000",
+            },
+            starRating: h.starRating || h.reviewScore || h.stars || 4,
+            currency:
+              h.price?.currency || h.currency || selectedCurrency?.code || "INR",
+            supplier: h.source || h.supplier || "TBO",
+            supplierCode: h.supplier?.toLowerCase() || "tbo",
+            isLiveData: h.source === "tbo" || h.isLiveData !== false,
+            priceRange: {
+              min: h.price?.offered || h.currentPrice || 0,
+              max: h.price?.published || h.originalPrice || h.price?.offered || 0,
+            },
+          };
+        },
       );
 
       console.log("✅ Metadata loaded:", metadataHotels.length, "hotels");
+
+      // Log search response with diagnostic info
+      const priceValues = metadataHotels.map(h => h.currentPrice || 0).filter(p => p > 0);
+      const minPrice = priceValues.length > 0 ? Math.min(...priceValues) : 0;
+      const maxPrice = priceValues.length > 0 ? Math.max(...priceValues) : 0;
+
+      logHotelSearchResponse(metadataHotels.length, metadataData.meta || { source: metadataData.source }, {
+        min: minPrice,
+        max: maxPrice,
+      });
 
       // STEP 2: Fetch live prices in parallel (non-blocking)
       fetchLivePrices(destCode, metadataHotels)
