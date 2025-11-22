@@ -1,0 +1,10 @@
+﻿{
+  "cityId": "DXB",
+  "destination": "Dubai",
+  "checkIn": "2025-12-21",
+  "checkOut": "2025-12-22",
+  "rooms": "1",
+  "adults": "2",
+  "children": "0",
+  "currency": "INR"
+}
