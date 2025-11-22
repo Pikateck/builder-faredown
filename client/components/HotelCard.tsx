@@ -164,7 +164,10 @@ export function HotelCard({
 
   // Helper functions to extract data from the hotel object
   const getHotelImages = (): string[] => {
-    console.log(`📸 [HotelCard] Getting images for ${hotel.name}: hotel.images =`, hotel.images);
+    console.log(
+      `📸 [HotelCard] Getting images for ${hotel.name}: hotel.images =`,
+      hotel.images,
+    );
 
     if (hotel.images && hotel.images.length > 0) {
       const processedImages = hotel.images
@@ -188,7 +191,9 @@ export function HotelCard({
     }
 
     // Enhanced fallback with hotel-specific images based on name/type
-    console.warn(`⚠️ [HotelCard] Using fallback images for hotel: ${hotel.name}`);
+    console.warn(
+      `⚠️ [HotelCard] Using fallback images for hotel: ${hotel.name}`,
+    );
     const fallbackImages = [
       "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
       "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&fit=crop&auto=format",

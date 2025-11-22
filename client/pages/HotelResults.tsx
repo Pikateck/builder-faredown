@@ -561,7 +561,9 @@ function HotelResultsContent() {
   const loadHotels = async () => {
     try {
       const startTime = performance.now();
-      console.log(`⏱️ [CACHE-FIRST] Starting hotel load at ${new Date().toLocaleTimeString()}`);
+      console.log(
+        `⏱️ [CACHE-FIRST] Starting hotel load at ${new Date().toLocaleTimeString()}`,
+      );
 
       setLoading(true);
       setError(null);
@@ -573,7 +575,9 @@ function HotelResultsContent() {
       // Fetch hotels
       const hotels = await fetchTBOHotels(destCode);
       const apiTime = performance.now();
-      console.log(`⏱️ [CACHE-FIRST] API responded in ${(apiTime - startTime).toFixed(2)}ms`);
+      console.log(
+        `⏱️ [CACHE-FIRST] API responded in ${(apiTime - startTime).toFixed(2)}ms`,
+      );
 
       // ✅ CACHE-FIRST: Render immediately
       if (hotels.length > 0) {
@@ -582,7 +586,9 @@ function HotelResultsContent() {
         );
         setHotels(hotels);
         const renderTime = performance.now();
-        console.log(`⏱️ [CACHE-FIRST] setHotels called at ${(renderTime - startTime).toFixed(2)}ms`);
+        console.log(
+          `⏱️ [CACHE-FIRST] setHotels called at ${(renderTime - startTime).toFixed(2)}ms`,
+        );
         setTotalResults(hotels.length);
 
         // Calculate price bounds from loaded hotels
@@ -601,7 +607,9 @@ function HotelResultsContent() {
       }
 
       setLoading(false);
-      console.log(`✅ [CACHE-FIRST] Loading spinner disabled at ${new Date().toLocaleTimeString()}`);
+      console.log(
+        `✅ [CACHE-FIRST] Loading spinner disabled at ${new Date().toLocaleTimeString()}`,
+      );
       setIsLiveData(false);
     } catch (error) {
       console.error("❌ Error loading hotels:", error);
@@ -818,7 +826,8 @@ function HotelResultsContent() {
       }
 
       // Log cache source for transparency
-      const apiType = metadataData.source === "cache" ? "CACHE (instant)" : "LIVE API";
+      const apiType =
+        metadataData.source === "cache" ? "CACHE (instant)" : "LIVE API";
       console.log(
         `✅ [API] Response source: ${apiType} with ${metadataData.hotels?.length || 0} hotels`,
       );
@@ -858,10 +867,13 @@ function HotelResultsContent() {
             : galleryImages;
 
           // ✅ FIX: Calculate total price for the stay
-          const currentPrice = h.minTotal || h.price?.offered || h.currentPrice || h.price || 0;
+          const currentPrice =
+            h.minTotal || h.price?.offered || h.currentPrice || h.price || 0;
           const totalPrice = currentPrice * Math.max(1, nights);
 
-          console.log(`📸 Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`);
+          console.log(
+            `📸 Hotel ${h.name}: ${allImages.length} images, price: ${currentPrice} x ${nights} nights = ${totalPrice}`,
+          );
 
           return {
             id: h.hotelId || h.id || `hotel-${i}`,
@@ -869,7 +881,10 @@ function HotelResultsContent() {
             location: h.location || h.address || destCode,
             locationTags: h.locationTags || [],
             // ✅ FIX: Pass raw images array to HotelCard for proper binding
-            images: allImages.length > 0 ? allImages : transformHotelImages([], h.name),
+            images:
+              allImages.length > 0
+                ? allImages
+                : transformHotelImages([], h.name),
             rating: h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
             reviewScore:
               h.starRating || h.reviewScore || h.stars || h.rating || 4.0,
