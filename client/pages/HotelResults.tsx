@@ -1178,6 +1178,9 @@ function HotelResultsContent() {
           country: hotel.countryCode || "IN",
           postalCode: hotel.zipCode || "00000",
         },
+        // ✅ FIX: Include real coordinates from API for maps
+        latitude: hotel.latitude || hotel.lat || 25.2048,  // Dubai default fallback
+        longitude: hotel.longitude || hotel.lng || 55.2708,  // Dubai default fallback
         starRating: hotel.rating || 4,
         reviewCount: hotel.reviewCount || 0,
         contact: {
