@@ -227,8 +227,12 @@ router.post("/", async (req, res) => {
         statusCode: adapterError.statusCode,
         responseStatus: adapterError.response?.status,
         responseData: adapterError.response?.data,
+        responseText: adapterError.response?.text,
         stack: adapterError.stack,
         fullError: JSON.stringify(adapterError, null, 2),
+        method: req.method,
+        path: req.path,
+        body: req.body,
       });
 
       // Return 500 with detailed error info for debugging
